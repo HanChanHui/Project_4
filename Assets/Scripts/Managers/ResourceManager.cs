@@ -7,8 +7,8 @@ public class ResourceManager : MonoBehaviour
     public static ResourceManager Instance;
 
 
-    [SerializeField] private List<GameObject> prefabs;
-    public List<GameObject> Prefabs{get{return prefabs;}}
+    [SerializeField] private List<TowerObject> prefabs;
+    public List<TowerObject> Prefabs{get{return prefabs;}}
 
     private int selectedPrefabIndex = -1; // 선택된 프리팹 인덱스
     public int SelectedPrefabIndex {get { return selectedPrefabIndex; } set{ selectedPrefabIndex = value; }}
@@ -30,7 +30,7 @@ public class ResourceManager : MonoBehaviour
 
     public void SetSelectedPrefabIndex(int index)
     {
-        if (index >= prefabs.Count - 1)
+        if (index > prefabs.Count - 1)
         {
             Debug.LogError("Invalid index");
             return;

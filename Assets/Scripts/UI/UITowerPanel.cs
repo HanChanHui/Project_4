@@ -9,6 +9,7 @@ public class UITowerPanel : MonoBehaviour
    public void OnButtonPress()
     {
         ResourceManager.Instance.SetSelectedPrefabIndex(prefabIndex);
+        GridMouseSystem.Instance.RefreshSelectedObjectType();
     }
 
 }

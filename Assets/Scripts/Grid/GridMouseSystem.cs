@@ -1,19 +1,32 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class GridMouseSystem : MonoBehaviour
 {
+    public static GridMouseSystem Instance { get; private set; }
+
+    public event EventHandler OnSelectedChanged;
+
     private InputActionAsset  inputActions;
     private InputAction mouseClickAction;
 
     [SerializeField] private LevelGrid levelGrid;
     [SerializeField] private LayerMask mousePlaneLayerMask;
+    [SerializeField] private TowerObject towerObject;
 
     private void Awake() {
+        if (Instance != null)
+        {
+            Debug.LogError("There's more than one CharacterActionSystem! " + transform + " - " + Instance);
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
         inputActions = Resources.Load<InputActionAsset>("InputSystem/PlayerInputActions");
         
-        // Player 액션 맵에서 MouseClick 액션을 가져옵니다.
         var playerActionMap = inputActions.FindActionMap("MouseClick");
         mouseClickAction = playerActionMap.FindAction("Mouse action");
     }
@@ -35,24 +48,28 @@ public class GridMouseSystem : MonoBehaviour
             GridPosition gridPosition = levelGrid.GetGridPosition(position);
 
             int index = ResourceManager.Instance.SelectedPrefabIndex;
-            Unit unit = Instantiate(ResourceManager.Instance.Prefabs[index]).GetComponentInChildren<Unit>();
+            towerObject = ResourceManager.Instance.Prefabs[index];
 
             Vector2 gridTr = levelGrid.GetWorldPosition(gridPosition);
-            List<GridPosition> gridPositionList = unit.GetGridPositionList(gridTr);
-            foreach(GridPosition gridPos in gridPositionList)
+            List<Vector2> gridPositions = towerObject.GetGridPositionList(gridTr);
+            List<GridPosition> gridPositionList = new List<GridPosition>();
+            foreach(Vector2 gridPos in gridPositions)
             {
-                if(HasAnyGridObject(gridPos))
+                gridPositionList.Add(levelGrid.GetGridPosition(gridPos));
+                if(HasAnyGridObject(gridPositionList[gridPositionList.Count - 1]))
                 {
-                    Debug.Log("유닛이 존재 합니다");
                     return;
                 }
             }
 
-            //AddressableManager.Instance.InstantiatePrefab(gridTr, Quaternion.identity);
+            Unit unit = Instantiate(towerObject.prefab, gridTr, Quaternion.identity).GetComponentInChildren<Unit>();
             foreach(GridPosition gridPos in gridPositionList)
             {
-                LevelGrid.Instance.AddUnitAtGridPosition(gridPos, unit);
+                unit.GridPosition.Add(gridPos);
+                levelGrid.AddUnitAtGridPosition(gridPos, unit);
             }
+            int reset = -1;
+            ResourceManager.Instance.SetSelectedPrefabIndex(reset);
         }
        
     }  
@@ -70,6 +87,10 @@ public class GridMouseSystem : MonoBehaviour
 
         position = Vector2.zero;
         return false;
+    }
+
+    public void RefreshSelectedObjectType() {
+        OnSelectedChanged?.Invoke(this, EventArgs.Empty);
     }
 
     private bool HasAnyGridObject(GridPosition gridPosition)

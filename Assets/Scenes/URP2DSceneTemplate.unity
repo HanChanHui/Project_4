@@ -756,6 +756,7 @@ MonoBehaviour:
   mousePlaneLayerMask:
     serializedVersion: 2
     m_Bits: 128
+  towerObject: {fileID: 0}
 --- !u!4 &725520530
 Transform:
   m_ObjectHideFlags: 0
@@ -1426,10 +1427,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs:
-  - {fileID: 1778167487081704115, guid: dbe2d018f2489434593f3cb67f2b1d43, type: 3}
-  - {fileID: 2134370366032611905, guid: 9efe014661ade9244a517fdb3d1e4127, type: 3}
-  - {fileID: 6562394594513193332, guid: 4c6c36da9d7a86c43bb6c4ea95673b18, type: 3}
-  - {fileID: 1487921921464483617, guid: 5a7f4f59bf6805445a05b1760fb91960, type: 3}
+  - {fileID: 11400000, guid: 7286492ceeaa4c34595d3cf6bb1d882c, type: 2}
+  - {fileID: 11400000, guid: 982f7804a9c100741a9d097b27636f47, type: 2}
+  - {fileID: 11400000, guid: 0fc50facb05b1ba42adfadf8167f0723, type: 2}
+  - {fileID: 11400000, guid: 2568c19943267ca4fb676dc508d7d93e, type: 2}
 --- !u!1 &1462842904
 GameObject:
   m_ObjectHideFlags: 0
@@ -2312,6 +2313,50 @@ Transform:
   - {fileID: 725520530}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2095256368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2095256370}
+  - component: {fileID: 2095256369}
+  m_Layer: 12
+  m_Name: TowerGhost
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2095256369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095256368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba4b1ea7e8995f34cb2d598f564052a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2095256370
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095256368}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2322,3 +2367,4 @@ SceneRoots:
   - {fileID: 1654062576}
   - {fileID: 1683163011}
   - {fileID: 1989307240}
+  - {fileID: 2095256370}
