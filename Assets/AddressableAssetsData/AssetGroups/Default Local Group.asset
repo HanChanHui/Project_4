@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 9bf9142f755ff2d4898db4c75e9ab664
+  m_SerializeEntries:
+  - m_GUID: 8533a515b91da7548b41747f0b75981d
+    m_Address: Assets/Prefabs/Tower/tower_01.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6430d732cc506b54eb0b54d6929d51a6
+    m_Address: Assets/Prefabs/Tower/Tower_02.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 54f79e91984b4e844a28da5063151a3c
+    m_Address: Assets/Prefabs/Tower/Tower_03.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc9fa1528d4ffdc41a71d1d30a1e8712
+    m_Address: Assets/Prefabs/Tower/Tower_04.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 111d97d4281029f44ac1282aa648d0e6, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e624f46c32c4f7b4ba297701d437772e, type: 2}
+    - {fileID: 11400000, guid: b80ac9aa24937ed43a3881ea4d1d4292, type: 2}

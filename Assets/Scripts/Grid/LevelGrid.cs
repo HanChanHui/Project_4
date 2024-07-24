@@ -11,9 +11,7 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private int width;
     [SerializeField] private int height;
     [SerializeField] private float cellSize;
-    [SerializeField] private Camera mainCamera;
-
-    
+    [SerializeField] private Vector3 startPosition;
 
     private GridSystem<GridObject> gridSystem;
 
@@ -27,13 +25,8 @@ public class LevelGrid : MonoBehaviour
         }
         Instance = this;
 
-        gridSystem = new GridSystem<GridObject>(width, height, cellSize, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition), mainCamera);
-        //gridSystem.CreateDebugObject(gridDebugObjectPrefab);
-    }
-
-    private void Start()
-    {
-        //Pathfinding.Instance.Setup(width, height, cellSize);
+        gridSystem = new GridSystem<GridObject>(width, height, cellSize, startPosition,(GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
+        gridSystem.CreateDebugObject(gridDebugObjectPrefab);
     }
 
     public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
@@ -67,10 +60,10 @@ public class LevelGrid : MonoBehaviour
         AddUnitAtGridPosition(toGridPosition, unit);
     }
 
-    public GridPosition GetGridPosition(Vector2 worldPosition) => gridSystem.GetGridPosition(worldPosition);
+    public GridPosition GetGridPosition(Vector3 worldPosition) => gridSystem.GetGridPosition(worldPosition);
 
-    public Vector2 GetWorldPosition(GridPosition gridPosition) => gridSystem.GetWorldPosition(gridPosition);
-    public Vector2 GetWorldPosition2(GridPosition gridPosition) => gridSystem.GetObjectWorldPosition(gridPosition);
+    public Vector3 GetWorldPosition(GridPosition gridPosition) => gridSystem.GetWorldPosition(gridPosition);
+    public Vector3 GetWorldGridPosition(Vector3 worldGridPosition) => gridSystem.GetWorldGridPosition(worldGridPosition);
 
     public bool IsValidGridPosition(GridPosition gridPosition) => gridSystem.IsValidGridPosition(gridPosition);
 
@@ -87,6 +80,11 @@ public class LevelGrid : MonoBehaviour
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         return gridObject.GetUnit();
+    }
+
+    public GridSystem<GridObject> GetGridSystem()
+    {
+        return gridSystem;
     }
 
 

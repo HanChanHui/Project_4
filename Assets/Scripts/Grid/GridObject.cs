@@ -23,7 +23,7 @@ public class GridObject
             unitString += unit + "\n";
         }
 
-        return gridPosition.ToString() + "\n" + unitString;
+        return unitString;
     }
 
     public void AddUnit(Unit unit)

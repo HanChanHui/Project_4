@@ -11,6 +11,7 @@ public class GridDebugObject : MonoBehaviour
 
     public virtual void SetGridObject(object gridObject)
     {
+        textMeshPro.text = "";
         this.gridObject = gridObject;
     }
 

@@ -21,6 +21,7 @@ public class GridSystemVisual : MonoBehaviour
         public Material material;
     }
 
+    [SerializeField] private LevelGrid levelGrid;
     [SerializeField] private Transform gridSystemVisualSingPrefab;
     [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterialList;
 
@@ -39,17 +40,27 @@ public class GridSystemVisual : MonoBehaviour
 
     private void Start()
     {
+        if (levelGrid == null)
+        {
+            levelGrid = GameObject.Find("LevelGrid").GetComponent<LevelGrid>();
+
+            if (levelGrid == null)
+            {
+                Debug.LogError("LevelGrid 오브젝트를 찾을 수 없습니다. LevelGrid를 할당해주세요.");
+            }
+        }
+
         gridSystemVisualSingleArray = new GridSystemVisualSingle[
-            LevelGrid.Instance.GetWidth(),
-            LevelGrid.Instance.GetHeight()
+            levelGrid.GetWidth(),
+            levelGrid.GetHeight()
             ];
 
-        for (int x = 0; x < LevelGrid.Instance.GetWidth(); x++)
+        for (int x = 0; x < levelGrid.GetWidth(); x++)
         {
-            for (int y = 0; y < LevelGrid.Instance.GetHeight(); y++)
+            for (int y = 0; y < levelGrid.GetHeight(); y++)
             {
                 GridPosition gridPosition = new GridPosition(x, y);
-                Transform gridSystemVisualSingleTransform = Instantiate(gridSystemVisualSingPrefab, LevelGrid.Instance.GetWorldPosition(gridPosition), Quaternion.identity);
+                Transform gridSystemVisualSingleTransform = Instantiate(gridSystemVisualSingPrefab, levelGrid.GetWorldPosition(gridPosition), Quaternion.identity);
                 gridSystemVisualSingleTransform.transform.parent = transform;
                 gridSystemVisualSingleArray[x, y] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
             }
@@ -57,9 +68,9 @@ public class GridSystemVisual : MonoBehaviour
 
         List<GridPosition> gridPositionList = new List<GridPosition>();
         GridPosition StartPosition = new GridPosition(0, 0);
-        for (int y = 0; y < LevelGrid.Instance.GetHeight(); y++)
+        for (int y = 0; y < levelGrid.GetHeight(); y++)
         {
-            for(int x = 0; x < LevelGrid.Instance.GetWidth(); x++)
+            for(int x = 0; x < levelGrid.GetWidth(); x++)
             {
                 GridPosition testGridPosition = StartPosition  + new GridPosition(x, y);
                 gridPositionList.Add(testGridPosition);
@@ -71,9 +82,9 @@ public class GridSystemVisual : MonoBehaviour
 
     public void HideAllGridPosition()
     {
-        for (int x = 0; x < LevelGrid.Instance.GetWidth(); x++)
+        for (int x = 0; x < levelGrid.GetWidth(); x++)
         {
-            for (int y = 0; y < LevelGrid.Instance.GetHeight(); y++)
+            for (int y = 0; y < levelGrid.GetHeight(); y++)
             {
                 gridSystemVisualSingleArray[x, y].Hide();
             }
@@ -81,9 +92,9 @@ public class GridSystemVisual : MonoBehaviour
     }
     public void ShowAllGridPosition()
     {
-        for (int x = 0; x < LevelGrid.Instance.GetWidth(); x++)
+        for (int x = 0; x < levelGrid.GetWidth(); x++)
         {
-            for (int y = 0; y < LevelGrid.Instance.GetHeight(); y++)
+            for (int y = 0; y < levelGrid.GetHeight(); y++)
             {
                 gridSystemVisualSingleArray[x, y].Show(GetGridVisualMaterial());
             }
@@ -99,7 +110,7 @@ public class GridSystemVisual : MonoBehaviour
             {
                 GridPosition testGridPosition = gridPosition + new GridPosition(x, y);
 
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                if (!levelGrid.IsValidGridPosition(testGridPosition))
                 {
                     continue;
                 }
@@ -125,7 +136,7 @@ public class GridSystemVisual : MonoBehaviour
             {
                 GridPosition testGridPosition = gridPosition + new GridPosition(x, y);
 
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                if (!levelGrid.IsValidGridPosition(testGridPosition))
                 {
                     continue;
                 }
@@ -153,9 +164,9 @@ public class GridSystemVisual : MonoBehaviour
 
     public void DestroyGridPositionList()
     {
-        for (int x = 0; x < LevelGrid.Instance.GetWidth(); x++)
+        for (int x = 0; x < levelGrid.GetWidth(); x++)
         {
-            for (int y = 0; y < LevelGrid.Instance.GetHeight(); y++)
+            for (int y = 0; y < levelGrid.GetHeight(); y++)
             {
                 Destroy(gridSystemVisualSingleArray[x, y].gameObject);
             }
