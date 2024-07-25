@@ -12,6 +12,8 @@ public class GridSystemVisual : MonoBehaviour
     {
         Empty,
         White,
+        Green,
+        Red,
     }
 
     [Serializable]
@@ -31,7 +33,6 @@ public class GridSystemVisual : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.LogError("There's more than one CharacterActionSystem! " + transform + " - " + Instance);
             Destroy(gameObject);
             return;
         }
@@ -127,12 +128,19 @@ public class GridSystemVisual : MonoBehaviour
         ShowGridPositionList(gridPositionList, gridVisualType);
     }
 
-    private void ShowGridPositionRange(GridPosition gridPosition, int range, GridVisualType gridVisualType)
+    private void ShowTowerGridPositionRange(List<GridPosition> gridPosition, GridVisualType gridVisualType)
     {
-        List<GridPosition> gridPositionList = new List<GridPosition>();
-        for(int x = -range; x <= range; x++)
+        ShowGridPositionList(gridPosition, gridVisualType);
+    }
+
+    public void ShowGridPositionRange(GridPosition gridPosition, int width, int height)
+    {
+        List<GridPosition> greedGridList = new List<GridPosition>();
+        List<GridPosition> redGridList = new List<GridPosition>();
+
+        for(int x = 0; x <= width; x++)
         {
-            for(int y = -range; y <= range; y++)
+            for(int y = 0; y <= height; y++)
             {
                 GridPosition testGridPosition = gridPosition + new GridPosition(x, y);
 
@@ -141,17 +149,18 @@ public class GridSystemVisual : MonoBehaviour
                     continue;
                 }
 
-                int testDistance = Mathf.Abs(x) + Mathf.Abs(y);
-                if (testDistance > range)
+                if(!levelGrid.HasAnyUnitOnGridPosition(testGridPosition))
                 {
+                    redGridList.Add(testGridPosition);
                     continue;
                 }
 
-                gridPositionList.Add(testGridPosition);
+                greedGridList.Add(testGridPosition);
             }
         }
 
-        ShowGridPositionList(gridPositionList, gridVisualType);
+        ShowGridPositionList(greedGridList, GridVisualType.Green);
+        ShowGridPositionList(redGridList, GridVisualType.Red);
     }
 
     public void ShowGridPositionList(List<GridPosition> gridPositionList, GridVisualType gridVisualType)
@@ -173,27 +182,27 @@ public class GridSystemVisual : MonoBehaviour
         }
     }
 
-    // private void UpdateGridVisual()
-    // {
-    //     HideAllGridPosition();
+    private void UpdateGridVisual()
+    {
+        //Unit selectedUnit = UnitActionSystem.Instance.GetSelecterdUnit();
 
-    //     Unit selectedUnit = UnitActionSystem.Instance.GetSelecterdUnit();
-    //     BaseAction selectedAction = UnitActionSystem.Instance.GetSelectedAction();
+        GridVisualType gridVisualType = GridVisualType.White;
 
-    //     GridVisualType gridVisualType;
+        switch (gridVisualType)
+        {
+            case GridVisualType.White:
+                             
+                break;
+            case GridVisualType.Green:
+                
+                break;
+            case GridVisualType.Red:
+                
+                break;
+        }
 
-    //     switch (selectedAction)
-    //     {
-    //         default:
-    //         case MoveAction moveAction:
-    //             gridVisualType = GridVisualType.White;              
-    //             break;
-    //         case EmptyAction EmptyAction:
-    //             gridVisualType = GridVisualType.Empty;
-
-    //             break;
-    //     }
-    // }
+        //ShowGridPositionList(, gridVisualType);
+    }
 
     private Material GetGridVisualTypeMaterial(GridVisualType gridVisualType)
     {

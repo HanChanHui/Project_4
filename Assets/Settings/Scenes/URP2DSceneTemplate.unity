@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 194770910}
   - component: {fileID: 194770909}
   - component: {fileID: 194770908}
+  - component: {fileID: 194770911}
   m_Layer: 5
   m_Name: TowerPanel
   m_TagString: Untagged
@@ -229,6 +230,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 194770906}
   m_CullTransparentMesh: 1
+--- !u!114 &194770911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 194770906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4c3533ba24540b4d83bf34b04cfd2dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &286568667
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,6 +276,10 @@ MonoBehaviour:
   gridVisualTypeMaterialList:
   - gridVisualType: 1
     material: {fileID: 2100000, guid: 956d9bf1280af2e4ba5e86f222b2da6f, type: 2}
+  - gridVisualType: 1
+    material: {fileID: 2100000, guid: c0415ea428976ed41abe0a74e2d79041, type: 2}
+  - gridVisualType: 1
+    material: {fileID: 2100000, guid: b73d3067f2248164990d5fc1f059c673, type: 2}
 --- !u!4 &286568669
 Transform:
   m_ObjectHideFlags: 0
@@ -659,19 +676,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 712288017}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 712288019}
-        m_TargetAssemblyTypeName: UITowerPanel, Assembly-CSharp
-        m_MethodName: OnButtonPress
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &712288017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -719,10 +724,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 712288014}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4c3533ba24540b4d83bf34b04cfd2dc, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIndex: 1
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 194770911}
+          m_TargetAssemblyTypeName: UITowerPanel, Assembly-CSharp
+          m_MethodName: OnButtonDownEvent
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &725520528
 GameObject:
   m_ObjectHideFlags: 0
@@ -1060,19 +1081,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 840429284}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 840429286}
-        m_TargetAssemblyTypeName: UITowerPanel, Assembly-CSharp
-        m_MethodName: OnButtonPress
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &840429284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1120,10 +1129,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 840429281}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4c3533ba24540b4d83bf34b04cfd2dc, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIndex: 3
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 194770911}
+          m_TargetAssemblyTypeName: UITowerPanel, Assembly-CSharp
+          m_MethodName: OnButtonDownEvent
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 3
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1011361897
 GameObject:
   m_ObjectHideFlags: 0
@@ -1644,19 +1669,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1479305895}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1479305897}
-        m_TargetAssemblyTypeName: UITowerPanel, Assembly-CSharp
-        m_MethodName: OnButtonPress
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1479305895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1704,10 +1717,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1479305892}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4c3533ba24540b4d83bf34b04cfd2dc, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIndex: 2
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 194770911}
+          m_TargetAssemblyTypeName: UITowerPanel, Assembly-CSharp
+          m_MethodName: OnButtonDownEvent
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1494314476
 GameObject:
   m_ObjectHideFlags: 0
@@ -2064,19 +2093,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1698932976}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1698932978}
-        m_TargetAssemblyTypeName: UITowerPanel, Assembly-CSharp
-        m_MethodName: OnButtonPress
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1698932976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2124,10 +2141,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1698932973}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4c3533ba24540b4d83bf34b04cfd2dc, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabIndex: 0
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 194770911}
+          m_TargetAssemblyTypeName: UITowerPanel, Assembly-CSharp
+          m_MethodName: OnButtonDownEvent
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1847888308
 GameObject:
   m_ObjectHideFlags: 0
@@ -2313,50 +2346,6 @@ Transform:
   - {fileID: 725520530}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2095256368
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2095256370}
-  - component: {fileID: 2095256369}
-  m_Layer: 12
-  m_Name: TowerGhost
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2095256369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095256368}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba4b1ea7e8995f34cb2d598f564052a8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &2095256370
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095256368}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2367,4 +2356,3 @@ SceneRoots:
   - {fileID: 1654062576}
   - {fileID: 1683163011}
   - {fileID: 1989307240}
-  - {fileID: 2095256370}

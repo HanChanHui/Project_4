@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GridVisual_White
+  m_Name: GridVisual_Red
   m_Shader: {fileID: 4800000, guid: 16d2405fb57b91041879d52909be5b2e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -43,7 +43,7 @@ Material:
     m_Floats:
     - _EnableExternalAlpha: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 0.19607843}
+    - _Color: {r: 1, g: 0.18353051, b: 0, a: 0.19607843}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

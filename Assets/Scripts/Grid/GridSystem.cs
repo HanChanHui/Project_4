@@ -44,14 +44,6 @@ public class GridSystem<TGridObject>
         );
     }
 
-    public Vector3 GetWorldGridPosition(Vector3 worldGridPosition)
-    {
-        return new Vector3(
-            Mathf.RoundToInt((worldGridPosition - startPosition).x / cellSize),
-            Mathf.RoundToInt((worldGridPosition - startPosition).y / cellSize)
-        );
-    }
-
     public void CreateDebugObject(Transform debugPrefab)
     {
         for (int x = 0; x < width; x++)
@@ -88,11 +80,6 @@ public class GridSystem<TGridObject>
     public int GetHeight()
     {
         return height;
-    }
-
-    public float GetCellSize()
-    {
-        return cellSize;
     }
 
 

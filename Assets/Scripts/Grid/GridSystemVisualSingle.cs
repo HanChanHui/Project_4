@@ -10,7 +10,6 @@ public class GridSystemVisualSingle : MonoBehaviour
     {
         sprite.enabled = true;
         sprite.material = material;
-        sprite.color = new Color(1f, 1f, 1f, 0.2f);
     }
 
     public void Hide()

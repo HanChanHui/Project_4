@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class UITowerPanel : MonoBehaviour
 {
-    public int prefabIndex;
 
-   public void OnButtonPress()
+   public void OnButtonDownEvent(int index)
     {
-        ResourceManager.Instance.SetSelectedPrefabIndex(prefabIndex);
-        GridMouseSystem.Instance.RefreshSelectedObjectType();
+        ResourceManager.Instance.SetSelectedPrefabIndex(index);
+        InputHandlerSystem.Instance.HandleMouseDown();
     }
 
 }
