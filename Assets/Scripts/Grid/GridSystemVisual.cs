@@ -26,6 +26,7 @@ public class GridSystemVisual : MonoBehaviour
     [SerializeField] private LevelGrid levelGrid;
     [SerializeField] private Transform gridSystemVisualSingPrefab;
     [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterialList;
+    private List<GridPosition> allGridPositionList = new List<GridPosition>();
 
     private GridSystemVisualSingle[,] gridSystemVisualSingleArray;
 
@@ -102,45 +103,16 @@ public class GridSystemVisual : MonoBehaviour
         }
     }
 
-    private void ShowSingleGridPositionRange(GridPosition gridPosition, int range, GridVisualType gridVisualType)
-    {
-        List<GridPosition> gridPositionList = new List<GridPosition>();
-        for (int x = -range; x <= range; x++)
-        {
-            for (int y = -range; y <= range; y++)
-            {
-                GridPosition testGridPosition = gridPosition + new GridPosition(x, y);
-
-                if (!levelGrid.IsValidGridPosition(testGridPosition))
-                {
-                    continue;
-                }
-
-                if(gridPosition != testGridPosition)
-                {
-                    continue;
-                }
-
-                gridPositionList.Add(testGridPosition);
-            }
-        }
-
-        ShowGridPositionList(gridPositionList, gridVisualType);
-    }
-
-    private void ShowTowerGridPositionRange(List<GridPosition> gridPosition, GridVisualType gridVisualType)
-    {
-        ShowGridPositionList(gridPosition, gridVisualType);
-    }
-
-    public void ShowGridPositionRange(GridPosition gridPosition, int width, int height)
+    public void ShowTowerGridPositionRange(GridPosition gridPosition, int width, int height)
     {
         List<GridPosition> greedGridList = new List<GridPosition>();
         List<GridPosition> redGridList = new List<GridPosition>();
+        ShowBeforeTowerGridVisual();
+        allGridPositionList.Clear();
 
-        for(int x = 0; x <= width; x++)
+        for(int x = 0; x < width; x++)
         {
-            for(int y = 0; y <= height; y++)
+            for(int y = 0; y < height; y++)
             {
                 GridPosition testGridPosition = gridPosition + new GridPosition(x, y);
 
@@ -149,7 +121,7 @@ public class GridSystemVisual : MonoBehaviour
                     continue;
                 }
 
-                if(!levelGrid.HasAnyUnitOnGridPosition(testGridPosition))
+                if(levelGrid.HasAnyUnitOnGridPosition(testGridPosition))
                 {
                     redGridList.Add(testGridPosition);
                     continue;
@@ -158,16 +130,26 @@ public class GridSystemVisual : MonoBehaviour
                 greedGridList.Add(testGridPosition);
             }
         }
-
+        allGridPositionList.AddRange(redGridList);
+        allGridPositionList.AddRange(greedGridList);
         ShowGridPositionList(greedGridList, GridVisualType.Green);
         ShowGridPositionList(redGridList, GridVisualType.Red);
     }
 
+    public void ShowBeforeTowerGridVisual()
+    {
+        if(allGridPositionList.Count > 0)
+        {
+            ShowGridPositionList(allGridPositionList, GridVisualType.White);
+        }
+    }
+
     public void ShowGridPositionList(List<GridPosition> gridPositionList, GridVisualType gridVisualType)
     {
-        foreach(GridPosition gridPosition in gridPositionList)
+        Material material = GetGridVisualTypeMaterial(gridVisualType);
+        foreach (GridPosition gridPosition in gridPositionList)
         {
-            gridSystemVisualSingleArray[gridPosition.x, gridPosition.y].Show(GetGridVisualTypeMaterial(gridVisualType));
+            gridSystemVisualSingleArray[gridPosition.x, gridPosition.y].Show(material);
         }
     }
 
@@ -180,28 +162,6 @@ public class GridSystemVisual : MonoBehaviour
                 Destroy(gridSystemVisualSingleArray[x, y].gameObject);
             }
         }
-    }
-
-    private void UpdateGridVisual()
-    {
-        //Unit selectedUnit = UnitActionSystem.Instance.GetSelecterdUnit();
-
-        GridVisualType gridVisualType = GridVisualType.White;
-
-        switch (gridVisualType)
-        {
-            case GridVisualType.White:
-                             
-                break;
-            case GridVisualType.Green:
-                
-                break;
-            case GridVisualType.Red:
-                
-                break;
-        }
-
-        //ShowGridPositionList(, gridVisualType);
     }
 
     private Material GetGridVisualTypeMaterial(GridVisualType gridVisualType)

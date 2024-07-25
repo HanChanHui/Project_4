@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+public class Tower : MonoBehaviour
 {
 
     [SerializeField] private int width;

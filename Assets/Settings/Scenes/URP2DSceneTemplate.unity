@@ -275,10 +275,10 @@ MonoBehaviour:
   gridSystemVisualSingPrefab: {fileID: 1119162169778905687, guid: 665fddd3a19ffe749a9c3c08d927207a, type: 3}
   gridVisualTypeMaterialList:
   - gridVisualType: 1
-    material: {fileID: 2100000, guid: 956d9bf1280af2e4ba5e86f222b2da6f, type: 2}
-  - gridVisualType: 1
+    material: {fileID: 2100000, guid: e75dc455476541f40bf983700376389b, type: 2}
+  - gridVisualType: 2
     material: {fileID: 2100000, guid: c0415ea428976ed41abe0a74e2d79041, type: 2}
-  - gridVisualType: 1
+  - gridVisualType: 3
     material: {fileID: 2100000, guid: b73d3067f2248164990d5fc1f059c673, type: 2}
 --- !u!4 &286568669
 Transform:
@@ -773,11 +773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 432953979741a8445abee9ac8e704da5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelGrid: {fileID: 1959498706}
-  mousePlaneLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  towerObject: {fileID: 0}
+  towerPlacement: {fileID: 1445851948}
 --- !u!4 &725520530
 Transform:
   m_ObjectHideFlags: 0
@@ -1456,6 +1452,54 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 982f7804a9c100741a9d097b27636f47, type: 2}
   - {fileID: 11400000, guid: 0fc50facb05b1ba42adfadf8167f0723, type: 2}
   - {fileID: 11400000, guid: 2568c19943267ca4fb676dc508d7d93e, type: 2}
+--- !u!1 &1445851946
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1445851947}
+  - component: {fileID: 1445851948}
+  m_Layer: 0
+  m_Name: TowerPlacement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1445851947
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445851946}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1989307240}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1445851948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445851946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f828f1981805e1e4aa43c560de994cbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelGrid: {fileID: 1959498706}
+  mousePlaneLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &1462842904
 GameObject:
   m_ObjectHideFlags: 0
@@ -2344,6 +2388,7 @@ Transform:
   - {fileID: 1959498705}
   - {fileID: 286568669}
   - {fileID: 725520530}
+  - {fileID: 1445851947}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807

@@ -26,10 +26,10 @@ public class LevelGrid : MonoBehaviour
         Instance = this;
 
         gridSystem = new GridSystem<GridObject>(width, height, cellSize, startPosition,(GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
-        gridSystem.CreateDebugObject(gridDebugObjectPrefab);
+        //gridSystem.CreateDebugObject(gridDebugObjectPrefab);
     }
 
-    public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
+    public void AddUnitAtGridPosition(GridPosition gridPosition, Tower unit)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         if (!gridObject.HasAnyUnit())
@@ -38,13 +38,13 @@ public class LevelGrid : MonoBehaviour
         }
     }
 
-    public List<Unit> GetUnitListAtGridPosition(GridPosition gridPosition)
+    public List<Tower> GetUnitListAtGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         return gridObject.GetUnitList();
     }
 
-    public void RemoveUnitAtGridPosition(GridPosition gridPosition, Unit unit)
+    public void RemoveUnitAtGridPosition(GridPosition gridPosition, Tower unit)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         if (gridObject.HasAnyUnit())
@@ -53,7 +53,7 @@ public class LevelGrid : MonoBehaviour
         }
     }
 
-    public void UnitMovedGridPosition(Unit unit, GridPosition fromGridPosition, GridPosition toGridPosition)
+    public void UnitMovedGridPosition(Tower unit, GridPosition fromGridPosition, GridPosition toGridPosition)
     {
         RemoveUnitAtGridPosition(fromGridPosition, unit);
 
@@ -75,7 +75,7 @@ public class LevelGrid : MonoBehaviour
         return gridObject.HasAnyUnit();
     }
 
-    public Unit GetUnitAtGridPosition(GridPosition gridPosition)
+    public Tower GetUnitAtGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         return gridObject.GetUnit();
