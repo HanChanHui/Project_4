@@ -12,6 +12,11 @@ public class GridSystemVisualSingle : MonoBehaviour
         sprite.material = material;
     }
 
+    public void GridLayerChange(string name)
+    {
+        sprite.sortingLayerName = name;
+    }
+
     public void Hide()
     {
         sprite.enabled = false;

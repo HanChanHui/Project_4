@@ -31,6 +31,7 @@ public class TowerPlacement : MonoBehaviour
         if (GetPosition(out Vector2 position))
         {
             GridPosition gridPosition = levelGrid.GetGridPosition(position);
+            Vector2 gridTr = levelGrid.GetWorldPosition(gridPosition);
 
             if (!gridPosition.Equals(previousGridPosition))
             {
@@ -39,9 +40,9 @@ public class TowerPlacement : MonoBehaviour
 
                 GridSystemVisual.Instance.ShowTowerGridPositionRange(gridPosition, towerObject.width, towerObject.height);
 
-                Vector2 gridTr = levelGrid.GetWorldPosition(gridPosition);
-                List<Vector2> gridPositions = towerObject.GetGridPositionList(gridTr);
-                foreach (Vector2 gridPos in gridPositions)
+
+                List<Vector2> gridPositionList = towerObject.GetGridPositionList(gridTr);
+                foreach (Vector2 gridPos in gridPositionList)
                 {
                     GridPosition towerPos = levelGrid.GetGridPosition(gridPos);
                     towerGridPositionList.Add(towerPos);
@@ -57,6 +58,11 @@ public class TowerPlacement : MonoBehaviour
         }
         else
         {
+            if(isDisposition)
+            {
+                GridSystemVisual.Instance.ShowBeforeTowerGridVisual();
+                previousGridPosition = new GridPosition();
+            }
             isDisposition = false;
         }
     }

@@ -12,6 +12,7 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private int height;
     [SerializeField] private float cellSize;
     [SerializeField] private Vector3 startPosition;
+    [SerializeField] private LayerMask layerMask;
 
     private GridSystem<GridObject> gridSystem;
 
@@ -25,7 +26,8 @@ public class LevelGrid : MonoBehaviour
         }
         Instance = this;
 
-        gridSystem = new GridSystem<GridObject>(width, height, cellSize, startPosition,(GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
+        gridSystem = new GridSystem<GridObject>(width, height, cellSize, startPosition, layerMask, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
+        //gridSystem.CreateGridAboveObjects((GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
         //gridSystem.CreateDebugObject(gridDebugObjectPrefab);
     }
 
@@ -68,16 +70,19 @@ public class LevelGrid : MonoBehaviour
 
     public int GetWidth() => gridSystem.GetWidth();
     public int GetHeight() => gridSystem.GetHeight();
+    public float GetCellSize() => gridSystem.GetCellSize();
 
     public bool HasAnyUnitOnGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        if(gridObject == null) return false;
         return gridObject.HasAnyUnit();
     }
 
     public Tower GetUnitAtGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        if(gridObject == null) return null;
         return gridObject.GetUnit();
     }
 

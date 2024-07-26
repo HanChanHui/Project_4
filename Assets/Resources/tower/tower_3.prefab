@@ -44,6 +44,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tower_03
       objectReference: {fileID: 0}
+    - target: {fileID: 7657617817024343740, guid: 54f79e91984b4e844a28da5063151a3c, type: 3}
+      propertyPath: m_SortingLayer
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657617817024343740, guid: 54f79e91984b4e844a28da5063151a3c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657617817024343740, guid: 54f79e91984b4e844a28da5063151a3c, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 714422313
+      objectReference: {fileID: 0}
+    - target: {fileID: 7657617817024343740, guid: 54f79e91984b4e844a28da5063151a3c, type: 3}
+      propertyPath: m_SpriteSortPoint
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9176640361426353557, guid: 54f79e91984b4e844a28da5063151a3c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.25
@@ -84,11 +100,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -2127188982025769463, guid: 54f79e91984b4e844a28da5063151a3c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5073392585822961582, guid: 54f79e91984b4e844a28da5063151a3c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7147216535333000030}
   m_SourcePrefab: {fileID: 100100000, guid: 54f79e91984b4e844a28da5063151a3c, type: 3}
+--- !u!1 &1754468488432445281 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5073392585822961582, guid: 54f79e91984b4e844a28da5063151a3c, type: 3}
+  m_PrefabInstance: {fileID: 6787294513157249231}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7147216535333000030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754468488432445281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1937b0639c1988145be3eeeab276a843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 3
+  height: 3
 --- !u!4 &2407360573217334618 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9176640361426353557, guid: 54f79e91984b4e844a28da5063151a3c, type: 3}

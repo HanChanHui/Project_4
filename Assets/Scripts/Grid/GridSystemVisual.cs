@@ -26,9 +26,12 @@ public class GridSystemVisual : MonoBehaviour
     [SerializeField] private LevelGrid levelGrid;
     [SerializeField] private Transform gridSystemVisualSingPrefab;
     [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterialList;
-    private List<GridPosition> allGridPositionList = new List<GridPosition>();
+    [SerializeField] private LayerMask layerMask;
+    private List<GridPosition> placeGridPositionList = new List<GridPosition>();
 
     private GridSystemVisualSingle[,] gridSystemVisualSingleArray;
+
+    private string layerName = "Grid";
 
     private void Awake()
     {
@@ -62,9 +65,22 @@ public class GridSystemVisual : MonoBehaviour
             for (int y = 0; y < levelGrid.GetHeight(); y++)
             {
                 GridPosition gridPosition = new GridPosition(x, y);
-                Transform gridSystemVisualSingleTransform = Instantiate(gridSystemVisualSingPrefab, levelGrid.GetWorldPosition(gridPosition), Quaternion.identity);
-                gridSystemVisualSingleTransform.transform.parent = transform;
-                gridSystemVisualSingleArray[x, y] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
+                Vector2 worldPosition = levelGrid.GetWorldPosition(gridPosition);
+                if(!Physics2D.Raycast(worldPosition, Vector2.down, 0.5f, layerMask))
+                {
+                    Transform gridSystemVisualSingleTransform = Instantiate(gridSystemVisualSingPrefab, worldPosition, Quaternion.identity);
+                    gridSystemVisualSingleTransform.transform.parent = transform;
+                    gridSystemVisualSingleArray[x, y] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
+                }
+                else
+                {
+                    worldPosition.y += 0.5f; // 원하는 높이로 조정
+                    Transform gridSystemVisualSingleTransform = Instantiate(gridSystemVisualSingPrefab, worldPosition, Quaternion.identity);
+                    gridSystemVisualSingleTransform.transform.parent = transform;
+                    gridSystemVisualSingleArray[x, y] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
+                }
+                Debug.Log(worldPosition + " " + gridPosition);
+               
             }
         }
 
@@ -78,8 +94,7 @@ public class GridSystemVisual : MonoBehaviour
                 gridPositionList.Add(testGridPosition);
             }
         }
-        ShowGridPositionList(gridPositionList, GridVisualType.White);
-
+        ShowGridPositionList(gridPositionList, layerName, GridVisualType.White);
     }
 
     public void HideAllGridPosition()
@@ -108,7 +123,6 @@ public class GridSystemVisual : MonoBehaviour
         List<GridPosition> greedGridList = new List<GridPosition>();
         List<GridPosition> redGridList = new List<GridPosition>();
         ShowBeforeTowerGridVisual();
-        allGridPositionList.Clear();
 
         for(int x = 0; x < width; x++)
         {
@@ -130,26 +144,30 @@ public class GridSystemVisual : MonoBehaviour
                 greedGridList.Add(testGridPosition);
             }
         }
-        allGridPositionList.AddRange(redGridList);
-        allGridPositionList.AddRange(greedGridList);
-        ShowGridPositionList(greedGridList, GridVisualType.Green);
-        ShowGridPositionList(redGridList, GridVisualType.Red);
+        placeGridPositionList.AddRange(redGridList);
+        placeGridPositionList.AddRange(greedGridList);
+        layerName = "PlaceGrid";
+        ShowGridPositionList(greedGridList, layerName, GridVisualType.Green);
+        ShowGridPositionList(redGridList, layerName, GridVisualType.Red);
     }
 
     public void ShowBeforeTowerGridVisual()
     {
-        if(allGridPositionList.Count > 0)
+        if(placeGridPositionList.Count > 0)
         {
-            ShowGridPositionList(allGridPositionList, GridVisualType.White);
+            layerName = "Grid";
+            ShowGridPositionList(placeGridPositionList, layerName, GridVisualType.White);
+            placeGridPositionList.Clear();
         }
     }
 
-    public void ShowGridPositionList(List<GridPosition> gridPositionList, GridVisualType gridVisualType)
+    public void ShowGridPositionList(List<GridPosition> gridPositionList, string layerName, GridVisualType gridVisualType)
     {
         Material material = GetGridVisualTypeMaterial(gridVisualType);
         foreach (GridPosition gridPosition in gridPositionList)
         {
             gridSystemVisualSingleArray[gridPosition.x, gridPosition.y].Show(material);
+            gridSystemVisualSingleArray[gridPosition.x, gridPosition.y].GridLayerChange(layerName);
         }
     }
 
