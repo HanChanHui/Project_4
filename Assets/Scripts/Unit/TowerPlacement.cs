@@ -38,7 +38,7 @@ public class TowerPlacement : MonoBehaviour
                 previousGridPosition = gridPosition;
                 towerGridPositionList.Clear();
 
-                GridSystemVisual.Instance.ShowTowerGridPositionRange(gridPosition, towerObject.width, towerObject.height);
+                //GridSystemVisual.Instance.ShowTowerGridPositionRange(gridPosition, towerObject.width, towerObject.height);
 
 
                 List<Vector2> gridPositionList = towerObject.GetGridPositionList(gridTr);
@@ -109,15 +109,32 @@ public class TowerPlacement : MonoBehaviour
         }
     }
 
-    private Vector3 GetMouseWorldSnappedPosition()
-    {
+    private Vector3 GetMouseWorldSnappedPosition() {
         Vector3 mousePosition = GetMousePosition();
         GridPosition gridPosition = levelGrid.GetGridPosition(mousePosition);
 
-        if (towerObject != null)
-        {
-            return levelGrid.GetWorldPosition(gridPosition);
+        if (gridPosition != null) {
+            // **1층 그리드 위치**
+            Vector3 worldPosition1 = levelGrid.GetWorldPosition(gridPosition);
+
+            //// **2층 그리드 위치**
+            //var gridSystem2 = levelGrid.GetGridSystem2();
+            //if (gridSystem2 != null) {
+            //    foreach (var gridPosition2 in levelGrid.GetLayer2GridPosition()) {
+            //        Vector3 worldPosition2 = gridSystem2.GetWorldPosition(gridPosition2);
+
+            //        // **2층 그리드가 유효한 경우**
+            //        if (gridSystem2.IsValidGridPosition(gridPosition2) && !levelGrid.HasAnyUnitOnGridPosition(gridPosition2)) {
+            //            if (Vector2.Distance(mousePosition, worldPosition2) < gridSystem2.GetCellSize() / 2) {
+            //                return worldPosition2;
+            //            }
+            //        }
+            //    }
+            //}
+
+            return worldPosition1;
         }
+
         return mousePosition;
     }
 

@@ -27,24 +27,49 @@ public class GridSystem<TGridObject>
             for(int y = 0; y < height; y++)
             {
                 GridPosition gridPosition = new GridPosition(x, y);
-                if (!IsObjectAtGridPosition(gridPosition))
+                Vector3 worldPosition = GetWorldPosition(gridPosition);
+
+                if (!Physics2D.Raycast(worldPosition, Vector2.down, 0.5f, layerMask))
                 {
                     gridObjectArray[x, y] = createGridObject(this, gridPosition);
                 }
-                else
+                else 
                 {
-                    Vector3 worldPosition = GetWorldPosition(gridPosition);
-                    worldPosition.y += 0.5f; // 원하는 높이로 조정
+                    worldPosition += new Vector3(0, 0.35f, 0); // 원하는 높이로 조정
                     GridPosition newGridPosition = GetGridPosition(worldPosition);
-                    Debug.Log(worldPosition + " " + newGridPosition);
-                    if (IsValidGridPosition(newGridPosition))
-                    {
-                        gridObjectArray[x, y] = createGridObject(this, newGridPosition);
-                    }
+                    Debug.Log(newGridPosition);
+                    gridObjectArray[x, y] = createGridObject(this, newGridPosition);
                 }
             }
         }
-        
+    }
+
+    public GridSystem(List<GridPosition> specificPositions, float cellSize, Vector3 startPosition, LayerMask layerMask, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
+    {
+        this.cellSize = cellSize;
+        this.startPosition = startPosition;
+        this.layerMask = layerMask;
+
+        // **특정 위치들을 기반으로 width와 height 계산**
+        int maxX = 0;
+        int maxY = 0;
+
+        foreach (var position in specificPositions)
+        {
+            if (position.x > maxX) maxX = position.x;
+            if (position.y > maxY) maxY = position.y;
+        }
+
+        this.width = maxX + 1;
+        this.height = maxY + 1;
+
+        gridObjectArray = new TGridObject[width, height];
+
+        foreach (var gridPosition in specificPositions)
+        {
+            Debug.Log(gridPosition.x + " " + gridPosition.y);
+            gridObjectArray[gridPosition.x, gridPosition.y] = createGridObject(this, gridPosition);
+        }
     }
 
     public Vector3 GetWorldPosition(GridPosition gridPosition)
@@ -60,6 +85,14 @@ public class GridSystem<TGridObject>
         return new GridPosition(xPosition, yPosition);
     }
 
+    public IEnumerable<GridPosition> GetAllGridPositions() 
+    {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                yield return new GridPosition(x, y);
+            }
+        }
+    }
 
     public void CreateDebugObject(Transform debugPrefab)
     {
@@ -103,34 +136,4 @@ public class GridSystem<TGridObject>
     {
         return cellSize;
     }
-
-    public bool IsObjectAtGridPosition(GridPosition gridPosition)
-    {
-        Vector3 worldPosition = GetWorldPosition(gridPosition);
-        return Physics2D.Raycast(worldPosition, Vector2.down, 0.5f, layerMask);
-    }
-
-    public void CreateGridAboveObjects(Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
-    {
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                GridPosition gridPosition = new GridPosition(x, y);
-                if (IsObjectAtGridPosition(gridPosition))
-                {
-                    
-                    Vector3 worldPosition = GetWorldPosition(gridPosition);
-                    worldPosition.y += 0.5f; // 원하는 높이로 조정
-                    GridPosition newGridPosition = GetGridPosition(worldPosition);
-                    Debug.Log(worldPosition + " " + newGridPosition);
-                    if (IsValidGridPosition(newGridPosition))
-                    {
-                        gridObjectArray[newGridPosition.x, newGridPosition.y] = createGridObject(this, newGridPosition);
-                    }
-                }
-            }
-        }
-    }
-
 }

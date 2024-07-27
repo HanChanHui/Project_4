@@ -321,6 +321,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelGrid: {fileID: 1959498706}
   gridSystemVisualSingPrefab: {fileID: 1119162169778905687, guid: 665fddd3a19ffe749a9c3c08d927207a, type: 3}
+  gridSystemVisualSingPrefab2: {fileID: 1119162169778905687, guid: 70b30134ef7f8aa4fb2b854b8692ce85, type: 3}
   gridVisualTypeMaterialList:
   - gridVisualType: 1
     material: {fileID: 2100000, guid: e75dc455476541f40bf983700376389b, type: 2}
@@ -655,6 +656,7 @@ GameObject:
   - component: {fileID: 702939590}
   - component: {fileID: 702939591}
   - component: {fileID: 702939592}
+  - component: {fileID: 702939593}
   m_Layer: 12
   m_Name: block
   m_TagString: Untagged
@@ -774,6 +776,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.1663806, y: 1.14224}
   m_EdgeRadius: 0
+--- !u!114 &702939593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 702939589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1937b0639c1988145be3eeeab276a843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &712288014
 GameObject:
   m_ObjectHideFlags: 0
@@ -1337,6 +1351,7 @@ GameObject:
   - component: {fileID: 873468373}
   - component: {fileID: 873468374}
   - component: {fileID: 873468375}
+  - component: {fileID: 873468376}
   m_Layer: 12
   m_Name: block (2)
   m_TagString: Untagged
@@ -1456,6 +1471,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.1663806, y: 1.14224}
   m_EdgeRadius: 0
+--- !u!114 &873468376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873468372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1937b0639c1988145be3eeeab276a843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1011361897
 GameObject:
   m_ObjectHideFlags: 0
@@ -1808,6 +1835,7 @@ GameObject:
   - component: {fileID: 1457520331}
   - component: {fileID: 1457520332}
   - component: {fileID: 1457520333}
+  - component: {fileID: 1457520334}
   m_Layer: 12
   m_Name: block (1)
   m_TagString: Untagged
@@ -1927,6 +1955,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.1663806, y: 1.14224}
   m_EdgeRadius: 0
+--- !u!114 &1457520334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457520330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1937b0639c1988145be3eeeab276a843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1462842904
 GameObject:
   m_ObjectHideFlags: 0
