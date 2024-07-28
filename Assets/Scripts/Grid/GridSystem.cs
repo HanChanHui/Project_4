@@ -35,40 +35,16 @@ public class GridSystem<TGridObject>
                 }
                 else 
                 {
-                    worldPosition += new Vector3(0, 0.35f, 0); // 원하는 높이로 조정
-                    GridPosition newGridPosition = GetGridPosition(worldPosition);
-                    Debug.Log(newGridPosition);
-                    gridObjectArray[x, y] = createGridObject(this, newGridPosition);
+                    float heightAdjustment = 0.35f;
+                    worldPosition += new Vector3(0, heightAdjustment, 0); // 원하는 높이로 조정
+                    heightAdjustments[gridPosition] = heightAdjustment; // 높이 정보를 딕셔너리에 저장
+                    gridObjectArray[x, y] = createGridObject(this, gridPosition);
+                    // worldPosition += new Vector3(0, 0.35f, 0); // 원하는 높이로 조정
+                    // GridPosition newGridPosition = GetGridPosition(worldPosition);
+                    // Debug.Log(newGridPosition);
+                    // gridObjectArray[x, y] = createGridObject(this, newGridPosition);
                 }
             }
-        }
-    }
-
-    public GridSystem(List<GridPosition> specificPositions, float cellSize, Vector3 startPosition, LayerMask layerMask, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
-    {
-        this.cellSize = cellSize;
-        this.startPosition = startPosition;
-        this.layerMask = layerMask;
-
-        // **특정 위치들을 기반으로 width와 height 계산**
-        int maxX = 0;
-        int maxY = 0;
-
-        foreach (var position in specificPositions)
-        {
-            if (position.x > maxX) maxX = position.x;
-            if (position.y > maxY) maxY = position.y;
-        }
-
-        this.width = maxX + 1;
-        this.height = maxY + 1;
-
-        gridObjectArray = new TGridObject[width, height];
-
-        foreach (var gridPosition in specificPositions)
-        {
-            Debug.Log(gridPosition.x + " " + gridPosition.y);
-            gridObjectArray[gridPosition.x, gridPosition.y] = createGridObject(this, gridPosition);
         }
     }
 
@@ -77,21 +53,24 @@ public class GridSystem<TGridObject>
          return new Vector3(gridPosition.x, gridPosition.y) * cellSize + startPosition;
     }
 
+    private Dictionary<GridPosition, float> heightAdjustments = new Dictionary<GridPosition, float>();
+    public Vector3 GetAdjustedWorldPosition(GridPosition gridPosition)
+    {
+        Vector3 worldPosition = GetWorldPosition(gridPosition);
+        if (heightAdjustments.TryGetValue(gridPosition, out float heightAdjustment))
+        {
+            worldPosition += new Vector3(0, heightAdjustment, 0);
+        }
+        return worldPosition;
+    }
+
+
     public GridPosition GetGridPosition(Vector3 worldPosition) 
     {
         int xPosition = Mathf.Clamp(Mathf.RoundToInt((worldPosition - startPosition).x / cellSize), 0, width - 1);
         int yPosition = Mathf.Clamp(Mathf.RoundToInt((worldPosition - startPosition).y / cellSize), 0, height - 1);
 
         return new GridPosition(xPosition, yPosition);
-    }
-
-    public IEnumerable<GridPosition> GetAllGridPositions() 
-    {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                yield return new GridPosition(x, y);
-            }
-        }
     }
 
     public void CreateDebugObject(Transform debugPrefab)

@@ -76,50 +76,28 @@ public class GridSystemVisual : MonoBehaviour {
                 }
             }
         }
-
-        // 2층 그리드 시각화 초기화
-        //var gridSystem2 = levelGrid.GetGridSystem2();
-        //if (gridSystem2 != null) 
-        //{
-        //    gridSystemVisualSingleDict2 = new Dictionary<GridPosition, GridSystemVisualSingle>();
-
-        //    foreach (var gridPosition in levelGrid.GetLayer2GridPosition()) {
-        //        Vector2 worldPosition = gridSystem2.GetWorldPosition(gridPosition);
-        //        Transform gridSystemVisualSingleTransform = Instantiate(gridSystemVisualSingPrefab2, worldPosition, Quaternion.identity);
-        //        gridSystemVisualSingleTransform.transform.parent = transform;
-        //        gridSystemVisualSingleDict2[gridPosition] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
-        //    }
-        //}
     }
 
     public void HideAllGridPosition() 
     {
-        for (int x = 0; x < levelGrid.GetWidth(); x++) {
-            for (int y = 0; y < levelGrid.GetHeight(); y++) {
+        for (int x = 0; x < levelGrid.GetWidth(); x++) 
+        {
+            for (int y = 0; y < levelGrid.GetHeight(); y++) 
+            {
                 gridSystemVisualSingleArray[x, y].Hide();
             }
         }
-
-        //if (gridSystemVisualSingleDict2 != null) {
-        //    foreach (var kvp in gridSystemVisualSingleDict2) {
-        //        kvp.Value.Hide();
-        //    }
-        //}
     }
 
     public void ShowAllGridPosition() 
     {
-        for (int x = 0; x < levelGrid.GetWidth(); x++) {
-            for (int y = 0; y < levelGrid.GetHeight(); y++) {
+        for (int x = 0; x < levelGrid.GetWidth(); x++) 
+        {
+            for (int y = 0; y < levelGrid.GetHeight(); y++) 
+            {
                 gridSystemVisualSingleArray[x, y].Show(GetGridVisualMaterial());
             }
         }
-
-        //if (gridSystemVisualSingleDict2 != null) {
-        //    foreach (var kvp in gridSystemVisualSingleDict2) {
-        //        kvp.Value.Show(GetGridVisualMaterial());
-        //    }
-        //}
     }
 
     public void ShowTowerGridPositionRange(GridPosition gridPosition, int width, int height) 
@@ -134,11 +112,13 @@ public class GridSystemVisual : MonoBehaviour {
             {
                 GridPosition testGridPosition = gridPosition + new GridPosition(x, y);
 
-                if (!levelGrid.IsValidGridPosition(testGridPosition)) {
+                if (!levelGrid.IsValidGridPosition(testGridPosition)) 
+                {
                     continue;
                 }
 
-                if (levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) {
+                if (levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) 
+                {
                     redGridList.Add(testGridPosition);
                     continue;
                 }
@@ -163,7 +143,8 @@ public class GridSystemVisual : MonoBehaviour {
         }
     }
 
-    public void ShowGridPositionList(List<GridPosition> gridPositionList, string layerName, GridVisualType gridVisualType) {
+    public void ShowGridPositionList(List<GridPosition> gridPositionList, string layerName, GridVisualType gridVisualType) 
+    {
         Material material = GetGridVisualTypeMaterial(gridVisualType);
         foreach (GridPosition gridPosition in gridPositionList) 
         {
@@ -179,18 +160,14 @@ public class GridSystemVisual : MonoBehaviour {
                 Destroy(gridSystemVisualSingleArray[x, y].gameObject);
             }
         }
-
-        //if (gridSystemVisualSingleDict2 != null) {
-        //    foreach (var kvp in gridSystemVisualSingleDict2) {
-        //        Destroy(kvp.Value.gameObject);
-        //    }
-        //}
     }
 
     private Material GetGridVisualTypeMaterial(GridVisualType gridVisualType) 
     {
-        foreach (GridVisualTypeMaterial gridVisualTypeMaterial in gridVisualTypeMaterialList) {
-            if (gridVisualTypeMaterial.gridVisualType == gridVisualType) {
+        foreach (GridVisualTypeMaterial gridVisualTypeMaterial in gridVisualTypeMaterialList) 
+        {
+            if (gridVisualTypeMaterial.gridVisualType == gridVisualType) 
+            {
                 return gridVisualTypeMaterial.material;
             }
         }
@@ -201,7 +178,8 @@ public class GridSystemVisual : MonoBehaviour {
 
     private Material GetGridVisualMaterial() 
     {
-        foreach (GridVisualTypeMaterial gridVisualTypeMaterial in gridVisualTypeMaterialList) {
+        foreach (GridVisualTypeMaterial gridVisualTypeMaterial in gridVisualTypeMaterialList) 
+        {
             return gridVisualTypeMaterial.material;
         }
         return null;

@@ -109,32 +109,14 @@ public class TowerPlacement : MonoBehaviour
         }
     }
 
-    private Vector3 GetMouseWorldSnappedPosition() {
+    private Vector3 GetMouseWorldSnappedPosition() 
+    {
         Vector3 mousePosition = GetMousePosition();
         GridPosition gridPosition = levelGrid.GetGridPosition(mousePosition);
 
         if (gridPosition != null) {
-            // **1Ãþ ±×¸®µå À§Ä¡**
-            Vector3 worldPosition1 = levelGrid.GetWorldPosition(gridPosition);
-
-            //// **2Ãþ ±×¸®µå À§Ä¡**
-            //var gridSystem2 = levelGrid.GetGridSystem2();
-            //if (gridSystem2 != null) {
-            //    foreach (var gridPosition2 in levelGrid.GetLayer2GridPosition()) {
-            //        Vector3 worldPosition2 = gridSystem2.GetWorldPosition(gridPosition2);
-
-            //        // **2Ãþ ±×¸®µå°¡ À¯È¿ÇÑ °æ¿ì**
-            //        if (gridSystem2.IsValidGridPosition(gridPosition2) && !levelGrid.HasAnyUnitOnGridPosition(gridPosition2)) {
-            //            if (Vector2.Distance(mousePosition, worldPosition2) < gridSystem2.GetCellSize() / 2) {
-            //                return worldPosition2;
-            //            }
-            //        }
-            //    }
-            //}
-
-            return worldPosition1;
+            return levelGrid.GetAdjustedWorldPosition(gridPosition); // ìˆ˜ì •ëœ ë¶€ë¶„: ë†’ì´ ì¡°ì •ì„ ë°˜ì˜í•œ ìœ„ì¹˜ ë°˜í™˜
         }
-
         return mousePosition;
     }
 
