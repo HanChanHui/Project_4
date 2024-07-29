@@ -12,7 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fd92ee31feb00e4c8a6d62bab71e620, type: 3}
   m_Name: tower_2
   m_EditorClassIdentifier: 
-  nameString: tower_2
+  towerID: 0
+  towerName: 
+  towerType: 1
+  towerHP: 0
+  towerDefence: 0
+  towerAttackType: 0
+  towerAttack: 0
+  towerAttackSpeed: 0
+  attackRange: 0
+  towerCost: 0
+  towerRecoveryCost: 0
+  towerRecoveryCostIncrease: 0
   prefab: {fileID: 1127661327994929567, guid: 9efe014661ade9244a517fdb3d1e4127, type: 3}
+  icon: {fileID: 1127661327994929567, guid: 82411687289229f45aa9158c6abb9990, type: 3}
   width: 1
   height: 1

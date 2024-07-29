@@ -1,36 +1,29 @@
 using System;
-using System.Collections;
+using Consts;
 using System.Collections.Generic;
 using UnityEngine;
-using static GridSystemVisual;
 
 public class GridSystemVisual : MonoBehaviour {
     public static GridSystemVisual Instance { get; private set; }
 
-    public enum GridVisualType {
-        Empty,
-        White,
-        Green,
-        Red,
-    }
-
+    [SerializeField] private LevelGrid levelGrid;
+    [SerializeField] private Transform gridSystemVisualSingPrefab;
+    [SerializeField] private Transform gridSystemVisualSingPrefab2;
+    public Transform GridSystemVisualSingPrefab { get {return gridSystemVisualSingPrefab; } }
+    public Transform GridSystemVisualSingPrefab2 { get {return gridSystemVisualSingPrefab2; } }
+    [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterialList;
+    
     [Serializable]
     public struct GridVisualTypeMaterial {
         public GridVisualType gridVisualType;
         public Material material;
     }
 
-    [SerializeField] private LevelGrid levelGrid;
-    [SerializeField] private Transform gridSystemVisualSingPrefab;
-    [SerializeField] private Transform gridSystemVisualSingPrefab2;
-    [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterialList;
-    [SerializeField] private LayerMask layerMask;
-    private List<GridPosition> placeGridPositionList = new List<GridPosition>();
+    private GridSystemVisualSingle[,] gridSystemVisualOneLayerArray;
+    private GridSystemVisualSingle[,] gridSystemVisualTwoLayerArray;
 
-    private GridSystemVisualSingle[,] gridSystemVisualSingleArray;
-    private Dictionary<GridPosition, GridSystemVisualSingle> gridSystemVisualSingleDict2;
 
-    private string layerName = "Grid";
+    //private string layerName = "Grid";
 
     private void Awake() {
         if (Instance != null) {
@@ -50,30 +43,35 @@ public class GridSystemVisual : MonoBehaviour {
         }
 
         // 1층 그리드 시각화 초기화
-        gridSystemVisualSingleArray = new GridSystemVisualSingle[
+        gridSystemVisualOneLayerArray = new GridSystemVisualSingle[
             levelGrid.GetWidth(),
             levelGrid.GetHeight()
         ];
-
-        for (int x = 0; x < levelGrid.GetWidth(); x++) {
-            for (int y = 0; y < levelGrid.GetHeight(); y++) {
+        // 2층 그리드 시각화 초기화
+        gridSystemVisualTwoLayerArray = new GridSystemVisualSingle[
+            levelGrid.GetWidth(),
+            levelGrid.GetHeight()
+        ];
+        for (int x = 0; x < levelGrid.GetWidth(); x++) 
+        {
+            for (int y = 0; y < levelGrid.GetHeight(); y++) 
+            {
                 GridPosition gridPosition = new GridPosition(x, y);
-                
-                Vector3 worldPosition = levelGrid.GetWorldPosition(gridPosition);
+                Vector3 worldPosition;
 
-                if (!Physics2D.Raycast(worldPosition, Vector2.down, 0.5f, layerMask))
+                if (levelGrid.HasAnyBlockOnGridPosition(gridPosition))
                 {
-                    Transform gridSystemVisualSingleTransform = Instantiate(gridSystemVisualSingPrefab, worldPosition, Quaternion.identity);
-                    gridSystemVisualSingleTransform.transform.parent = transform;
-                    gridSystemVisualSingleArray[x, y] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
-                } 
-                else 
-                {
-                    worldPosition += new Vector3(0, 0.35f, 0);
-                    Transform gridSystemVisualSingleTransform = Instantiate(gridSystemVisualSingPrefab2, worldPosition, Quaternion.identity);
-                    gridSystemVisualSingleTransform.transform.parent = transform;
-                    gridSystemVisualSingleArray[x, y] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
+                    GridPosition newGridPosition = new GridPosition(x, y, 2);
+                    worldPosition = levelGrid.GetWorldPosition(newGridPosition);
+                    Transform gridSystemVisualTwoLayerTransform = Instantiate(gridSystemVisualSingPrefab2, worldPosition, Quaternion.identity);
+                    gridSystemVisualTwoLayerTransform.transform.parent = transform;
+                    gridSystemVisualTwoLayerArray[x, y] = gridSystemVisualTwoLayerTransform.GetComponent<GridSystemVisualSingle>();
                 }
+
+                worldPosition = levelGrid.GetWorldPosition(gridPosition);
+                Transform gridSystemVisualOneLayerTransform = Instantiate(gridSystemVisualSingPrefab, worldPosition, Quaternion.identity);
+                gridSystemVisualOneLayerTransform.transform.parent = transform;
+                gridSystemVisualOneLayerArray[x, y] = gridSystemVisualOneLayerTransform.GetComponent<GridSystemVisualSingle>();
             }
         }
     }
@@ -84,7 +82,8 @@ public class GridSystemVisual : MonoBehaviour {
         {
             for (int y = 0; y < levelGrid.GetHeight(); y++) 
             {
-                gridSystemVisualSingleArray[x, y].Hide();
+                gridSystemVisualOneLayerArray[x, y].Hide();
+                gridSystemVisualTwoLayerArray[x, y].Hide();
             }
         }
     }
@@ -95,61 +94,9 @@ public class GridSystemVisual : MonoBehaviour {
         {
             for (int y = 0; y < levelGrid.GetHeight(); y++) 
             {
-                gridSystemVisualSingleArray[x, y].Show(GetGridVisualMaterial());
+                gridSystemVisualOneLayerArray[x, y].Show(GetGridVisualMaterial());
+                gridSystemVisualTwoLayerArray[x, y].Show(GetGridVisualMaterial());
             }
-        }
-    }
-
-    public void ShowTowerGridPositionRange(GridPosition gridPosition, int width, int height) 
-    {
-        List<GridPosition> greedGridList = new List<GridPosition>();
-        List<GridPosition> redGridList = new List<GridPosition>();
-        ShowBeforeTowerGridVisual();
-
-        for (int x = 0; x < width; x++) 
-        {
-            for (int y = 0; y < height; y++) 
-            {
-                GridPosition testGridPosition = gridPosition + new GridPosition(x, y);
-
-                if (!levelGrid.IsValidGridPosition(testGridPosition)) 
-                {
-                    continue;
-                }
-
-                if (levelGrid.HasAnyUnitOnGridPosition(testGridPosition)) 
-                {
-                    redGridList.Add(testGridPosition);
-                    continue;
-                }
-
-                greedGridList.Add(testGridPosition);
-            }
-        }
-        placeGridPositionList.AddRange(redGridList);
-        placeGridPositionList.AddRange(greedGridList);
-        layerName = "PlaceGrid";
-        ShowGridPositionList(greedGridList, layerName, GridVisualType.Green);
-        ShowGridPositionList(redGridList, layerName, GridVisualType.Red);
-    }
-
-    public void ShowBeforeTowerGridVisual() 
-    {
-        if (placeGridPositionList.Count > 0) 
-        {
-            layerName = "Grid";
-            ShowGridPositionList(placeGridPositionList, layerName, GridVisualType.White);
-            placeGridPositionList.Clear();
-        }
-    }
-
-    public void ShowGridPositionList(List<GridPosition> gridPositionList, string layerName, GridVisualType gridVisualType) 
-    {
-        Material material = GetGridVisualTypeMaterial(gridVisualType);
-        foreach (GridPosition gridPosition in gridPositionList) 
-        {
-            gridSystemVisualSingleArray[gridPosition.x, gridPosition.y].Show(material);
-            gridSystemVisualSingleArray[gridPosition.x, gridPosition.y].GridLayerChange(layerName);
         }
     }
 
@@ -157,12 +104,12 @@ public class GridSystemVisual : MonoBehaviour {
     {
         for (int x = 0; x < levelGrid.GetWidth(); x++) {
             for (int y = 0; y < levelGrid.GetHeight(); y++) {
-                Destroy(gridSystemVisualSingleArray[x, y].gameObject);
+                Destroy(gridSystemVisualOneLayerArray[x, y].gameObject);
             }
         }
     }
 
-    private Material GetGridVisualTypeMaterial(GridVisualType gridVisualType) 
+    public Material GetGridVisualTypeMaterial(GridVisualType gridVisualType) 
     {
         foreach (GridVisualTypeMaterial gridVisualTypeMaterial in gridVisualTypeMaterialList) 
         {
@@ -176,7 +123,7 @@ public class GridSystemVisual : MonoBehaviour {
         return null;
     }
 
-    private Material GetGridVisualMaterial() 
+    public Material GetGridVisualMaterial() 
     {
         foreach (GridVisualTypeMaterial gridVisualTypeMaterial in gridVisualTypeMaterialList) 
         {

@@ -1,13 +1,14 @@
+using Consts;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerPlacement : MonoBehaviour
 {
     [SerializeField] private LevelGrid levelGrid;
-    [SerializeField] private LayerMask mousePlaneLayerMask;
+    [SerializeField] private InputManager inputManager;
     private List<GridPosition> towerGridPositionList = new List<GridPosition>();
     private GridPosition previousGridPosition = new GridPosition();
-    private Vector2 resultTowerGridPos = new Vector2();
+    private Vector3 resultTowerGridPos = new Vector3();
 
     private bool isDisposition = false;
     private Transform towerGhostPrefab;
@@ -17,8 +18,8 @@ public class TowerPlacement : MonoBehaviour
     {
         if (ResourceManager.Instance.SelectedPrefabIndex != -1)
         {
-            GridSystemVisual.Instance.ShowBeforeTowerGridVisual();
             RefreshVisual();
+
             if (isDisposition)
             {
                 PlaceTower(resultTowerGridPos);
@@ -28,29 +29,38 @@ public class TowerPlacement : MonoBehaviour
 
     public void HandleMouseHoldAction()
     {
-        if (GetPosition(out Vector2 position))
+        if (inputManager.GetPosition(out Vector2 position))
         {
-            GridPosition gridPosition = levelGrid.GetGridPosition(position);
-            Vector2 gridTr = levelGrid.GetWorldPosition(gridPosition);
+            Vector3 pos = position;
+            
+            if(levelGrid.HasAnyBlockOnWorldPosition(pos))
+            {
+                pos.z = 2f;
+            }
 
+            GridPosition gridPosition = levelGrid.GetGridPosition(pos);
+            Vector2 gridTr = levelGrid.GetWorldPosition(gridPosition);
             if (!gridPosition.Equals(previousGridPosition))
             {
                 previousGridPosition = gridPosition;
                 towerGridPositionList.Clear();
 
-                //GridSystemVisual.Instance.ShowTowerGridPositionRange(gridPosition, towerObject.width, towerObject.height);
+                OnTowerTypeVisualGrid(gridPosition);
 
-
-                List<Vector2> gridPositionList = towerObject.GetGridPositionList(gridTr);
-                foreach (Vector2 gridPos in gridPositionList)
+                List<GridPosition> gridPositionList = towerObject.GetGridPositionList(gridPosition);
+                if(gridPositionList == null)
                 {
-                    GridPosition towerPos = levelGrid.GetGridPosition(gridPos);
-                    towerGridPositionList.Add(towerPos);
-                    if (HasAnyGridObject(towerPos))
+                    isDisposition = false;
+                    return;
+                }
+                foreach (GridPosition gridPos in gridPositionList)
+                {
+                    if (HasAnyGridObject(gridPos))
                     {
                         isDisposition = false;
                         return;
                     }
+                    towerGridPositionList.Add(gridPos);
                 }
                 resultTowerGridPos = gridTr;
                 isDisposition = true;
@@ -60,14 +70,13 @@ public class TowerPlacement : MonoBehaviour
         {
             if(isDisposition)
             {
-                GridSystemVisual.Instance.ShowBeforeTowerGridVisual();
                 previousGridPosition = new GridPosition();
             }
             isDisposition = false;
         }
     }
 
-    private void PlaceTower(Vector2 gridTr)
+    private void PlaceTower(Vector3 gridTr)
     {
         Tower tower = Instantiate(towerObject.prefab, gridTr, Quaternion.identity).GetComponentInChildren<Tower>();
         foreach (GridPosition gridPos in towerGridPositionList)
@@ -75,6 +84,7 @@ public class TowerPlacement : MonoBehaviour
             tower.GridPosition.Add(gridPos);
             levelGrid.AddUnitAtGridPosition(gridPos, tower);
         }
+        
         ResourceManager.Instance.SetSelectedPrefabIndex(-1);
     }
 
@@ -105,38 +115,34 @@ public class TowerPlacement : MonoBehaviour
 
         if (towerObject != null)
         {
-            towerGhostPrefab = Instantiate(towerObject.prefab, GetMousePosition(), Quaternion.identity).transform;
+            towerGhostPrefab = Instantiate(towerObject.icon, inputManager.GetMouseWorldPosition(), Quaternion.identity).transform;
         }
     }
 
-    private Vector3 GetMouseWorldSnappedPosition() 
+    private Vector3 GetMouseWorldSnappedPosition()
     {
-        Vector3 mousePosition = GetMousePosition();
-        GridPosition gridPosition = levelGrid.GetGridPosition(mousePosition);
-
-        if (gridPosition != null) {
-            return levelGrid.GetAdjustedWorldPosition(gridPosition); // 수정된 부분: 높이 조정을 반영한 위치 반환
-        }
-        return mousePosition;
-    }
-
-    private bool GetPosition(out Vector2 position)
-    {
-        Vector3 clickPosition = GetMousePosition();
-        RaycastHit2D raycastHit = Physics2D.Raycast(clickPosition, Vector2.zero, 0f, mousePlaneLayerMask);
-        if (raycastHit.collider != null)
+        Vector3 mousePosition = inputManager.GetMouseWorldPosition();
+        if (levelGrid.HasAnyBlockOnWorldPosition(mousePosition))
         {
-            position = raycastHit.point;
-            return true;
+            mousePosition.z = 2f;
+            return levelGrid.GetWorldPosition(levelGrid.GetGridPosition(mousePosition));
         }
-
-        position = Vector2.zero;
-        return false;
+        GridPosition gridPosition = levelGrid.GetGridPosition(mousePosition);
+        return levelGrid.GetWorldPosition(gridPosition);
     }
 
-    private Vector3 GetMousePosition()
+    private void OnTowerTypeVisualGrid(GridPosition gridPosition)
     {
-        return InputManager.Instance.GetMouseWorldPosition();
+        TowerType towerType = towerObject.towerType;
+        switch(towerType)
+        {
+            case TowerType.Dealer:
+                towerGhostPrefab.GetComponent<TowerVisualGrid>().ShowSingleTowerGridPositionRange(gridPosition);
+                break;
+             case TowerType.Tanker:
+                towerGhostPrefab.GetComponent<TowerVisualGrid>().ShowRangeTowerGridPositionRange(gridPosition);
+                break;
+        }
     }
 
     private bool HasAnyGridObject(GridPosition gridPosition)

@@ -53,6 +53,9 @@ TagManager:
   - name: Block
     uniqueID: 3600328653
     locked: 0
+  - name: TwoLayerGrid
+    uniqueID: 2820624345
+    locked: 0
   - name: Tower
     uniqueID: 714422313
     locked: 0

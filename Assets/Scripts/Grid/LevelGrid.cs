@@ -40,6 +40,15 @@ public class LevelGrid : MonoBehaviour
         }
     }
 
+    public void AddBlockAtGridPosition(GridPosition gridPosition, Block block)
+    {
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        if (!gridObject.HasAnyBlock())
+        {
+            gridObject.AddBlock(block);
+        }
+    }
+
     public List<Tower> GetUnitListAtGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
@@ -68,8 +77,6 @@ public class LevelGrid : MonoBehaviour
 
     public bool IsValidGridPosition(GridPosition gridPosition) => gridSystem.IsValidGridPosition(gridPosition);
 
-    public Vector3 GetAdjustedWorldPosition(GridPosition gridPosition) => gridSystem.GetAdjustedWorldPosition(gridPosition);
-
     public int GetWidth() => gridSystem.GetWidth();
     public int GetHeight() => gridSystem.GetHeight();
     public float GetCellSize() => gridSystem.GetCellSize();
@@ -77,8 +84,29 @@ public class LevelGrid : MonoBehaviour
     public bool HasAnyUnitOnGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
-        if(gridObject == null) return false;
+        if(gridObject == null) {
+            return false;
+        }
         return gridObject.HasAnyUnit();
+    }
+
+    public bool HasAnyBlockOnGridPosition(GridPosition gridPosition)
+    {
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        if(gridObject == null) {
+            return false;
+        }
+        return gridObject.HasAnyBlock();
+    }
+
+    public bool HasAnyBlockOnWorldPosition(Vector3 worldPosition)
+    {
+        GridPosition gridPosition = gridSystem.GetGridPosition(worldPosition);
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        if(gridObject == null) {
+            return false;
+        }
+        return gridObject.HasAnyBlock();
     }
 
     public Tower GetUnitAtGridPosition(GridPosition gridPosition)
