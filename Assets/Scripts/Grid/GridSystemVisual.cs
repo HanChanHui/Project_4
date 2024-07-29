@@ -23,24 +23,26 @@ public class GridSystemVisual : MonoBehaviour {
     private GridSystemVisualSingle[,] gridSystemVisualTwoLayerArray;
 
 
-    //private string layerName = "Grid";
-
     private void Awake() {
-        if (Instance != null) {
+        if (Instance != null) 
+        {
             Destroy(gameObject);
             return;
         }
         Instance = this;
-    }
 
-    private void Start() {
-        if (levelGrid == null) {
+        if (levelGrid == null) 
+        {
             levelGrid = GameObject.Find("LevelGrid").GetComponent<LevelGrid>();
 
             if (levelGrid == null) {
                 Debug.LogError("LevelGrid 오브젝트를 찾을 수 없습니다. LevelGrid를 할당해주세요.");
             }
         }
+    }
+
+    private void Start() 
+    {
 
         // 1층 그리드 시각화 초기화
         gridSystemVisualOneLayerArray = new GridSystemVisualSingle[
@@ -52,6 +54,7 @@ public class GridSystemVisual : MonoBehaviour {
             levelGrid.GetWidth(),
             levelGrid.GetHeight()
         ];
+
         for (int x = 0; x < levelGrid.GetWidth(); x++) 
         {
             for (int y = 0; y < levelGrid.GetHeight(); y++) 
@@ -102,8 +105,10 @@ public class GridSystemVisual : MonoBehaviour {
 
     public void DestroyGridPositionList() 
     {
-        for (int x = 0; x < levelGrid.GetWidth(); x++) {
-            for (int y = 0; y < levelGrid.GetHeight(); y++) {
+        for (int x = 0; x < levelGrid.GetWidth(); x++) 
+        {
+            for (int y = 0; y < levelGrid.GetHeight(); y++) 
+            {
                 Destroy(gridSystemVisualOneLayerArray[x, y].gameObject);
             }
         }

@@ -29,9 +29,9 @@ public class TowerObject : ScriptableObject
     public int width;
     public int height;
 
-    public List<GridPosition> GetGridPositionList(GridPosition gridPosition)
+    public bool GetGridPositionList(GridPosition gridPosition, out List<GridPosition> gridPositionList)
     {
-        List<GridPosition> gridPositionList = new List<GridPosition>();
+        gridPositionList = new List<GridPosition>();
         for(int x = 0; x < width; x++)
         {
             for(int y = 0; y < height; y++)
@@ -40,13 +40,34 @@ public class TowerObject : ScriptableObject
 
                 if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) 
                 {
-                    return null;
+                    return false;
+                }
+
+                if(LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition)
+                  || LevelGrid.Instance.HasAnyBlockOnGridPosition(testGridPosition))
+                {
+                    return false;
                 }
 
                 gridPositionList.Add(testGridPosition);
             }
         }
-        return gridPositionList;
+        return true;
     }
+
+    public bool GetSingleGridPosition(GridPosition gridPosition)
+    {
+        if (!LevelGrid.Instance.IsValidGridPosition(gridPosition)) {
+            return false;
+        }
+
+        if (LevelGrid.Instance.HasAnyUnitOnGridPosition(gridPosition)
+            || !LevelGrid.Instance.HasAnyBlockOnGridPosition(gridPosition)) {
+            return false;
+        }
+
+        return true;
+    }
+
 
 }

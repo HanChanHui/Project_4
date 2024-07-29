@@ -13,6 +13,19 @@ public class TowerPlacement : MonoBehaviour
     private bool isDisposition = false;
     private Transform towerGhostPrefab;
     private TowerObject towerObject;
+    private TowerType towerType;
+
+    private void Awake() 
+    {
+        if (levelGrid == null) 
+        {
+            levelGrid = GameObject.Find("LevelGrid").GetComponent<LevelGrid>();
+
+            if (levelGrid == null) {
+                Debug.LogError("LevelGrid 오브젝트를 찾을 수 없습니다. LevelGrid를 할당해주세요.");
+            }
+        }
+    }
 
     public void OnMouseUp()
     {
@@ -46,22 +59,26 @@ public class TowerPlacement : MonoBehaviour
                 towerGridPositionList.Clear();
 
                 OnTowerTypeVisualGrid(gridPosition);
-
-                List<GridPosition> gridPositionList = towerObject.GetGridPositionList(gridPosition);
-                if(gridPositionList == null)
+                
+                if(towerType == TowerType.Dealer)
                 {
-                    isDisposition = false;
-                    return;
-                }
-                foreach (GridPosition gridPos in gridPositionList)
-                {
-                    if (HasAnyGridObject(gridPos))
-                    {
+                    if (towerObject.GetSingleGridPosition(gridPosition)) {
+                        towerGridPositionList.Add(gridPosition);
+                    } else {
                         isDisposition = false;
                         return;
                     }
-                    towerGridPositionList.Add(gridPos);
                 }
+                else if(towerType == TowerType.Tanker)
+                {
+                    if (towerObject.GetGridPositionList(gridPosition, out List<GridPosition> gridPositionList)) {
+                        towerGridPositionList = gridPositionList;
+                    } else {
+                        isDisposition = false;
+                        return;
+                    }
+                }
+
                 resultTowerGridPos = gridTr;
                 isDisposition = true;
             }
@@ -133,7 +150,7 @@ public class TowerPlacement : MonoBehaviour
 
     private void OnTowerTypeVisualGrid(GridPosition gridPosition)
     {
-        TowerType towerType = towerObject.towerType;
+        towerType = towerObject.towerType;
         switch(towerType)
         {
             case TowerType.Dealer:
@@ -143,10 +160,5 @@ public class TowerPlacement : MonoBehaviour
                 towerGhostPrefab.GetComponent<TowerVisualGrid>().ShowRangeTowerGridPositionRange(gridPosition);
                 break;
         }
-    }
-
-    private bool HasAnyGridObject(GridPosition gridPosition)
-    {
-        return levelGrid.HasAnyUnitOnGridPosition(gridPosition);
     }
 }

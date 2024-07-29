@@ -12,7 +12,6 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private int height;
     [SerializeField] private float cellSize;
     [SerializeField] private Vector3 startPosition;
-    [SerializeField] private LayerMask layerMask;
 
     private GridSystem<GridObject> gridSystem;
 
@@ -27,7 +26,7 @@ public class LevelGrid : MonoBehaviour
         Instance = this;
 
 
-        gridSystem = new GridSystem<GridObject>(width, height, cellSize, startPosition, layerMask, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
+        gridSystem = new GridSystem<GridObject>(width, height, cellSize, startPosition, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
         //gridSystem.CreateDebugObject(gridDebugObjectPrefab);
     }
 

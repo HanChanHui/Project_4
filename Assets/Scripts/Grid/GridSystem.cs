@@ -10,15 +10,13 @@ public class GridSystem<TGridObject>
     private float cellSize;
     private TGridObject[,] gridObjectArray;
     private Vector3 startPosition;
-    private LayerMask layerMask;
 
-    public GridSystem(int width, int height, float cellSize, Vector3 startPosition, LayerMask layerMask,Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
+    public GridSystem(int width, int height, float cellSize, Vector3 startPosition, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
     {
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
         this.startPosition = startPosition;
-        this.layerMask = layerMask;
 
         gridObjectArray = new TGridObject[width, height];
 

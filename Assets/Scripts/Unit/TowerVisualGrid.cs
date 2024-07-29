@@ -11,7 +11,7 @@ public class TowerVisualGrid : MonoBehaviour
     public GridPosition GridPosition { get{ return gridPosition; } set{ gridPosition = value; }}
 
     private GridSystemVisualSingle[,] gridSystemVisualSingleArray;
-
+    private Material material;
 
     private void Start() 
     {
@@ -23,13 +23,20 @@ public class TowerVisualGrid : MonoBehaviour
         gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
 
         Material material = GridSystemVisual.Instance.GetGridVisualTypeMaterial(GridVisualType.Green);
-        if (towerObject.width > 1 && towerObject.height > 1) 
+        if(towerObject.towerType == TowerType.Dealer)
+        {
+            Transform gridSystemVisualSingleTransform = Instantiate(GridSystemVisual.Instance.GridSystemVisualSingPrefab2, transform.position, Quaternion.identity);
+            gridSystemVisualSingleTransform.transform.parent = transform;
+            gridSystemVisualSingleArray[0, 0] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
+            gridSystemVisualSingleArray[0, 0].Show(material);
+            gridSystemVisualSingleArray[0, 0].GridLayerChange("PlaceGrid");
+        }
+        else if(towerObject.towerType == TowerType.Tanker)
         {
             for (int x = 0; x < towerObject.width; x++) 
             {
                 for (int y = 0; y < towerObject.height; y++) 
                 {
-                    GridPosition testgridPosition = new GridPosition(x, y);
                     Vector3 worldPosition = transform.position + new Vector3(x, y);
 
                     Transform gridSystemVisualSingleTransform = Instantiate(GridSystemVisual.Instance.GridSystemVisualSingPrefab, worldPosition, Quaternion.identity);
@@ -40,37 +47,30 @@ public class TowerVisualGrid : MonoBehaviour
                 }
             }
         }
-        else
-        {
-            GridPosition testgridPosition = new GridPosition(0, 0) + gridPosition;
-            Transform gridSystemVisualSingleTransform = Instantiate(GridSystemVisual.Instance.GridSystemVisualSingPrefab2, transform.position, Quaternion.identity);
-            gridSystemVisualSingleTransform.transform.parent = transform;
-            gridSystemVisualSingleArray[0, 0] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
-            gridSystemVisualSingleArray[0, 0].Show(material);
-            gridSystemVisualSingleArray[0, 0].GridLayerChange("PlaceGrid");
-        }
         
     }
 
     public void ShowSingleTowerGridPositionRange(GridPosition gridPosition) 
     {
-        Material material;
-
-        if (!LevelGrid.Instance.IsValidGridPosition(gridPosition) ||
-            LevelGrid.Instance.HasAnyUnitOnGridPosition(gridPosition)) 
+        if (!LevelGrid.Instance.IsValidGridPosition(gridPosition)) 
         {
-            material = GridSystemVisual.Instance.GetGridVisualTypeMaterial(GridVisualType.Red);
-            gridSystemVisualSingleArray[0, 0].Show(material);
+            GetMaterialGrid(0, 0, GridVisualType.Red);
             return;
         }
 
-        material = GridSystemVisual.Instance.GetGridVisualTypeMaterial(GridVisualType.Green);
-        gridSystemVisualSingleArray[0, 0].Show(material);
+        if (LevelGrid.Instance.HasAnyUnitOnGridPosition(gridPosition)
+            || !LevelGrid.Instance.HasAnyBlockOnGridPosition(gridPosition)) 
+        {
+            GetMaterialGrid(0, 0, GridVisualType.Red);
+            return;
+        }
+
+        GetMaterialGrid(0, 0, GridVisualType.Green);
     }
 
     public void ShowRangeTowerGridPositionRange(GridPosition gridPosition) 
     {
-        Material material;
+
         for (int x = 0; x < towerObject.width; x++) 
         {
             for (int y = 0; y < towerObject.height; y++) 
@@ -79,24 +79,26 @@ public class TowerVisualGrid : MonoBehaviour
 
                 if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) 
                 {
-                    material = GridSystemVisual.Instance.GetGridVisualTypeMaterial(GridVisualType.Red);
-                    gridSystemVisualSingleArray[x, y].Show(material);
+                    GetMaterialGrid(x, y, GridVisualType.Red);
                     continue;
                 }
 
                 if (LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition) ||
                     LevelGrid.Instance.HasAnyBlockOnGridPosition(testGridPosition)) 
                 {
-                    material = GridSystemVisual.Instance.GetGridVisualTypeMaterial(GridVisualType.Red);
-                    gridSystemVisualSingleArray[x, y].Show(material);
+                    GetMaterialGrid(x, y, GridVisualType.Red);
                     continue;
                 }
                 
-                material = GridSystemVisual.Instance.GetGridVisualTypeMaterial(GridVisualType.Green);
-                gridSystemVisualSingleArray[x, y].Show(material);
+                GetMaterialGrid(x, y, GridVisualType.Green);
             }
         }
+    }
 
+    private void GetMaterialGrid(int x, int y, GridVisualType gridType)
+    {
+        material = GridSystemVisual.Instance.GetGridVisualTypeMaterial(gridType);
+        gridSystemVisualSingleArray[x, y].Show(material);
     }
 
     public void DestroyGridPositionList() 
