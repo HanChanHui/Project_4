@@ -23,4 +23,15 @@ namespace Consts
         Green,
         Red,
     }
+
+    public enum LayerName
+    {
+        Grid,
+        BackTower,
+        Block,
+        TwoLayerGrid,
+        Tower,
+        PlaceGrid
+    }
 }
+

@@ -11,7 +11,6 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private int width;
     [SerializeField] private int height;
     [SerializeField] private float cellSize;
-    [SerializeField] private Vector3 startPosition;
 
     private GridSystem<GridObject> gridSystem;
 
@@ -26,7 +25,7 @@ public class LevelGrid : MonoBehaviour
         Instance = this;
 
 
-        gridSystem = new GridSystem<GridObject>(width, height, cellSize, startPosition, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
+        gridSystem = new GridSystem<GridObject>(width, height, cellSize, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
         //gridSystem.CreateDebugObject(gridDebugObjectPrefab);
     }
 
@@ -48,6 +47,12 @@ public class LevelGrid : MonoBehaviour
         }
     }
 
+     public void AddEnemyAtGridPosition(GridPosition gridPosition, Enemy enemy)
+    {
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        gridObject.AddEnemy(enemy);
+    }
+
     public List<Tower> GetUnitListAtGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
@@ -63,6 +68,12 @@ public class LevelGrid : MonoBehaviour
         }
     }
 
+    public void RemoveEnemyAtGridPosition(GridPosition gridPosition, Enemy enemy)
+    {
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        gridObject.RemoveEnemy(enemy);
+    }
+
     public void UnitMovedGridPosition(Tower unit, GridPosition fromGridPosition, GridPosition toGridPosition)
     {
         RemoveUnitAtGridPosition(fromGridPosition, unit);
@@ -70,7 +81,15 @@ public class LevelGrid : MonoBehaviour
         AddUnitAtGridPosition(toGridPosition, unit);
     }
 
+    public void EnemyMovedGridPosition(Enemy enemy, GridPosition fromGridPosition, GridPosition toGridPosition)
+    {
+        RemoveEnemyAtGridPosition(fromGridPosition, enemy);
+
+        AddEnemyAtGridPosition(toGridPosition, enemy);
+    }
+
     public GridPosition GetGridPosition(Vector3 worldPosition) => gridSystem.GetGridPosition(worldPosition);
+    public GridPosition GetCameraGridPosition(Vector3 worldPosition) => gridSystem.GetCameraGridPosition(worldPosition);
 
     public Vector3 GetWorldPosition(GridPosition gridPosition) => gridSystem.GetWorldPosition(gridPosition);
 
@@ -96,6 +115,15 @@ public class LevelGrid : MonoBehaviour
             return false;
         }
         return gridObject.HasAnyBlock();
+    }
+
+    public bool HasAnyEnemyOnGridPosition(GridPosition gridPosition)
+    {
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        if(gridObject == null) {
+            return false;
+        }
+        return gridObject.HasAnyEnemy();
     }
 
     public bool HasAnyBlockOnWorldPosition(Vector3 worldPosition)

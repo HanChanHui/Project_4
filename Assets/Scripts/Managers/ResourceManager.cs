@@ -10,6 +10,11 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] private List<TowerObject> prefabs;
     public List<TowerObject> Prefabs{get{return prefabs;}}
 
+    [SerializeField] private Transform gridSystemVisualSingPrefab;
+    [SerializeField] private Transform gridSystemVisualSingPrefab2;
+    public Transform GridSystemVisualSingPrefab { get {return gridSystemVisualSingPrefab; } }
+    public Transform GridSystemVisualSingPrefab2 { get {return gridSystemVisualSingPrefab2; } }
+
     private int selectedPrefabIndex = -1; // 선택된 프리팹 인덱스
     public int SelectedPrefabIndex {get { return selectedPrefabIndex; } set{ selectedPrefabIndex = value; }}
 

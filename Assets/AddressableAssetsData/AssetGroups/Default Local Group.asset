@@ -16,31 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 9bf9142f755ff2d4898db4c75e9ab664
-  m_SerializeEntries:
-  - m_GUID: 8533a515b91da7548b41747f0b75981d
-    m_Address: Assets/Prefabs/Tower/tower_01.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6430d732cc506b54eb0b54d6929d51a6
-    m_Address: Assets/Prefabs/Tower/Tower_02.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 54f79e91984b4e844a28da5063151a3c
-    m_Address: Assets/Prefabs/Tower/Tower_03.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: bc9fa1528d4ffdc41a71d1d30a1e8712
-    m_Address: Assets/Prefabs/Tower/Tower_04.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 111d97d4281029f44ac1282aa648d0e6, type: 2}
   m_SchemaSet:

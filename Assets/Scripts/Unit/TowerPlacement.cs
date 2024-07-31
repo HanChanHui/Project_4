@@ -15,6 +15,8 @@ public class TowerPlacement : MonoBehaviour
     private TowerObject towerObject;
     private TowerType towerType;
 
+    private bool isOutside = false;
+
     private void Awake() 
     {
         if (levelGrid == null) 
@@ -42,10 +44,11 @@ public class TowerPlacement : MonoBehaviour
 
     public void HandleMouseHoldAction()
     {
+
         if (inputManager.GetPosition(out Vector2 position))
         {
+            isOutside = true;
             Vector3 pos = position;
-            
             if(levelGrid.HasAnyBlockOnWorldPosition(pos))
             {
                 pos.z = 2f;
@@ -59,38 +62,55 @@ public class TowerPlacement : MonoBehaviour
                 towerGridPositionList.Clear();
 
                 OnTowerTypeVisualGrid(gridPosition);
-                
-                if(towerType == TowerType.Dealer)
-                {
-                    if (towerObject.GetSingleGridPosition(gridPosition)) {
-                        towerGridPositionList.Add(gridPosition);
-                    } else {
-                        isDisposition = false;
-                        return;
-                    }
-                }
-                else if(towerType == TowerType.Tanker)
-                {
-                    if (towerObject.GetGridPositionList(gridPosition, out List<GridPosition> gridPositionList)) {
-                        towerGridPositionList = gridPositionList;
-                    } else {
-                        isDisposition = false;
-                        return;
-                    }
-                }
 
-                resultTowerGridPos = gridTr;
-                isDisposition = true;
+                if (TryGetTowerGridPositions(gridPosition, out List<GridPosition> gridPositions))
+                {
+                    towerGridPositionList = gridPositions;
+                    resultTowerGridPos = gridTr;
+                    isDisposition = true;
+                }
+                else
+                {
+                    previousGridPosition = new GridPosition();
+                    isDisposition = false;
+                    return;
+                }
             }
         }
         else
         {
-            if(isDisposition)
+            isDisposition = false;
+            if(isOutside)
             {
+                isOutside = false;
+                towerGhostPrefab.GetComponent<TowerVisualGrid>().OutSideGridPositionList();
                 previousGridPosition = new GridPosition();
             }
-            isDisposition = false;
         }
+        
+    }
+
+    private bool TryGetTowerGridPositions(GridPosition gridPosition, out List<GridPosition> gridPositions)
+    {
+        gridPositions = new List<GridPosition>();
+
+        if (towerType == TowerType.Dealer)
+        {
+            if (towerObject.GetSingleGridPosition(gridPosition))
+            {
+                gridPositions.Add(gridPosition);
+                return true;
+            }
+        }
+        else if (towerType == TowerType.Tanker)
+        {
+            if (towerObject.GetGridPositionList(gridPosition, out gridPositions))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void PlaceTower(Vector3 gridTr)
@@ -98,7 +118,7 @@ public class TowerPlacement : MonoBehaviour
         Tower tower = Instantiate(towerObject.prefab, gridTr, Quaternion.identity).GetComponentInChildren<Tower>();
         foreach (GridPosition gridPos in towerGridPositionList)
         {
-            tower.GridPosition.Add(gridPos);
+            tower.GridPositionList.Add(gridPos);
             levelGrid.AddUnitAtGridPosition(gridPos, tower);
         }
         
@@ -108,7 +128,7 @@ public class TowerPlacement : MonoBehaviour
     public void UpdateMousePosition()
     {
         Vector3 targetPosition = GetMouseWorldSnappedPosition();
-        towerGhostPrefab.position = Vector3.Lerp(towerGhostPrefab.position, targetPosition, Time.deltaTime * 50f);
+        towerGhostPrefab.position = targetPosition;
     }
 
     public void RefreshVisual()
@@ -144,8 +164,14 @@ public class TowerPlacement : MonoBehaviour
             mousePosition.z = 2f;
             return levelGrid.GetWorldPosition(levelGrid.GetGridPosition(mousePosition));
         }
-        GridPosition gridPosition = levelGrid.GetGridPosition(mousePosition);
-        return levelGrid.GetWorldPosition(gridPosition);
+
+        GridPosition gridPosition = levelGrid.GetCameraGridPosition(mousePosition);
+        if(levelGrid.IsValidGridPosition(gridPosition))
+        {
+            return levelGrid.GetWorldPosition(gridPosition);
+        }
+
+        return mousePosition;
     }
 
     private void OnTowerTypeVisualGrid(GridPosition gridPosition)

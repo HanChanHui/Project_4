@@ -11,13 +11,15 @@ public class GridSystem<TGridObject>
     private TGridObject[,] gridObjectArray;
     private Vector3 startPosition;
 
-    public GridSystem(int width, int height, float cellSize, Vector3 startPosition, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
+    public GridSystem(int width, int height, float cellSize, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
     {
         this.width = width;
         this.height = height;
         this.cellSize = cellSize;
-        this.startPosition = startPosition;
 
+        Camera mainCamera = Camera.main;
+        Vector3 cameraPosition = mainCamera.transform.position;
+        startPosition = new Vector3(cameraPosition.x - (width * cellSize) / 2 + 0.5f, cameraPosition.y - (height * cellSize) / 2, 0);
         gridObjectArray = new TGridObject[width, height];
 
         for(int x = 0; x < width; x++)
@@ -40,6 +42,14 @@ public class GridSystem<TGridObject>
     {
         int xPosition = Mathf.Clamp(Mathf.RoundToInt((worldPosition - startPosition).x / cellSize), 0, width - 1);
         int yPosition = Mathf.Clamp(Mathf.RoundToInt((worldPosition - startPosition).y / cellSize), 0, height - 1);
+        int zLayer = (int)worldPosition.z;
+        return new GridPosition(xPosition, yPosition, zLayer);
+    }
+
+    public GridPosition GetCameraGridPosition(Vector3 worldPosition) 
+    {
+        int xPosition = Mathf.RoundToInt((worldPosition - startPosition).x / cellSize);
+        int yPosition = Mathf.RoundToInt((worldPosition - startPosition).y / cellSize);
         int zLayer = (int)worldPosition.z;
         return new GridPosition(xPosition, yPosition, zLayer);
     }

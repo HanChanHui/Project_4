@@ -7,7 +7,6 @@ public class InputManager : MonoBehaviour
     public static InputManager Instance { get; private set; }
 
     [SerializeField] private LayerMask mousePlaneLayerMask;
-    [SerializeField] private LayerMask layerMask;
 
     private void Awake()
     {
@@ -22,7 +21,9 @@ public class InputManager : MonoBehaviour
 
     public Vector3 GetMouseWorldPosition()
     {
-        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mouseScreenPosition = Input.mousePosition;
+        mouseScreenPosition.z = Camera.main.nearClipPlane;  // 카메라의 near clip plane으로 z값 설정
+        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
         return mouseWorldPosition;
     }
 

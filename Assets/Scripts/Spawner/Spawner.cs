@@ -1,0 +1,46 @@
+using UnityEngine;
+using Pathfinding;
+
+public class Spawner : MonoBehaviour
+{
+    public GameObject Enemy;
+    public Transform target;
+    public bool spawnerEnabled = false;
+
+    private Transform trans;
+    private float nextSpawnTime;
+
+    void Awake()
+    {
+        this.trans = this.transform;
+        this.nextSpawnTime = Time.time + Random.Range(1.0f, 2.0f);
+    }
+
+    void Update()
+    {
+        if (!spawnerEnabled)
+        {
+            return;
+        }
+
+        if (Time.time >= this.nextSpawnTime)
+        {
+            var numToSpawn = 1;
+
+            for (var i = 0; i < numToSpawn; i++)
+            {
+                var spawnPos = this.trans.position;
+                spawnPos.x = Random.Range(spawnPos.x - 6, spawnPos.x + 6);
+                var enemyInstance = Instantiate(Enemy, spawnPos, Enemy.transform.rotation);
+
+                var aiDestinationSetter = enemyInstance.GetComponent<AIDestinationSetter>();
+                if (aiDestinationSetter != null)
+                {
+                    aiDestinationSetter.target = target;
+                }
+            }
+
+            this.nextSpawnTime = Time.time + Random.Range(1.0f, 2.0f);
+        }
+    }
+}
