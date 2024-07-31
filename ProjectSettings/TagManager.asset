@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Bullet
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -18,7 +20,7 @@ TagManager:
   - Enemy
   - Tower
   - Block
-  - 
+  - Bullet
   - 
   - 
   - 
@@ -70,4 +72,7 @@ TagManager:
     locked: 0
   - name: PlaceGrid
     uniqueID: 3837358787
+    locked: 0
+  - name: Bullet
+    uniqueID: 2574031337
     locked: 0

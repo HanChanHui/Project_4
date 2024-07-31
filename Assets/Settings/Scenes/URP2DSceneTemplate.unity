@@ -1023,7 +1023,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 00000000df4fd0c52938952acbaedf31d39c8762c372b9e4cda798d6d94f1fa84f1d3c8bcde6542407cc0139
+  m_ApplyToSortingLayers: 00000000df4fd0c52938952acbaedf31d39c8762c372b9e4cda798d6d94f1fa84f1d3c8bcde6542407cc0139e9996c99
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -2388,6 +2388,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1360842974 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5406034751234531167, guid: fe0324d6c99fde7429a47a8d7a476299, type: 3}
+  m_PrefabInstance: {fileID: 5241962743329339596}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96717cedba3b9bb4199cb0896c19dd08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1494242937
 GameObject:
   m_ObjectHideFlags: 0
@@ -4083,6 +4094,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1929974308559165632, guid: fe0324d6c99fde7429a47a8d7a476299, type: 3}
+      propertyPath: levelGrid
+      value: 
+      objectReference: {fileID: 1360842974}
+    - target: {fileID: 1929974308559165632, guid: fe0324d6c99fde7429a47a8d7a476299, type: 3}
       propertyPath: inputManager
       value: 
       objectReference: {fileID: 1085649630}
@@ -4090,6 +4105,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: ----------Grid System----------
       objectReference: {fileID: 0}
+    - target: {fileID: 5776718429716483907, guid: fe0324d6c99fde7429a47a8d7a476299, type: 3}
+      propertyPath: levelGrid
+      value: 
+      objectReference: {fileID: 1360842974}
+    - target: {fileID: 5776718429716483907, guid: fe0324d6c99fde7429a47a8d7a476299, type: 3}
+      propertyPath: gridSystemVisualSingPrefab
+      value: 
+      objectReference: {fileID: 1119162169778905687, guid: 665fddd3a19ffe749a9c3c08d927207a, type: 3}
+    - target: {fileID: 5776718429716483907, guid: fe0324d6c99fde7429a47a8d7a476299, type: 3}
+      propertyPath: gridSystemVisualSingPrefab2
+      value: 
+      objectReference: {fileID: 1119162169778905687, guid: 70b30134ef7f8aa4fb2b854b8692ce85, type: 3}
     - target: {fileID: 6852649943283134374, guid: fe0324d6c99fde7429a47a8d7a476299, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -9,12 +9,16 @@ public class Enemy : MonoBehaviour
     private AIPath aiPath;
     private SpriteRenderer spriteRenderer;
     private GridPosition gridPosition;
+    private GridPosition beforeGridPosition;
 
     [SerializeField] private float health;
     [SerializeField] private float maxHealth;
     [SerializeField] private Image healthBar;
 
     private float currentHealth;
+
+    public delegate void EnemyDestroyedHandler(Enemy enemy);
+    public static event EnemyDestroyedHandler OnEnemyDestroyed;
 
     void Start()
     {
@@ -29,10 +33,6 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            Demege(10f);
-        }
         // Check the AIPath velocity to determine the movement direction
         if (aiPath.desiredVelocity.x >= 0.01f)
         {
@@ -52,29 +52,35 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator ResetEnemyGridPosition()
     {
-        GridPosition beforeGridPosition = new GridPosition();
         while(true)
         {
             gridPosition = LevelGrid.Instance.GetCameraGridPosition(transform.position);
-            if(LevelGrid.Instance.IsValidGridPosition(gridPosition) && beforeGridPosition != gridPosition)
+            if(LevelGrid.Instance.IsValidGridPosition(gridPosition) 
+                && beforeGridPosition != gridPosition)
             {
-                Debug.Log("이동 : " + gridPosition);
+                LevelGrid.Instance.EnemyMovedGridPosition(this, beforeGridPosition, gridPosition);
                 beforeGridPosition = gridPosition;
-                LevelGrid.Instance.AddEnemyAtGridPosition(gridPosition, this);
             }
 
             yield return new WaitForSeconds(0.1f);
         }
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if(other.transform.CompareTag("Bullet"))
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Bullet"))
         {
-            Demege(10f);
+            Debug.Log("들어오는지");
+            Bullet bullet = other.GetComponent<Bullet>();
+            if (bullet != null)
+            {
+                Damage(bullet.Damage);
+                Destroy(other.gameObject);
+            }
         }
     }
 
-    private void Demege(float damage)
+    private void Damage(float damage)
     {
         health -= damage;
         if (health < 0)
@@ -83,12 +89,18 @@ public class Enemy : MonoBehaviour
         }
 
         currentHealth = health / maxHealth;
-        
 
         if (health <= 0)
         {
-            Destroy(gameObject);
+            DestroyEnemy();
         }
+    }
+
+    private void DestroyEnemy()
+    {
+        LevelGrid.Instance.RemoveEnemyAtGridPosition(gridPosition, this);
+        OnEnemyDestroyed?.Invoke(this);
+        Destroy(gameObject);
     }
 
 

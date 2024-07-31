@@ -5,7 +5,7 @@ using UnityEngine;
 public class TowerVisualGrid : MonoBehaviour
 {
 
-    [SerializeField] private TowerObject towerObject;
+    private TowerObject towerObject;
 
     private GridPosition gridPosition;
     public GridPosition GridPosition { get{ return gridPosition; } set{ gridPosition = value; }}
@@ -15,6 +15,12 @@ public class TowerVisualGrid : MonoBehaviour
 
     private void Start() 
     {
+        int count = ResourceManager.Instance.SelectedPrefabIndex;
+        if (count >= 0)
+        {
+            towerObject = ResourceManager.Instance.Prefabs[count];
+        }
+        
         gridSystemVisualSingleArray = new GridSystemVisualSingle[
             towerObject.width,
             towerObject.height

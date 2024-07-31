@@ -141,7 +141,7 @@ public class TowerPlacement : MonoBehaviour
         }
 
         int count = ResourceManager.Instance.SelectedPrefabIndex;
-        if (count >= 0 && count < ResourceManager.Instance.Prefabs.Count)
+        if (count >= 0)
         {
             towerObject = ResourceManager.Instance.Prefabs[count];
         }
@@ -152,6 +152,7 @@ public class TowerPlacement : MonoBehaviour
 
         if (towerObject != null)
         {
+            isOutside = false;
             towerGhostPrefab = Instantiate(towerObject.icon, inputManager.GetMouseWorldPosition(), Quaternion.identity).transform;
         }
     }

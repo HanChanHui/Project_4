@@ -7,6 +7,9 @@ public class LevelGrid : MonoBehaviour
 {
     public static LevelGrid Instance { get; private set; }
 
+    public event Action<Enemy, GridPosition> OnEnemyEnteredGridPosition;
+    public event Action<Enemy, GridPosition> OnEnemyExitedGridPosition;
+
     [SerializeField] private Transform gridDebugObjectPrefab;
     [SerializeField] private int width;
     [SerializeField] private int height;
@@ -51,6 +54,7 @@ public class LevelGrid : MonoBehaviour
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         gridObject.AddEnemy(enemy);
+        OnEnemyEnteredGridPosition?.Invoke(enemy, gridPosition);
     }
 
     public List<Tower> GetUnitListAtGridPosition(GridPosition gridPosition)
@@ -71,7 +75,11 @@ public class LevelGrid : MonoBehaviour
     public void RemoveEnemyAtGridPosition(GridPosition gridPosition, Enemy enemy)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
-        gridObject.RemoveEnemy(enemy);
+        if(gridObject.HasAnyEnemy())
+        {
+            gridObject.RemoveEnemy(enemy);
+            OnEnemyExitedGridPosition?.Invoke(enemy, gridPosition);
+        }
     }
 
     public void UnitMovedGridPosition(Tower unit, GridPosition fromGridPosition, GridPosition toGridPosition)
@@ -141,6 +149,12 @@ public class LevelGrid : MonoBehaviour
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         if(gridObject == null) return null;
         return gridObject.GetUnit();
+    }
+
+    public List<Enemy> GetEnemiesAtGridPosition(GridPosition gridPosition)
+    {
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        return gridObject.GetEnemy();
     }
 
     public GridSystem<GridObject> GetGridSystem()
