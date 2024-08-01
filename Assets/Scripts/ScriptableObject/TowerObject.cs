@@ -43,7 +43,7 @@ public class TowerObject : ScriptableObject
                     return false;
                 }
 
-                if(LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition)
+                if(LevelGrid.Instance.HasAnyTowerOnGridPosition(testGridPosition)
                   || LevelGrid.Instance.HasAnyBlockOnGridPosition(testGridPosition))
                 {
                     return false;
@@ -61,7 +61,7 @@ public class TowerObject : ScriptableObject
             return false;
         }
 
-        if (LevelGrid.Instance.HasAnyUnitOnGridPosition(gridPosition)
+        if (LevelGrid.Instance.HasAnyTowerOnGridPosition(gridPosition)
             || !LevelGrid.Instance.HasAnyBlockOnGridPosition(gridPosition)) {
             return false;
         }

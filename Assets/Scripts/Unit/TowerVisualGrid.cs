@@ -64,7 +64,7 @@ public class TowerVisualGrid : MonoBehaviour
             return;
         }
 
-        if (LevelGrid.Instance.HasAnyUnitOnGridPosition(gridPosition)
+        if (LevelGrid.Instance.HasAnyTowerOnGridPosition(gridPosition)
             || !LevelGrid.Instance.HasAnyBlockOnGridPosition(gridPosition)) 
         {
             GetMaterialGrid(0, 0, GridVisualType.Red);
@@ -89,7 +89,7 @@ public class TowerVisualGrid : MonoBehaviour
                     continue;
                 }
 
-                if (LevelGrid.Instance.HasAnyUnitOnGridPosition(testGridPosition) ||
+                if (LevelGrid.Instance.HasAnyTowerOnGridPosition(testGridPosition) ||
                     LevelGrid.Instance.HasAnyBlockOnGridPosition(testGridPosition)) 
                 {
                     GetMaterialGrid(x, y, GridVisualType.Red);

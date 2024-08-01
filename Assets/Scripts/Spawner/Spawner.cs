@@ -5,6 +5,7 @@ public class Spawner : MonoBehaviour
 {
     public GameObject Enemy;
     public Transform target;
+    public float coolTime;
     public bool spawnerEnabled = false;
 
     private Transform trans;
@@ -13,7 +14,8 @@ public class Spawner : MonoBehaviour
     void Awake()
     {
         this.trans = this.transform;
-        this.nextSpawnTime = Time.time + Random.Range(1.0f, 2.0f);
+        //this.nextSpawnTime = Time.time + Random.Range(1.0f, 2.0f);
+        this.nextSpawnTime = Time.time + coolTime;
     }
 
     void Update()
@@ -40,7 +42,8 @@ public class Spawner : MonoBehaviour
                 }
             }
 
-            this.nextSpawnTime = Time.time + Random.Range(1.0f, 2.0f);
+            //this.nextSpawnTime = Time.time + Random.Range(1.0f, 2.0f);
+            this.nextSpawnTime = Time.time + coolTime;
         }
     }
 }

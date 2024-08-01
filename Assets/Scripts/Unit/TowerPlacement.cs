@@ -119,7 +119,7 @@ public class TowerPlacement : MonoBehaviour
         foreach (GridPosition gridPos in towerGridPositionList)
         {
             tower.GridPositionList.Add(gridPos);
-            levelGrid.AddUnitAtGridPosition(gridPos, tower);
+            levelGrid.AddTowerAtGridPosition(gridPos, tower);
         }
         
         ResourceManager.Instance.SetSelectedPrefabIndex(-1);

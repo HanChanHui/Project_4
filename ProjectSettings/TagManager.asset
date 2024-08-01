@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Bullet
   - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -20,7 +20,7 @@ TagManager:
   - Enemy
   - Tower
   - Block
-  - Bullet
+  - 
   - 
   - 
   - 
@@ -74,5 +74,5 @@ TagManager:
     uniqueID: 3837358787
     locked: 0
   - name: Bullet
-    uniqueID: 2574031337
+    uniqueID: 3096149627
     locked: 0

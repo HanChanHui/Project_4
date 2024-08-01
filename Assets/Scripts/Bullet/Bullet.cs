@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public static Action<Enemy, float> OnEnemyHit;
+    public static Action OnBulletDestroyed;
 
-    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private int moveSpeed = 10;
     [SerializeField] private float minDistanceToDealDamage = 0.1f;
     private float damage;
     public float Damage{get {return damage;} set{damage = value;}}
@@ -30,7 +30,11 @@ public class Bullet : MonoBehaviour
         float distanceToTarget = (enemyTarget.transform.position - transform.position).magnitude;
         if(distanceToTarget < minDistanceToDealDamage)
         {
-            OnEnemyHit?.Invoke(enemyTarget, damage);
+            if(enemyTarget.gameObject.activeSelf)
+            {
+                enemyTarget.TakeDamage(damage);
+            }
+            DestroyBullet();
         }
     }
 
@@ -44,6 +48,15 @@ public class Bullet : MonoBehaviour
     public void SetEnemy(Enemy enemy)
     {
         enemyTarget = enemy;
+    }
+
+    private void DestroyBullet()
+    {
+        if (OnBulletDestroyed != null)
+        {
+            OnBulletDestroyed();
+        }
+        Destroy(gameObject);
     }
 
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerID: 0
   towerName: 
-  towerType: 2
+  towerType: 1
   towerHP: 0
   towerDefence: 0
   towerAttackType: 0

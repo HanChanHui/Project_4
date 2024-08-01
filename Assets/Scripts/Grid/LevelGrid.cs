@@ -29,15 +29,14 @@ public class LevelGrid : MonoBehaviour
 
 
         gridSystem = new GridSystem<GridObject>(width, height, cellSize, (GridSystem<GridObject> g, GridPosition gridPosition) => new GridObject(g, gridPosition));
-        //gridSystem.CreateDebugObject(gridDebugObjectPrefab);
     }
 
-    public void AddUnitAtGridPosition(GridPosition gridPosition, Tower unit)
+    public void AddTowerAtGridPosition(GridPosition gridPosition, Tower tower)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
-        if (!gridObject.HasAnyUnit())
+        if (!gridObject.HasAnyTower())
         {
-            gridObject.AddUnit(unit);
+            gridObject.AddTower(tower);
         }
     }
 
@@ -57,18 +56,18 @@ public class LevelGrid : MonoBehaviour
         OnEnemyEnteredGridPosition?.Invoke(enemy, gridPosition);
     }
 
-    public List<Tower> GetUnitListAtGridPosition(GridPosition gridPosition)
+    public List<Tower> GetTowerListAtGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
-        return gridObject.GetUnitList();
+        return gridObject.GetTowerList();
     }
 
-    public void RemoveUnitAtGridPosition(GridPosition gridPosition, Tower unit)
+    public void RemoveTowerAtGridPosition(GridPosition gridPosition, Tower tower)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
-        if (gridObject.HasAnyUnit())
+        if (gridObject.HasAnyTower())
         {
-            gridObject.RemoveUnit(unit);
+            gridObject.RemoveTower(tower);
         }
     }
 
@@ -84,9 +83,9 @@ public class LevelGrid : MonoBehaviour
 
     public void UnitMovedGridPosition(Tower unit, GridPosition fromGridPosition, GridPosition toGridPosition)
     {
-        RemoveUnitAtGridPosition(fromGridPosition, unit);
+        RemoveTowerAtGridPosition(fromGridPosition, unit);
 
-        AddUnitAtGridPosition(toGridPosition, unit);
+        AddTowerAtGridPosition(toGridPosition, unit);
     }
 
     public void EnemyMovedGridPosition(Enemy enemy, GridPosition fromGridPosition, GridPosition toGridPosition)
@@ -107,59 +106,44 @@ public class LevelGrid : MonoBehaviour
     public int GetHeight() => gridSystem.GetHeight();
     public float GetCellSize() => gridSystem.GetCellSize();
 
-    public bool HasAnyUnitOnGridPosition(GridPosition gridPosition)
+    public bool HasAnyTowerOnGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
-        if(gridObject == null) {
-            return false;
-        }
-        return gridObject.HasAnyUnit();
+        return gridObject != null && gridObject.HasAnyTower();
     }
 
     public bool HasAnyBlockOnGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
-        if(gridObject == null) {
-            return false;
-        }
-        return gridObject.HasAnyBlock();
+        return gridObject != null && gridObject.HasAnyBlock();
     }
 
     public bool HasAnyEnemyOnGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
-        if(gridObject == null) {
-            return false;
-        }
-        return gridObject.HasAnyEnemy();
+        return gridObject != null && gridObject.HasAnyEnemy();
     }
 
     public bool HasAnyBlockOnWorldPosition(Vector3 worldPosition)
     {
         GridPosition gridPosition = gridSystem.GetGridPosition(worldPosition);
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
-        if(gridObject == null) {
-            return false;
-        }
-        return gridObject.HasAnyBlock();
+        return gridObject != null && gridObject.HasAnyBlock();
     }
 
-    public Tower GetUnitAtGridPosition(GridPosition gridPosition)
+    public Tower GetTowerAtGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         if(gridObject == null) return null;
-        return gridObject.GetUnit();
+        return gridObject.GetTower();
     }
 
-    public List<Enemy> GetEnemiesAtGridPosition(GridPosition gridPosition)
+    public Enemy GetEnemiesAtGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         return gridObject.GetEnemy();
     }
 
-    public GridSystem<GridObject> GetGridSystem()
-    {
-        return gridSystem;
-    }
+    public GridSystem<GridObject> GetGridSystem() => gridSystem;
 
 }

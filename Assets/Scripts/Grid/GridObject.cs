@@ -6,7 +6,7 @@ public class GridObject
 {
     private GridSystem<GridObject> gridSystem;
     private GridPosition gridPosition;
-    private List<Tower> unitList;
+    private List<Tower> towerList;
     private List<Block> blockList;
     private List<Enemy> enemyList;
 
@@ -14,25 +14,25 @@ public class GridObject
     {
         this.gridSystem = gridSystem;
         this.gridPosition = gridPosition;
-        unitList = new List<Tower>();
+        towerList = new List<Tower>();
         blockList = new List<Block>();
         enemyList = new List<Enemy>();
     }
 
     public override string ToString()
     {
-        string unitString = "";
-        foreach (Tower unit in unitList)
+        string towerString = "";
+        foreach (Tower tower in towerList)
         {
-            unitString += unit + "\n";
+            towerString += tower + "\n";
         }
 
-        return unitString;
+        return towerString;
     }
 
-    public void AddUnit(Tower unit)
+    public void AddTower(Tower unit)
     {
-        unitList.Add(unit);
+        towerList.Add(unit);
     }
     public void AddBlock(Block block)
     {
@@ -43,9 +43,9 @@ public class GridObject
         enemyList.Add(enemy);
     }
 
-    public void RemoveUnit(Tower unit)
+    public void RemoveTower(Tower unit)
     {
-        unitList.Remove(unit);
+        towerList.Remove(unit);
     }
     public void RemoveBlock(Block block)
     {
@@ -56,14 +56,14 @@ public class GridObject
         enemyList.Remove(enemy);
     }
 
-    public List<Tower> GetUnitList()
+    public List<Tower> GetTowerList()
     {
-        return unitList;
+        return towerList;
     }
 
-    public bool HasAnyUnit()
+    public bool HasAnyTower()
     {
-        return unitList.Count > 0;
+        return towerList.Count > 0;
     }
 
     public bool HasAnyBlock()
@@ -77,18 +77,18 @@ public class GridObject
     }
 
 
-    public Tower GetUnit()
+    public Tower GetTower()
     {
-        if(HasAnyUnit())
+        if(HasAnyTower())
         {
-            return unitList[0];
+            return towerList[0];
         }
         else
         {
             return null;
         }
     }
-
+    
     public Block GetBlock()
     {
         if(HasAnyBlock())
@@ -101,11 +101,11 @@ public class GridObject
         }
     }
 
-    public List<Enemy> GetEnemy()
+    public Enemy GetEnemy()
     {
         if(HasAnyBlock())
         {
-            return enemyList;
+            return enemyList[0];
         }
         else
         {
