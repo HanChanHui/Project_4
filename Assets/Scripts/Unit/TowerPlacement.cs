@@ -34,7 +34,7 @@ public class TowerPlacement : MonoBehaviour
         if (ResourceManager.Instance.SelectedPrefabIndex != -1)
         {
             RefreshVisual();
-
+            ResourceManager.Instance.SetSelectedPrefabIndex(-1);
             if (isDisposition)
             {
                 PlaceTower(resultTowerGridPos);
@@ -121,8 +121,6 @@ public class TowerPlacement : MonoBehaviour
             tower.GridPositionList.Add(gridPos);
             levelGrid.AddTowerAtGridPosition(gridPos, tower);
         }
-        
-        ResourceManager.Instance.SetSelectedPrefabIndex(-1);
     }
 
     public void UpdateMousePosition()

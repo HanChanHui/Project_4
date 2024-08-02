@@ -13,7 +13,7 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private Transform gridDebugObjectPrefab;
     [SerializeField] private int width;
     [SerializeField] private int height;
-    [SerializeField] private float cellSize;
+    [SerializeField] private int cellSize;
 
     private GridSystem<GridObject> gridSystem;
 

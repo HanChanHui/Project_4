@@ -7,11 +7,11 @@ public class GridSystem<TGridObject>
 {
     private int width;
     private int height;
-    private float cellSize;
+    private int cellSize;
     private TGridObject[,] gridObjectArray;
     private Vector3 startPosition;
 
-    public GridSystem(int width, int height, float cellSize, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
+    public GridSystem(int width, int height, int cellSize, Func<GridSystem<TGridObject>, GridPosition, TGridObject> createGridObject)
     {
         this.width = width;
         this.height = height;
@@ -19,7 +19,13 @@ public class GridSystem<TGridObject>
 
         Camera mainCamera = Camera.main;
         Vector3 cameraPosition = mainCamera.transform.position;
-        startPosition = new Vector3(cameraPosition.x - (width * cellSize) / 2 + 0.5f, cameraPosition.y - (height * cellSize) / 2, 0);
+
+        startPosition = new Vector3(
+            Mathf.Round(cameraPosition.x - (width * cellSize) / 2 + (cellSize / 2)),
+            Mathf.Round(cameraPosition.y - (height * cellSize) / 2 + cellSize),
+            0
+        );
+
         gridObjectArray = new TGridObject[width, height];
 
         for(int x = 0; x < width; x++)
@@ -34,8 +40,8 @@ public class GridSystem<TGridObject>
 
     public Vector3 GetWorldPosition(GridPosition gridPosition)
     {
-        return gridPosition.z > 1 ? new Vector3(gridPosition.x, gridPosition.y + 0.35f) * cellSize + startPosition 
-                                    : new Vector3(gridPosition.x, gridPosition.y) * cellSize + startPosition;
+        return gridPosition.z > 1 ? new Vector3(gridPosition.x, gridPosition.y + 0.35f, 2f) * cellSize + startPosition 
+                                    : new Vector3(gridPosition.x, gridPosition.y, 1f) * cellSize + startPosition;
     }
 
     public GridPosition GetGridPosition(Vector3 worldPosition) 

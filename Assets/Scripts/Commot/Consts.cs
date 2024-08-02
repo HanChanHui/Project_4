@@ -27,7 +27,7 @@ namespace Consts
     public enum LayerName
     {
         Grid,
-        BackTower,
+        BackObject,
         Block,
         TwoLayerGrid,
         Tower,

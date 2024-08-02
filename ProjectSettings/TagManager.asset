@@ -52,23 +52,17 @@ TagManager:
   - name: Grid
     uniqueID: 1653054675
     locked: 0
-  - name: BackTower
-    uniqueID: 2335972687
-    locked: 0
-  - name: Enemy
-    uniqueID: 609543885
-    locked: 0
-  - name: Block
+  - name: BackObject
     uniqueID: 3600328653
     locked: 0
   - name: TwoLayerGrid
     uniqueID: 2820624345
     locked: 0
+  - name: Unit
+    uniqueID: 714422313
+    locked: 0
   - name: UI
     uniqueID: 956419079
-    locked: 0
-  - name: Tower
-    uniqueID: 714422313
     locked: 0
   - name: PlaceGrid
     uniqueID: 3837358787

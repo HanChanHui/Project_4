@@ -162,10 +162,10 @@ GameObject:
   - component: {fileID: 6243726343823035705}
   - component: {fileID: 8364929600265309891}
   - component: {fileID: 1537700608483716824}
+  - component: {fileID: 4904956932470879280}
   - component: {fileID: 3339541785454853201}
   - component: {fileID: 5184207215131280118}
-  - component: {fileID: 6207057684447241778}
-  - component: {fileID: 4904956932470879280}
+  - component: {fileID: 84839756532804226}
   m_Layer: 10
   m_Name: Enemy
   m_TagString: Enemy
@@ -228,7 +228,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -694638643
-  m_SortingLayer: 6
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: aa128483a4991434b9c88ba7eb2d75ae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -270,12 +270,32 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.02849722}
   m_Size: {x: 1.3, y: 1.6433516}
   m_Direction: 0
+--- !u!114 &4904956932470879280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2573575432457491810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba66a17d689c3c74cbd3952d60ce0525, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxDistance: 1
+  health: 100
+  maxHealth: 100
+  attackRange: 2
+  attackDamage: 1
+  attackInterval: 2
+  healthBar: {fileID: 263335059395298138}
+  targetTower: {fileID: 0}
 --- !u!114 &3339541785454853201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,12 +368,12 @@ MonoBehaviour:
   maxAcceleration: -2.5
   rotationSpeed: 360
   slowdownDistance: 0.6
-  pickNextWaypointDist: 0.6
+  pickNextWaypointDist: 0.2
   alwaysDrawGizmos: 0
   slowWhenNotFacingTarget: 1
   preventMovingBackwards: 0
   constrainInsideGraph: 0
---- !u!114 &6207057684447241778
+--- !u!114 &84839756532804226
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -368,21 +388,6 @@ MonoBehaviour:
   version: 1073741824
   target: {fileID: 0}
   useRotation: 0
---- !u!114 &4904956932470879280
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2573575432457491810}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba66a17d689c3c74cbd3952d60ce0525, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 100
-  maxHealth: 100
-  healthBar: {fileID: 263335059395298138}
 --- !u!1 &7409314972711773829
 GameObject:
   m_ObjectHideFlags: 0

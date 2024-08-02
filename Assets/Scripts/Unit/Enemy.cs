@@ -13,15 +13,20 @@ public class Enemy : MonoBehaviour
     private GridPosition beforeGridPosition;
     private Transform originalTarget;
 
-    [SerializeField] private int health;
-    [SerializeField] private int maxHealth;
-     [SerializeField] private int attackRange = 1; // 공격 범위
+    [SerializeField] protected int maxDistance;
+    [SerializeField] private float health;
+    [SerializeField] private float maxHealth;
+    [SerializeField] private int attackRange = 1; // 공격 범위
     [SerializeField] private float attackDamage = 10f; // 공격 데미지
     [SerializeField] private float attackInterval = 1f; // 공격 간격
     [SerializeField] private Image healthBar;
 
     private float currentHealth;
-    private Coroutine attackCoroutine;
+    private bool isAttackingTower = false;
+
+
+    [SerializeField] private Tower targetTower; // **탑들을 감지하는 리스트**
+    private Coroutine checkDistanceCoroutine;
 
     public delegate void EnemyDestroyedHandler(Enemy enemy);
     public static event EnemyDestroyedHandler OnEnemyDestroyed;
@@ -30,14 +35,18 @@ public class Enemy : MonoBehaviour
     {
         aiPath = GetComponent<AIPath>();
         destinationSetter = GetComponent<AIDestinationSetter>();
+        
         spriteRenderer = GetComponent<SpriteRenderer>();
-
+        //destinationSetter.target = ResourceManager.Instance.EnemyTarget;
+        Debug.Log(destinationSetter.target);
         originalTarget = destinationSetter.target;
 
         StartCoroutine(MainRoutine());
 
         currentHealth = health / maxHealth;
         healthBar.fillAmount = currentHealth;
+
+        checkDistanceCoroutine = StartCoroutine(CoCheckDistance());
     }
 
      private IEnumerator MainRoutine()
@@ -47,7 +56,7 @@ public class Enemy : MonoBehaviour
             Direction();
 
             // 목표 도달 체크
-            if (aiPath.reachedEndOfPath && aiPath.remainingDistance <= aiPath.endReachedDistance)
+            if (!isAttackingTower && aiPath.reachedEndOfPath && aiPath.remainingDistance <= aiPath.endReachedDistance)
             {
                 OnTargetReached();
                 yield break;
@@ -61,26 +70,7 @@ public class Enemy : MonoBehaviour
                 beforeGridPosition = gridPosition;
             }
 
-            Tower targetTower = FindNearestTower();
-            if (targetTower != null)
-            {
-                SetNewTarget(targetTower.transform);
-                aiPath.canMove = true;
-                if (attackCoroutine == null)
-                {
-                    attackCoroutine = StartCoroutine(AttackTower(targetTower)); // 공격 코루틴 시작
-                }
-            }
-            else
-            {
-                SetNewTarget(originalTarget);
-                aiPath.canMove = true; // 이동 재개
-                if (attackCoroutine != null)
-                {
-                    StopCoroutine(attackCoroutine);
-                    attackCoroutine = null;
-                }
-            }
+            TargetMove();
 
             yield return new WaitForSeconds(0.1f);
         }
@@ -96,27 +86,113 @@ public class Enemy : MonoBehaviour
         }
     }
 
-     private Tower FindNearestTower()
+    private IEnumerator CoCheckDistance()
     {
-        if(LevelGrid.Instance.IsValidGridPosition(gridPosition))
+        while (true)
         {
-            foreach (Tower tower in LevelGrid.Instance.GetTowerListAtGridPosition(gridPosition)) {
-                if (Vector2.Distance(transform.position, tower.transform.position) <= attackRange) {
-                    return tower; // 가장 가까운 Tower를 반환합니다.
+            if (!isAttackingTower)
+            {
+                targetTower = FindNearestTowerInRange();
+                if (targetTower != null)
+                {
+                    Debug.Log("발견 : " + targetTower);
+                    SetNewTarget(targetTower.transform);
+                    isAttackingTower = true;
                 }
             }
+
+            yield return new WaitForSeconds(1f); // 조정 가능한 딜레이
         }
-        return null; // 근처에 Tower가 없으면 null 반환
+    }
+
+    private Tower FindNearestTowerInRange()
+    {
+        List<GridPosition> offsetGridPosition = new List<GridPosition>();
+        
+        float velX = aiPath.desiredVelocity.x;
+        float velY = aiPath.desiredVelocity.y;
+
+        if (Mathf.Abs(velX) > 0.01f && Mathf.Abs(velY) > 0.01f) {
+            if (velX > 0 && velY > 0) {
+                Debug.Log("오른쪽 위");
+                offsetGridPosition.Add(new GridPosition(0, 1));
+                offsetGridPosition.Add(new GridPosition(1, 1));
+            } else if (velX > 0 && velY < 0) {
+                Debug.Log("오른쪽 아래");
+                offsetGridPosition.Add(new GridPosition(0, -1));
+                offsetGridPosition.Add(new GridPosition(1, -1));
+            } else if (velX < 0 && velY > 0) {
+                Debug.Log("왼쪽 위");
+                offsetGridPosition.Add(new GridPosition(0, 1));
+                offsetGridPosition.Add(new GridPosition(-1, 1));
+            } else if (velX < 0 && velY < 0) {
+                Debug.Log("왼쪽 아래");
+                offsetGridPosition.Add(new GridPosition(0, -1));
+                offsetGridPosition.Add(new GridPosition(-1, -1));
+            }
+        }
+        // 수평 이동 처리
+        else if (Mathf.Abs(velX) > 0.01f) {
+            offsetGridPosition.Add(velX > 0 ? new GridPosition(1, 0) : new GridPosition(-1, 0));
+            Debug.Log(velX > 0 ? "오른쪽" : "왼쪽");
+        }
+        // 수직 이동 처리
+         else if (Mathf.Abs(velY) > 0.01f) {
+            offsetGridPosition.Add(velY > 0 ? new GridPosition(0, 1) : new GridPosition(0, -1));
+            Debug.Log(velY > 0 ? "위쪽" : "아래쪽");
+        }
+
+
+        foreach(GridPosition findPosition in offsetGridPosition)
+        {
+            GridPosition testGridPosition = gridPosition + findPosition;
+
+            if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) {
+                continue;
+            }
+
+            if (LevelGrid.Instance.HasAnyTowerOnGridPosition(testGridPosition)) {
+                return LevelGrid.Instance.GetTowerAtGridPosition(testGridPosition);
+            }
+        }
+
+        return null;
+    }
+
+
+    private void TargetMove()
+    {
+        if (targetTower != null) {
+            isAttackingTower = true;
+            if (Vector3.Distance(transform.position, targetTower.transform.position) <= attackRange) {
+                aiPath.canMove = false;
+                if (checkDistanceCoroutine != null)
+                {
+                    StopCoroutine(checkDistanceCoroutine);
+                    checkDistanceCoroutine = null;
+                }
+                StartCoroutine(AttackTower(targetTower));
+            }
+        } 
+        else 
+        {
+            SetNewTarget(originalTarget);
+            isAttackingTower = false;
+            aiPath.canMove = true; // 이동 재개
+        }
     }
 
     private IEnumerator AttackTower(Tower targetTower)
     {
-        while (targetTower != null && Vector2.Distance(transform.position, targetTower.transform.position) <= attackRange)
+        while (targetTower != null)
         {
             targetTower.TakeDamage(attackDamage);
-            yield return new WaitForSeconds(attackInterval); // 공격 주기
+            yield return new WaitForSeconds(attackInterval);
         }
-        attackCoroutine = null;
+
+        isAttackingTower = false;
+       
+        yield return null;
     }
 
     public void TakeDamage(float damage)
@@ -167,6 +243,11 @@ public class Enemy : MonoBehaviour
     private void OnDisable() {
         StopCoroutine(MainRoutine());
         StopCoroutine(UpdateHealthBar());
+
+        if (checkDistanceCoroutine != null)
+        {
+            StopCoroutine(checkDistanceCoroutine);
+        }
     }
 
     private void SetNewTarget(Transform newTarget)

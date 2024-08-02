@@ -27,14 +27,14 @@ public class Tower : MonoBehaviour
         {
             foreach (GridPosition pos in gridPositionList)
             {
-                if (pos.y - 1 < 0)
+                if (pos.y - 1 < 0 || LevelGrid.Instance.HasAnyBlockOnGridPosition(pos))
                 {
                     continue;
                 }
                 GridPosition position = new GridPosition(pos.x, pos.y - 1);
                 if (LevelGrid.Instance.HasAnyBlockOnGridPosition(position))
                 {
-                    sprite.sortingLayerName = Consts.LayerName.BackTower.ToString();
+                    sprite.sortingLayerName = Consts.LayerName.BackObject.ToString();
                 }
             }
         }

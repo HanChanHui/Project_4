@@ -9,6 +9,8 @@ public class ResourceManager : MonoBehaviour
 
     [SerializeField] private List<TowerObject> prefabs;
     public List<TowerObject> Prefabs{get{return prefabs;}}
+    [SerializeField] private Transform enemyTarget;
+    public Transform EnemyTarget{get { return enemyTarget;}}
 
     [SerializeField] private Transform gridSystemVisualSingPrefab;
     [SerializeField] private Transform gridSystemVisualSingPrefab2;

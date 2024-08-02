@@ -26,5 +26,5 @@ MonoBehaviour:
   towerRecoveryCostIncrease: 0
   prefab: {fileID: 6164315642519637943, guid: 5a7f4f59bf6805445a05b1760fb91960, type: 3}
   icon: {fileID: 9052112046883021409, guid: b0471d059c4a1cc40ae04530d12002ba, type: 3}
-  width: 2
-  height: 2
+  width: 1
+  height: 1

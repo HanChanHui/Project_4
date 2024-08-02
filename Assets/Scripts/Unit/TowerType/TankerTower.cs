@@ -51,7 +51,10 @@ public class TankerTower : Tower
 
     private void AttackEnemy(Enemy enemy)
     {
-        Debug.Log("근접 공격");
         enemy.TakeDamage(attackDamage); // 적에게 데미지를 입힘
+    }
+
+    private void OnDisable() {
+        StopCoroutine(CoCheckDistance());
     }
 }
