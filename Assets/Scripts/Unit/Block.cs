@@ -1,3 +1,4 @@
+using Consts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,8 @@ using UnityEngine;
 public class Block : MonoBehaviour
 {
     private GridPosition gridPosition;
+    [SerializeField] private BlockType blockType;
+    public BlockType BlockType {get{return blockType;}}
 
     void Start()
     {

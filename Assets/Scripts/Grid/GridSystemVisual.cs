@@ -7,10 +7,10 @@ public class GridSystemVisual : MonoBehaviour {
     public static GridSystemVisual Instance { get; private set; }
 
     [SerializeField] private LevelGrid levelGrid;
-    [SerializeField] private Transform gridSystemVisualSingPrefab;
-    [SerializeField] private Transform gridSystemVisualSingPrefab2;
-    public Transform GridSystemVisualSingPrefab { get {return gridSystemVisualSingPrefab; } }
-    public Transform GridSystemVisualSingPrefab2 { get {return gridSystemVisualSingPrefab2; } }
+    [SerializeField] private Transform gridSystemVisualFloorPrefab;
+    [SerializeField] private Transform gridSystemVisualBlockPrefab;
+    public Transform GridSystemVisualFloorPrefab { get {return gridSystemVisualFloorPrefab; } }
+    public Transform GridSystemVisualBlockPrefab { get {return gridSystemVisualBlockPrefab; } }
     [SerializeField] private List<GridVisualTypeMaterial> gridVisualTypeMaterialList;
     
     [Serializable]
@@ -60,23 +60,24 @@ public class GridSystemVisual : MonoBehaviour {
             for (int y = 0; y < levelGrid.GetHeight(); y++) 
             {
                 GridPosition gridPosition = new GridPosition(x, y);
-                Vector3 worldPosition;
 
-                if (levelGrid.HasAnyBlockOnGridPosition(gridPosition))
+
+                if (levelGrid.HasAnyBlockTypeOnGridPosition(gridPosition))
                 {
                     GridPosition newGridPosition = new GridPosition(x, y, 2);
-                    worldPosition = levelGrid.GetWorldPosition(newGridPosition);
-                    Transform gridSystemVisualTwoLayerTransform = Instantiate(gridSystemVisualSingPrefab2, worldPosition, Quaternion.identity);
-                    gridSystemVisualTwoLayerTransform.transform.parent = transform;
-                    gridSystemVisualTwoLayerArray[x, y] = gridSystemVisualTwoLayerTransform.GetComponent<GridSystemVisualSingle>();
+                    GridSystemVisualSelect(gridSystemVisualBlockPrefab, newGridPosition, x, y);
                 }
-
-                worldPosition = levelGrid.GetWorldPosition(gridPosition);
-                Transform gridSystemVisualOneLayerTransform = Instantiate(gridSystemVisualSingPrefab, worldPosition, Quaternion.identity);
-                gridSystemVisualOneLayerTransform.transform.parent = transform;
-                gridSystemVisualOneLayerArray[x, y] = gridSystemVisualOneLayerTransform.GetComponent<GridSystemVisualSingle>();
+                GridSystemVisualSelect(gridSystemVisualFloorPrefab, gridPosition, x, y);
             }
         }
+    }
+
+    private void GridSystemVisualSelect(Transform prefab, GridPosition gridPosition, int x, int y)
+    {
+        Vector3 worldPosition = levelGrid.GetWorldPosition(gridPosition);
+        Transform gridSystemVisualOneLayerTransform = Instantiate(prefab, worldPosition, Quaternion.identity);
+        gridSystemVisualOneLayerTransform.transform.parent = transform;
+        gridSystemVisualOneLayerArray[x, y] = gridSystemVisualOneLayerTransform.GetComponent<GridSystemVisualSingle>();
     }
 
     public void HideAllGridPosition() 

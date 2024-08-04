@@ -62,7 +62,7 @@ public class TowerObject : ScriptableObject
         }
 
         if (LevelGrid.Instance.HasAnyTowerOnGridPosition(gridPosition)
-            || !LevelGrid.Instance.HasAnyBlockOnGridPosition(gridPosition)) {
+            || !LevelGrid.Instance.HasAnyBlockTypeOnGridPosition(gridPosition)) {
             return false;
         }
 

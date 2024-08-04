@@ -33,5 +33,13 @@ namespace Consts
         Tower,
         PlaceGrid
     }
+
+    public enum BlockType
+    {
+       Block,
+       BenBlock,
+       TargetBlock,
+
+    }
 }
 

@@ -32,7 +32,7 @@ public class Spawner : MonoBehaviour
             for (var i = 0; i < numToSpawn; i++)
             {
                 var spawnPos = this.trans.position;
-                spawnPos.x = Random.Range(spawnPos.x - 6, spawnPos.x + 6);
+                spawnPos.x = Random.Range(spawnPos.x - 5.5f, spawnPos.x + 5.5f);
                 var enemyInstance = Instantiate(Enemy, spawnPos, Enemy.transform.rotation);
 
                 var aiDestinationSetter = enemyInstance.GetComponent<AIDestinationSetter>();

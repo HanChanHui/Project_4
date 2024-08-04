@@ -9,6 +9,7 @@ public class LevelGrid : MonoBehaviour
 
     public event Action<Enemy, GridPosition> OnEnemyEnteredGridPosition;
     public event Action<Enemy, GridPosition> OnEnemyExitedGridPosition;
+    public event Action<Tower> OnTowerPlaced;
 
     [SerializeField] private Transform gridDebugObjectPrefab;
     [SerializeField] private int width;
@@ -37,6 +38,7 @@ public class LevelGrid : MonoBehaviour
         if (!gridObject.HasAnyTower())
         {
             gridObject.AddTower(tower);
+            OnTowerPlaced?.Invoke(tower);
         }
     }
 
@@ -104,7 +106,6 @@ public class LevelGrid : MonoBehaviour
 
     public int GetWidth() => gridSystem.GetWidth();
     public int GetHeight() => gridSystem.GetHeight();
-    public float GetCellSize() => gridSystem.GetCellSize();
 
     public bool HasAnyTowerOnGridPosition(GridPosition gridPosition)
     {
@@ -117,6 +118,12 @@ public class LevelGrid : MonoBehaviour
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         return gridObject != null && gridObject.HasAnyBlock();
     }
+    public bool HasAnyBlockTypeOnGridPosition(GridPosition gridPosition)
+    {
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        return gridObject != null && gridObject.HasAnyBlock() 
+        && gridObject.GetBlock().BlockType == Consts.BlockType.Block;
+    }
 
     public bool HasAnyEnemyOnGridPosition(GridPosition gridPosition)
     {
@@ -128,7 +135,8 @@ public class LevelGrid : MonoBehaviour
     {
         GridPosition gridPosition = gridSystem.GetGridPosition(worldPosition);
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
-        return gridObject != null && gridObject.HasAnyBlock();
+        return gridObject != null && gridObject.HasAnyBlock()
+        && gridObject.GetBlock().BlockType == Consts.BlockType.Block;
     }
 
     public Tower GetTowerAtGridPosition(GridPosition gridPosition)
