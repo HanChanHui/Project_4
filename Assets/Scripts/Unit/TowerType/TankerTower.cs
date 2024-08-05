@@ -26,7 +26,7 @@ public class TankerTower : Tower
 
     private void CoAttack()
     {
-        foreach (Enemy enemy in enemiesInRange)
+        foreach (BaseEnemy enemy in enemiesInRange)
         {
             if(enemy != null)
             {
@@ -37,19 +37,7 @@ public class TankerTower : Tower
         }
     }
 
-     public override void TakeDamage(float damage)
-    {
-        base.TakeDamage(damage);
-        if (health <= 0)
-        {
-           foreach(GridPosition gridPosition in gridPositionList)
-           {
-                LevelGrid.Instance.RemoveTowerAtGridPosition(gridPosition, this);
-           }
-        }
-    }
-
-    private void AttackEnemy(Enemy enemy)
+    private void AttackEnemy(BaseEnemy enemy)
     {
         enemy.TakeDamage(attackDamage); // 적에게 데미지를 입힘
     }

@@ -12,7 +12,7 @@ public class Bullet : MonoBehaviour
     private float damage;
     public float Damage{get {return damage;} set{damage = value;}}
 
-    private Enemy enemyTarget;
+    private BaseEnemy enemyTarget;
 
     private void Update() 
     {
@@ -20,6 +20,10 @@ public class Bullet : MonoBehaviour
         {
             Move();
             RotateBullet();
+        }
+        else
+        {
+            DestroyBullet();
         }
     }
 
@@ -32,7 +36,7 @@ public class Bullet : MonoBehaviour
         {
             if(enemyTarget.gameObject.activeSelf)
             {
-                enemyTarget.TakeDamage(damage);
+                enemyTarget.TakeDamage((int)damage);
             }
             DestroyBullet();
         }
@@ -45,7 +49,7 @@ public class Bullet : MonoBehaviour
         transform.Rotate(0f, 0f, angle);
     }
 
-    public void SetEnemy(Enemy enemy)
+    public void SetEnemy(BaseEnemy enemy)
     {
         enemyTarget = enemy;
     }

@@ -8,7 +8,7 @@ public class GridObject
     private GridPosition gridPosition;
     private List<Tower> towerList;
     private List<Block> blockList;
-    private List<Enemy> enemyList;
+    private List<BaseEnemy> enemyList;
 
     public GridObject(GridSystem<GridObject> gridSystem, GridPosition gridPosition)
     {
@@ -16,7 +16,7 @@ public class GridObject
         this.gridPosition = gridPosition;
         towerList = new List<Tower>();
         blockList = new List<Block>();
-        enemyList = new List<Enemy>();
+        enemyList = new List<BaseEnemy>();
     }
 
     public override string ToString()
@@ -38,7 +38,7 @@ public class GridObject
     {
         blockList.Add(block);
     }
-    public void AddEnemy(Enemy enemy)
+    public void AddEnemy(BaseEnemy enemy)
     {
         enemyList.Add(enemy);
     }
@@ -51,7 +51,7 @@ public class GridObject
     {
         blockList.Remove(block);
     }
-    public void RemoveEnemy(Enemy enemy)
+    public void RemoveEnemy(BaseEnemy enemy)
     {
         enemyList.Remove(enemy);
     }
@@ -101,7 +101,7 @@ public class GridObject
         }
     }
 
-    public Enemy GetEnemy()
+    public BaseEnemy GetEnemy()
     {
         if(HasAnyBlock())
         {

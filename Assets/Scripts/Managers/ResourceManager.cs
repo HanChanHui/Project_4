@@ -11,6 +11,7 @@ public class ResourceManager : MonoBehaviour
     public List<TowerObject> Prefabs{get{return prefabs;}}
     [SerializeField] private Transform enemyTarget;
     public Transform EnemyTarget{get { return enemyTarget;}}
+    public GameObject enemyPrefab;
 
     [SerializeField] private Transform gridSystemVisualSingPrefab;
     [SerializeField] private Transform gridSystemVisualSingPrefab2;

@@ -37,12 +37,12 @@ public class DealerTower : Tower
     {
         if (enemiesInRange.Count > 0)
         {
-            Enemy targetEnemy = enemiesInRange[0];
+            BaseEnemy targetEnemy = enemiesInRange[0];
             ShootBullet(targetEnemy);
         }
     }
 
-    private void ShootBullet(Enemy target)
+    private void ShootBullet(BaseEnemy target)
     {
         isBulletActive = true;
         GameObject bulletInstance = Instantiate(bulletPrefab, shooterPos.position, Quaternion.identity);

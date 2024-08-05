@@ -7,8 +7,8 @@ public class LevelGrid : MonoBehaviour
 {
     public static LevelGrid Instance { get; private set; }
 
-    public event Action<Enemy, GridPosition> OnEnemyEnteredGridPosition;
-    public event Action<Enemy, GridPosition> OnEnemyExitedGridPosition;
+    public event Action<BaseEnemy, GridPosition> OnEnemyEnteredGridPosition;
+    public event Action<BaseEnemy, GridPosition> OnEnemyExitedGridPosition;
     public event Action<Tower> OnTowerPlaced;
 
     [SerializeField] private Transform gridDebugObjectPrefab;
@@ -51,7 +51,7 @@ public class LevelGrid : MonoBehaviour
         }
     }
 
-     public void AddEnemyAtGridPosition(GridPosition gridPosition, Enemy enemy)
+     public void AddEnemyAtGridPosition(GridPosition gridPosition, BaseEnemy enemy)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         gridObject.AddEnemy(enemy);
@@ -73,7 +73,7 @@ public class LevelGrid : MonoBehaviour
         }
     }
 
-    public void RemoveEnemyAtGridPosition(GridPosition gridPosition, Enemy enemy)
+    public void RemoveEnemyAtGridPosition(GridPosition gridPosition, BaseEnemy enemy)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         if(gridObject.HasAnyEnemy())
@@ -90,7 +90,7 @@ public class LevelGrid : MonoBehaviour
         AddTowerAtGridPosition(toGridPosition, unit);
     }
 
-    public void EnemyMovedGridPosition(Enemy enemy, GridPosition fromGridPosition, GridPosition toGridPosition)
+    public void EnemyMovedGridPosition(BaseEnemy enemy, GridPosition fromGridPosition, GridPosition toGridPosition)
     {
         RemoveEnemyAtGridPosition(fromGridPosition, enemy);
 
@@ -131,7 +131,7 @@ public class LevelGrid : MonoBehaviour
         return gridObject != null && gridObject.HasAnyEnemy();
     }
 
-    public bool HasAnyBlockOnWorldPosition(Vector3 worldPosition)
+    public bool HasAnyBlockTypeOnWorldPosition(Vector3 worldPosition)
     {
         GridPosition gridPosition = gridSystem.GetGridPosition(worldPosition);
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
@@ -146,7 +146,7 @@ public class LevelGrid : MonoBehaviour
         return gridObject.GetTower();
     }
 
-    public Enemy GetEnemiesAtGridPosition(GridPosition gridPosition)
+    public BaseEnemy GetEnemiesAtGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         return gridObject.GetEnemy();

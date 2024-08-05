@@ -2,23 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tower : MonoBehaviour
+public class Tower : LivingEntity
 {
     protected SpriteRenderer sprite;
+    private Color originalColor;
 
     protected List<GridPosition> gridPositionList = new List<GridPosition>();
     public List<GridPosition> GridPositionList { get { return gridPositionList; } set { gridPositionList = value; } }
-    [SerializeField] protected List<Enemy> enemiesInRange = new List<Enemy>();
-    public List<Enemy> EnemiesInRange { get { return enemiesInRange; } }
+    [SerializeField] protected List<BaseEnemy> enemiesInRange = new List<BaseEnemy>();
+    public List<BaseEnemy> EnemiesInRange { get { return enemiesInRange; } }
 
     [SerializeField] protected int maxDistance;
     [SerializeField] protected float attackDamage;
     [SerializeField] protected float attackSpeed;
-    [SerializeField] protected float health = 100f;
 
     protected virtual void Awake()
     {
         sprite = GetComponent<SpriteRenderer>();
+        if (sprite != null)
+        {
+            originalColor = sprite.color;
+        }
     }
 
     protected virtual void Start()
@@ -41,12 +45,13 @@ public class Tower : MonoBehaviour
 
         LevelGrid.Instance.OnEnemyEnteredGridPosition += OnEnemyEnteredGridPosition;
         LevelGrid.Instance.OnEnemyExitedGridPosition += OnEnemyExitedGridPosition;
-        Enemy.OnEnemyDestroyed += OnEnemyDestroyed;
+        BaseEnemy.OnEnemyDestroyed += OnEnemyDestroyed;
 
+        SetHealth(100);
         StartCoroutine(CoCheckDistance());
     }
 
-    protected void OnEnemyEnteredGridPosition(Enemy enemy, GridPosition gridPosition)
+    protected void OnEnemyEnteredGridPosition(BaseEnemy enemy, GridPosition gridPosition)
     {
         if (IsWithinRange(gridPosition))
         {
@@ -57,7 +62,7 @@ public class Tower : MonoBehaviour
         }
     }
 
-    protected void OnEnemyExitedGridPosition(Enemy enemy, GridPosition gridPosition)
+    protected void OnEnemyExitedGridPosition(BaseEnemy enemy, GridPosition gridPosition)
     {
         if(!IsWithinRange(gridPosition))
         {
@@ -68,7 +73,7 @@ public class Tower : MonoBehaviour
         }
     }
 
-    protected void OnEnemyDestroyed(Enemy enemy)
+    protected void OnEnemyDestroyed(BaseEnemy enemy)
     {
         if (enemiesInRange.Contains(enemy))
         {
@@ -96,12 +101,30 @@ public class Tower : MonoBehaviour
         yield return null;
     }
 
-    public virtual void TakeDamage(float damage)
+    public override void TakeDamage(float damage, int obstacleDamage = 1, bool isCritical = false, bool showLabel = false)
     {
+        base.TakeDamage(damage, obstacleDamage, isCritical, showLabel);
         health -= damage;
+
+        StartCoroutine(FlashRed());
+
         if (health <= 0)
         {
-            Destroy(gameObject);
+           foreach(GridPosition gridPosition in gridPositionList)
+           {
+                LevelGrid.Instance.RemoveTowerAtGridPosition(gridPosition, this);
+           }
+           Destroy(gameObject);
+        }
+    }
+
+    private IEnumerator FlashRed()
+    {
+        if (sprite != null)
+        {
+            sprite.color = Color.red;
+            yield return new WaitForSeconds(0.1f);
+            sprite.color = originalColor;
         }
     }
 
@@ -109,6 +132,6 @@ public class Tower : MonoBehaviour
     {
         LevelGrid.Instance.OnEnemyEnteredGridPosition -= OnEnemyEnteredGridPosition;
         LevelGrid.Instance.OnEnemyExitedGridPosition -= OnEnemyExitedGridPosition;
-        Enemy.OnEnemyDestroyed -= OnEnemyDestroyed;
+        BaseEnemy.OnEnemyDestroyed -= OnEnemyDestroyed;
     }
 }

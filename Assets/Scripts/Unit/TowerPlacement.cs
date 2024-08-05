@@ -49,7 +49,7 @@ public class TowerPlacement : MonoBehaviour
         {
             isOutside = true;
             Vector3 pos = position;
-            if(levelGrid.HasAnyBlockOnWorldPosition(pos))
+            if(levelGrid.HasAnyBlockTypeOnWorldPosition(pos))
             {
                 pos.z = 2f;
             }
@@ -158,7 +158,7 @@ public class TowerPlacement : MonoBehaviour
     private Vector3 GetMouseWorldSnappedPosition()
     {
         Vector3 mousePosition = inputManager.GetMouseWorldPosition();
-        if (levelGrid.HasAnyBlockOnWorldPosition(mousePosition))
+        if (levelGrid.HasAnyBlockTypeOnWorldPosition(mousePosition))
         {
             mousePosition.z = 2f;
             return levelGrid.GetWorldPosition(levelGrid.GetGridPosition(mousePosition));

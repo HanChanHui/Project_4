@@ -65,7 +65,7 @@ public class TowerVisualGrid : MonoBehaviour
         }
 
         if (LevelGrid.Instance.HasAnyTowerOnGridPosition(gridPosition)
-            || !LevelGrid.Instance.HasAnyBlockOnGridPosition(gridPosition)) 
+            || !LevelGrid.Instance.HasAnyBlockTypeOnGridPosition(gridPosition)) 
         {
             GetMaterialGrid(0, 0, GridVisualType.Red);
             return;
