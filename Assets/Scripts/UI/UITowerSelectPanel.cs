@@ -7,91 +7,87 @@ using UnityEngine.UI;
 public class UITowerSelectPanel : MonoBehaviour
 {
     [Header("Parameter")]
-    [SerializeField] private float natureAmount;
-    [SerializeField] private float natureAmountMax;
+    //[SerializeField] private float natureAmount;
+    //[SerializeField] private float natureAmountMax;
 
-    [SerializeField] private float fillSpeed = 1; // 채워지는 속도
-    [SerializeField] private float natureFillInterval = 0.0001f; // 채워지는 간격
+    [SerializeField] private float fullBarSpeed; // 채워지는 속도
+    [SerializeField] private float natureBarSpeed; // 채워지는 속도
+    [SerializeField] private float natureFillInterval; // 채워지는 간격
 
     [Header("UI")]
     [SerializeField] private Image barImage;
     [SerializeField]private Image fullBarIamge;
 
     private int previousNatureSegment = 0;
+    private int currentNatureSegment = 0;
+    private bool isFilling = false;
 
     private void Start()
     {
-        NatureBarInit(100);
-
-        SetNature(GetNatureNormalized());
-
         StartCoroutine(FillNature());
+        //StartCoroutine(CheckNatureSegment());
     }
 
-    private void Update() {
 
-        int currentNatureSegment = Mathf.FloorToInt(GetNatureNormalized() * 10);
 
-        if (currentNatureSegment > previousNatureSegment)
-        {
-            previousNatureSegment = currentNatureSegment;
-            StartCoroutine(FillBarImage());
-        }
-    }
-
-    private void NatureBarInit(int amount)
+    private IEnumerator CheckNatureSegment()
     {
-        natureAmountMax = amount;
-        natureAmount = 0;
+        while (true)
+        {
+            currentNatureSegment = Mathf.FloorToInt(GameManager.Instance.GetNatureNormalized() * 10);
+
+            if (currentNatureSegment > previousNatureSegment && !isFilling)
+            {
+                previousNatureSegment = currentNatureSegment;
+                StartCoroutine(SmoothFillNatureBar());
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 
     private IEnumerator FillNature()
     {
         while (true)
         {
-            FullNature(fillSpeed * natureFillInterval);
-            SetNature(GetNatureNormalized());
+            GameManager.Instance.FullNature(fullBarSpeed * natureFillInterval);
+            SetNature(GameManager.Instance.GetNatureNormalized());
+
+            currentNatureSegment = Mathf.FloorToInt(GameManager.Instance.GetNatureNormalized() * 10);
+
+            if (currentNatureSegment > previousNatureSegment)
+            {
+                previousNatureSegment = currentNatureSegment;
+                StartCoroutine(SmoothFillNatureBar());
+                yield return new WaitForSeconds(0.2f); // 10단위 도달 시 멈춤
+            }
+
             yield return new WaitForSeconds(natureFillInterval);
         }
     }
 
-    private IEnumerator FillBarImage()
+    private IEnumerator SmoothFillNatureBar()
     {
-        int fullSpeed = 1;
-        while (barImage.fillAmount < previousNatureSegment * 0.1f)
+        isFilling = true;
+        float targetFillAmount = previousNatureSegment * 0.1f;
+
+        while (barImage.fillAmount < targetFillAmount)
         {
-            barImage.fillAmount += fullSpeed * Time.deltaTime;
+            barImage.fillAmount = Mathf.Lerp(barImage.fillAmount, targetFillAmount, Time.deltaTime * natureBarSpeed);
+            if (Mathf.Abs(barImage.fillAmount - targetFillAmount) < 0.01f)
+            {
+                barImage.fillAmount = targetFillAmount;
+            }
             yield return null;
         }
+
+        barImage.fillAmount = targetFillAmount; // 정확하게 목표량에 맞추기
+        isFilling = false;
     }
 
     private void SetNature(float natureNormalized)
     {
         fullBarIamge.fillAmount = natureNormalized;
-    }
-
-
-    public void UseNature(int amount)
-    {
-        natureAmount -= amount;
-        if(natureAmount < 0)
-        {
-            natureAmount = 0;
-        }
-    }
-
-    public void FullNature(float amount)
-    {
-        natureAmount += amount;
-        if(natureAmount > natureAmountMax)
-        {
-            natureAmount = natureAmountMax;
-        }
-    }
-
-    public float GetNatureNormalized()
-    {
-        return (float)natureAmount / natureAmountMax;
     }
 
     
