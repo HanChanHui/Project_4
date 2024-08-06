@@ -103,7 +103,7 @@ public class GridObject
 
     public BaseEnemy GetEnemy()
     {
-        if(HasAnyBlock())
+        if(HasAnyEnemy())
         {
             return enemyList[0];
         }

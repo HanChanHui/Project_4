@@ -534,14 +534,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxDistance: 1
   attackRange: 2
-  attackDamage: 10
+  attackDamage: 1
   attackInterval: 1
-  knockbackForce: 1
+  moveAttackSpeed: 1
+  moveWaitTime: 0.4
+  knockbackForce: 2
   knockbackDuration: 0.2
   healthBar: {fileID: 4530176063428779052}
   textDamage: {fileID: 4691782142634938849, guid: 334eac695a40a84428127dc3e7e4b6c9, type: 3}
   textDamageSpawnPosition: {fileID: 5168368443059701893}
   targetTower: {fileID: 0}
+  towerList: []
+  attackEffect: {fileID: 8467543171443383205, guid: bcad5aa891e6d224aac0cee49ac832b8, type: 3}
+  effectSpawnDistance: 1
+  effectSpeed: 2
 --- !u!114 &3339541785454853201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -614,7 +620,7 @@ MonoBehaviour:
   maxAcceleration: -2.5
   rotationSpeed: 360
   slowdownDistance: 0.6
-  pickNextWaypointDist: 0.2
+  pickNextWaypointDist: 1
   alwaysDrawGizmos: 0
   slowWhenNotFacingTarget: 0
   preventMovingBackwards: 0

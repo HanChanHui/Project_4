@@ -26,8 +26,16 @@ public class DealerTower : Tower
         {
             if (!isBulletActive && enemiesInRange.Count > 0)
             {
-                CoAttack();
-                yield return new WaitForSeconds(attackSpeed);
+                // 첫 번째 요소가 null이면 삭제
+                if (enemiesInRange[0] == null)
+                {
+                    enemiesInRange.RemoveAt(0);
+                }
+                else
+                {
+                    CoAttack();
+                    yield return new WaitForSeconds(attackSpeed);
+                }
             }
             yield return new WaitForSeconds(0.1f);
         }
@@ -38,7 +46,14 @@ public class DealerTower : Tower
         if (enemiesInRange.Count > 0)
         {
             BaseEnemy targetEnemy = enemiesInRange[0];
-            ShootBullet(targetEnemy);
+            if (targetEnemy != null)
+            {
+                ShootBullet(targetEnemy);
+            }
+            else
+            {
+                enemiesInRange.RemoveAt(0); // null인 적을 리스트에서 삭제
+            }
         }
     }
 

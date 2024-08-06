@@ -49,6 +49,7 @@ public class Tower : LivingEntity
 
         SetHealth(100);
         StartCoroutine(CoCheckDistance());
+        GridRangeCheck();
     }
 
     protected void OnEnemyEnteredGridPosition(BaseEnemy enemy, GridPosition gridPosition)
@@ -96,6 +97,28 @@ public class Tower : LivingEntity
         return false;
     }
 
+    protected void GridRangeCheck()
+    {
+        for(int x = -maxDistance; x <= maxDistance; x++)
+        {
+            for(int y = -maxDistance; y <= maxDistance; y++)
+            {
+                GridPosition offsetGridPosition = new GridPosition(x, y);
+                GridPosition testGridPosition = gridPositionList[0] + offsetGridPosition;
+
+                if(!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                {
+                    continue;
+                }
+
+                if(LevelGrid.Instance.HasAnyEnemyOnGridPosition(testGridPosition) && IsWithinRange(testGridPosition))
+                {
+                    enemiesInRange.Add(LevelGrid.Instance.GetEnemiesAtGridPosition(testGridPosition));
+                }
+            }
+        }
+    }
+
     protected virtual IEnumerator CoCheckDistance()
     {
         yield return null;
@@ -104,7 +127,6 @@ public class Tower : LivingEntity
     public override void TakeDamage(float damage, int obstacleDamage = 1, bool isCritical = false, bool showLabel = false)
     {
         base.TakeDamage(damage, obstacleDamage, isCritical, showLabel);
-        health -= damage;
 
         StartCoroutine(FlashRed());
 

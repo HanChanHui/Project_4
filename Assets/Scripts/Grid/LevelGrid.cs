@@ -149,6 +149,7 @@ public class LevelGrid : MonoBehaviour
     public BaseEnemy GetEnemiesAtGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        if(gridObject == null) return null;
         return gridObject.GetEnemy();
     }
 

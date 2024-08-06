@@ -28,12 +28,10 @@ public class Spawner : MonoBehaviour {
         if (Time.time >= this.nextSpawnTime) {
             var numToSpawn = 1;
 
-            for (var i = 0; i < numToSpawn; i++) {
-                var spawnPos = this.trans.position;
-                spawnPos.x = Random.Range(spawnPos.x - 5.5f, spawnPos.x + 5.5f);
-                var enemyInstance = Instantiate(enemy, spawnPos, enemy.transform.rotation);
+            for (var i = 0; i < numToSpawn; i++) 
+            {
+                var enemyInstance = Instantiate(enemy, transform.position, enemy.transform.rotation);
 
-                //this.nextSpawnTime = Time.time + Random.Range(1.0f, 2.0f);
                 this.nextSpawnTime = Time.time + coolTime;
             }
         }

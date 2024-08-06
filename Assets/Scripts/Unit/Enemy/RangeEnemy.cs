@@ -7,12 +7,7 @@ public class RangeEnemy : BaseEnemy
     [SerializeField] private GameObject projectilePrefab; // 투사체 프리팹
     [SerializeField] private float projectileSpeed = 10f;
 
-    protected override void AttackTarget(Tower targetTower)
-    {
-        StartCoroutine(AttackRoutine(targetTower));
-    }
-
-    private IEnumerator AttackRoutine(Tower targetTower)
+    protected override IEnumerator AttackTarget(Tower targetTower)
     {
         while (targetTower != null)
         {
@@ -21,7 +16,24 @@ public class RangeEnemy : BaseEnemy
         }
 
         isAttackingTower = false;
-        checkDistanceCoroutine = StartCoroutine(CoCheckDistance());
+        attackCoroutine = StartCoroutine(CoCheckDistance());
+        SetNewTarget(originalTarget);
+        AiPath.canMove = true;
+    }
+
+    protected override IEnumerator MovingAttackTarget(Tower targetTower) 
+    {
+        while (targetTower != null && isMoveAttacking)
+        {
+            AiPath.canMove = false;
+            ShootProjectile(targetTower);
+            yield return new WaitForSeconds(moveWaitTime);
+            AiPath.canMove = true;
+            yield return new WaitForSeconds(moveAttackSpeed);
+        }
+
+        isAttackingTower = false;
+        isMoveAttacking = true;
     }
 
     private void ShootProjectile(Tower targetTower)

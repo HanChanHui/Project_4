@@ -4,22 +4,26 @@ using UnityEngine;
 using Pathfinding;
 using UnityEngine.UI;
 using TMPro;
+using System.Data;
 
 public abstract class BaseEnemy : LivingEntity
 {
     private AIPath aiPath;
+    public AIPath AiPath {get{return aiPath;} set{aiPath = value;}}
     private AIDestinationSetter destinationSetter;
     private SpriteRenderer spriteRenderer;
-    private GridPosition gridPosition;
+    private GridPosition currentGridPosition;
     private GridPosition beforeGridPosition;
-    private Transform originalTarget;
+    protected Transform originalTarget;
 
-    [SerializeField] protected int maxDistance;
+    [SerializeField] protected int maxDistance = 1;
     [SerializeField] private int attackRange = 1; // 공격 범위
-    [SerializeField] protected float attackDamage = 10f; // 공격 데미지
+    [SerializeField] protected float attackDamage; // 공격 데미지
     [SerializeField] protected float attackInterval = 1f; // 공격 간격
-    [SerializeField] private float knockbackForce = 1f;
-    [SerializeField] private float knockbackDuration = 0.5f; // 밀려나는 시간
+    [SerializeField] protected float moveAttackSpeed = 1f;
+    [SerializeField] protected float moveWaitTime = 1f;
+    [SerializeField] private float knockbackForce = 2f;
+    [SerializeField] private float knockbackDuration = 0.2f; // 밀려나는 시간
 
     
     [SerializeField] private EnemyHealthLabel healthBar;
@@ -27,9 +31,13 @@ public abstract class BaseEnemy : LivingEntity
     [SerializeField] private Transform textDamageSpawnPosition;
 
     protected bool isAttackingTower = false;
+    protected bool isMoveAttacking = false;
 
-    [SerializeField] protected Tower targetTower; // **탑들을 감지하는 리스트**
-    protected Coroutine checkDistanceCoroutine;
+    [SerializeField] protected Tower targetTower;
+    [SerializeField] protected List<Tower> towerList = new List<Tower>();
+
+    protected Coroutine attackCoroutine;
+    protected Coroutine moveAttackCoroutine;
 
     public delegate void EnemyDestroyedHandler(BaseEnemy enemy);
     public static event EnemyDestroyedHandler OnEnemyDestroyed;
@@ -47,43 +55,53 @@ public abstract class BaseEnemy : LivingEntity
         SetHealth(100);
         healthBar.Init();
 
-        checkDistanceCoroutine = StartCoroutine(CoCheckDistance());
+        attackCoroutine = StartCoroutine(CoCheckDistance());
     }
+
+    private void OnEnable()
+    {
+        LevelGrid.Instance.OnTowerPlaced += HandleTowerPlaced; // 타워 설치 이벤트 구독
+    }
+
 
     private IEnumerator MainRoutine()
     {
         while (true)
         {
-            Direction();
-
-            // 목표 도달 체크
-            if (!isAttackingTower && aiPath.reachedEndOfPath && aiPath.remainingDistance <= aiPath.endReachedDistance)
-            {
-                Destroy(gameObject);
-                yield break;
-            }
-
-            // 그리드 위치 업데이트
-            gridPosition = LevelGrid.Instance.GetCameraGridPosition(transform.position);
-            if (LevelGrid.Instance.IsValidGridPosition(gridPosition) && beforeGridPosition != gridPosition)
-            {
-                LevelGrid.Instance.EnemyMovedGridPosition(this, beforeGridPosition, gridPosition);
-                beforeGridPosition = gridPosition;
-            }
-
-            //TargetMove();
+            UpdateDirection();
+            CheckTargetReached();
+            UpdateGridPosition();
 
             yield return new WaitForSeconds(0.1f);
         }
     }
 
-    private void Direction()
+    private void UpdateDirection()
     {
         // 적의 방향 설정
         if (aiPath.desiredVelocity.x >= 0.01f) {
             spriteRenderer.flipX = false;
         } else if (aiPath.desiredVelocity.x <= -0.01f) {
             spriteRenderer.flipX = true;
+        }
+    }
+
+    private void CheckTargetReached()
+    {
+        if (!isAttackingTower && aiPath.reachedEndOfPath && aiPath.remainingDistance <= aiPath.endReachedDistance)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void UpdateGridPosition()
+    {
+        currentGridPosition = LevelGrid.Instance.GetCameraGridPosition(transform.position);
+        if (LevelGrid.Instance.IsValidGridPosition(currentGridPosition) && beforeGridPosition != currentGridPosition)
+        {
+            LevelGrid.Instance.EnemyMovedGridPosition(this, beforeGridPosition, currentGridPosition);
+            beforeGridPosition = currentGridPosition;
+            GridRangeFind();
         }
     }
 
@@ -95,7 +113,6 @@ public abstract class BaseEnemy : LivingEntity
                 if (!isAttackingTower)
                 {
                     targetTower = FindNearestTowerInRange();
-                    
                     if (targetTower != null)
                     {
                         SetNewTarget(originalTarget);
@@ -103,18 +120,23 @@ public abstract class BaseEnemy : LivingEntity
                         {
                             isAttackingTower = true;
                             aiPath.canMove = false;
-                            if (checkDistanceCoroutine != null) {
-                                StopCoroutine(checkDistanceCoroutine);
-                                checkDistanceCoroutine = null;
-                            }
-                            AttackTarget(targetTower);
+                            StopAttacking();
+                            StartCoroutine(AttackTarget(targetTower));
                         }
                     }
-                    else
+                    else if(towerList.Count > 0 && !isMoveAttacking)
                     {
-                        SetNewTarget(originalTarget);
-                        isAttackingTower = false;
                         aiPath.canMove = true; // 이동 재개
+
+                        if(towerList[0] == null)
+                        {
+                            towerList.RemoveAt(0);
+                        }
+                        else
+                        {
+                            isMoveAttacking = true;
+                            StartMoveAttacking(towerList[0]);
+                        }
                     }
                 }
     
@@ -134,7 +156,6 @@ public abstract class BaseEnemy : LivingEntity
                 int yDirection = velY > 0 ? 1 : -1;
     
                 // 대각선 이동 처리
-                offsetGridPosition.Add(new GridPosition(xDirection, 0));
                 offsetGridPosition.Add(new GridPosition(0, yDirection));
                 offsetGridPosition.Add(new GridPosition(xDirection, yDirection));
             } else if (Mathf.Abs(velX) > 0.01f) {
@@ -151,7 +172,7 @@ public abstract class BaseEnemy : LivingEntity
     
             foreach (GridPosition findPosition in offsetGridPosition) 
             {
-                GridPosition testGridPosition = gridPosition + findPosition;
+                GridPosition testGridPosition = currentGridPosition + findPosition;
     
                 if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) {
                     continue;
@@ -170,12 +191,57 @@ public abstract class BaseEnemy : LivingEntity
     
             return null;
         }
+
+    private void GridRangeFind() {
+        List<Tower> foundTowers = new List<Tower>();
+
+        for (int x = -maxDistance; x <= maxDistance; x++) 
+        {
+            for (int y = -maxDistance; y <= maxDistance; y++) 
+            {
+                GridPosition offsetGridPosition = new GridPosition(x, y);
+                GridPosition testGridPosition = currentGridPosition + offsetGridPosition;
+
+                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) 
+                {
+                    continue;
+                }
+
+                if (LevelGrid.Instance.HasAnyTowerOnGridPosition(testGridPosition)) 
+                {
+                    Tower tower = LevelGrid.Instance.GetTowerAtGridPosition(testGridPosition);
+                    foundTowers.Add(tower);
+                }
+            }
+        }
+
+        foreach (Tower tower in towerList)
+        {
+            if(!foundTowers.Contains(tower))
+            {
+                isMoveAttacking = false;
+                StopAttacking();
+            }
+        }
+        towerList.RemoveAll(tower => !foundTowers.Contains(tower));
+
+       foreach (Tower tower in foundTowers) 
+       {
+            if (!towerList.Contains(tower))
+            {
+                towerList.Add(tower);
+            }
+        }
+    }
     #endregion
-   
+
     #region Tower Crash
-        private void HandleTowerPlaced(Tower tower) {
-            foreach (GridPosition grid in tower.GridPositionList) {
-                if (grid == gridPosition) {
+        private void HandleTowerPlaced(Tower tower) 
+        {
+            foreach (GridPosition grid in tower.GridPositionList) 
+            {
+                if (grid == currentGridPosition) 
+                {
                     Vector3 directionToEnemy = (transform.position - tower.transform.position).normalized;
                     Vector3 knockbackPosition = GetSafeKnockbackPosition(directionToEnemy);
                     StartCoroutine(KnockbackRoutine(knockbackPosition));
@@ -218,7 +284,33 @@ public abstract class BaseEnemy : LivingEntity
     #endregion
     
 
-    protected abstract void AttackTarget(Tower targetTower);
+    protected abstract IEnumerator AttackTarget(Tower targetTower);
+    protected abstract IEnumerator MovingAttackTarget(Tower targetTower);
+    
+    protected void StartMoveAttacking(Tower targetTower)
+    {
+        if (moveAttackCoroutine != null)
+        {
+            StopCoroutine(moveAttackCoroutine);
+        }
+
+        moveAttackCoroutine = StartCoroutine(MovingAttackTarget(targetTower));
+    }
+
+    protected void StopAttacking()
+    {
+        if (moveAttackCoroutine != null)
+        {
+            StopCoroutine(moveAttackCoroutine);
+            moveAttackCoroutine = null;
+        }
+
+        // if(attackCoroutine != null)
+        // {
+        //     StopCoroutine(attackCoroutine);
+        //     attackCoroutine = null;
+        // }
+    }
 
     public override void TakeDamage(float damage, int obstacleDamage = 1, bool isCritical = false, bool showLabel = false)
     {
@@ -243,28 +335,19 @@ public abstract class BaseEnemy : LivingEntity
 
     private void DestroyEnemy()
     {
-        LevelGrid.Instance.RemoveEnemyAtGridPosition(gridPosition, this);
+        LevelGrid.Instance.RemoveEnemyAtGridPosition(currentGridPosition, this);
         OnEnemyDestroyed?.Invoke(this);
         gameObject.SetActive(false);
         Destroy(gameObject, 1f);
     }
-    private void OnEnable()
+
+    private void OnDisable() 
     {
-        LevelGrid.Instance.OnTowerPlaced += HandleTowerPlaced; // 타워 설치 이벤트 구독
-    }
-
-    private void OnDisable() {
         LevelGrid.Instance.OnTowerPlaced -= HandleTowerPlaced;
-        StopCoroutine(MainRoutine());
-        //StopCoroutine(UpdateHealthBar());
-
-        if (checkDistanceCoroutine != null)
-        {
-            StopCoroutine(checkDistanceCoroutine);
-        }
+        StopAllCoroutines();
     }
 
-    private void SetNewTarget(Transform newTarget)
+    protected void SetNewTarget(Transform newTarget)
     {
         destinationSetter.target = newTarget;
     }
