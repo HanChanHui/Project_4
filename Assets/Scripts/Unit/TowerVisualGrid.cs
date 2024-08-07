@@ -5,7 +5,7 @@ using UnityEngine;
 public class TowerVisualGrid : MonoBehaviour
 {
 
-    private TowerObject towerObject;
+    private PlaceableTowerData towerObject;
 
     private GridPosition gridPosition;
     public GridPosition GridPosition { get{ return gridPosition; } set{ gridPosition = value; }}

@@ -12,7 +12,7 @@ public class TowerPlacement : MonoBehaviour
 
     private bool isDisposition = false;
     private Transform towerGhostPrefab;
-    private TowerObject towerObject;
+    private PlaceableTowerData towerObject;
     private TowerType towerType;
 
     private bool isOutside = false;
@@ -115,7 +115,7 @@ public class TowerPlacement : MonoBehaviour
 
     private void PlaceTower(Vector3 gridTr)
     {
-        Tower tower = Instantiate(towerObject.prefab, gridTr, Quaternion.identity).GetComponentInChildren<Tower>();
+        Tower tower = Instantiate(towerObject.towerPrefab, gridTr, Quaternion.identity).GetComponentInChildren<Tower>();
         foreach (GridPosition gridPos in towerGridPositionList)
         {
             tower.GridPositionList.Add(gridPos);
@@ -151,7 +151,7 @@ public class TowerPlacement : MonoBehaviour
         if (towerObject != null)
         {
             isOutside = false;
-            towerGhostPrefab = Instantiate(towerObject.icon, inputManager.GetMouseWorldPosition(), Quaternion.identity).transform;
+            towerGhostPrefab = Instantiate(towerObject.towerIconPrefab, inputManager.GetMouseWorldPosition(), Quaternion.identity).transform;
         }
     }
 

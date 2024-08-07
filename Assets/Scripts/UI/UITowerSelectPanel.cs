@@ -1,22 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UITowerSelectPanel : MonoBehaviour
 {
     [Header("Parameter")]
-    //[SerializeField] private float natureAmount;
-    //[SerializeField] private float natureAmountMax;
 
-    [SerializeField] private float fullBarSpeed; // 채워지는 속도
-    [SerializeField] private float natureBarSpeed; // 채워지는 속도
-    [SerializeField] private float natureFillInterval; // 채워지는 간격
+    [SerializeField] private float fullBarSpeed = 0.5f; // 채워지는 속도
+    [SerializeField] private float natureBarSpeed = 10f; // 채워지는 속도
+    [SerializeField] private float natureFillInterval = 0.01f; // 채워지는 간격
 
     [Header("UI")]
     [SerializeField] private Image barImage;
     [SerializeField]private Image fullBarIamge;
+    [SerializeField]private TextMeshProUGUI natureCountText;
 
     private int previousNatureSegment = 0;
     private int currentNatureSegment = 0;
@@ -25,41 +25,26 @@ public class UITowerSelectPanel : MonoBehaviour
     private void Start()
     {
         StartCoroutine(FillNature());
-        //StartCoroutine(CheckNatureSegment());
     }
-
-
-
-    private IEnumerator CheckNatureSegment()
-    {
-        while (true)
-        {
-            currentNatureSegment = Mathf.FloorToInt(GameManager.Instance.GetNatureNormalized() * 10);
-
-            if (currentNatureSegment > previousNatureSegment && !isFilling)
-            {
-                previousNatureSegment = currentNatureSegment;
-                StartCoroutine(SmoothFillNatureBar());
-            }
-
-            yield return new WaitForSeconds(0.1f);
-        }
-    }
+    
 
     private IEnumerator FillNature()
     {
-        while (true)
+        while (!isFilling)
         {
-            GameManager.Instance.FullNature(fullBarSpeed * natureFillInterval);
-            SetNature(GameManager.Instance.GetNatureNormalized());
+            UIManager.Instance.FullNature(fullBarSpeed * natureFillInterval);
+            float normalize = UIManager.Instance.GetNatureNormalized();
+            SetNature(normalize);
 
-            currentNatureSegment = Mathf.FloorToInt(GameManager.Instance.GetNatureNormalized() * 10);
+            currentNatureSegment = Mathf.FloorToInt(UIManager.Instance.GetNatureNormalized() * 10);
 
             if (currentNatureSegment > previousNatureSegment)
             {
                 previousNatureSegment = currentNatureSegment;
                 StartCoroutine(SmoothFillNatureBar());
-                yield return new WaitForSeconds(0.2f); // 10단위 도달 시 멈춤
+                int natureCnt = (int)UIManager.Instance.NatureAmount;
+                natureCountText.text = natureCnt.ToString();
+                //yield return new WaitForSeconds(0.2f); // 10단위 도달 시 멈춤
             }
 
             yield return new WaitForSeconds(natureFillInterval);
@@ -83,11 +68,16 @@ public class UITowerSelectPanel : MonoBehaviour
 
         barImage.fillAmount = targetFillAmount; // 정확하게 목표량에 맞추기
         isFilling = false;
+        StartCoroutine(FillNature());
     }
 
     private void SetNature(float natureNormalized)
     {
         fullBarIamge.fillAmount = natureNormalized;
+    }
+
+    private void OnDisable() {
+        StopAllCoroutines();
     }
 
     
