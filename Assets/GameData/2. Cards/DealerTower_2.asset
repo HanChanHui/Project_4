@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98080bcac942d3b4aa166b4237a5672e, type: 3}
   m_Name: DealerTower_2
   m_EditorClassIdentifier: 
-  cardImage: {fileID: 21300000, guid: fc56fbce712a9544e866c8ddb390ab34, type: 3}
-  towerData: []
-  relativeOffsets: []
+  cardImage: {fileID: 21300000, guid: cad9de468fb20ea49b3461515cf2e116, type: 3}
+  towerData:
+  - {fileID: 11400000, guid: fba94d5e3e4740044a71dd8c0a087556, type: 2}
+  relativeOffsets:
+  - {x: 0, y: 0, z: 0}

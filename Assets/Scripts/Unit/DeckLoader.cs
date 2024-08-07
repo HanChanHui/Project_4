@@ -13,7 +13,7 @@ public class DeckLoader : MonoBehaviour
     public void LoadDeck(DeckData deckToLoad)
     {
         targetDeck = deckToLoad;
-        //Addressables.LoadAssetsAsync<CardData>(targetDeck.labelsToInclude[0].labelString, null).Completed += OnResourcesRetrieved;
+        Addressables.LoadAssetsAsync<CardData>(targetDeck.labelsToInclude[0].labelString, null).Completed += OnResourcesRetrieved;
     }
 
     private void OnResourcesRetrieved(AsyncOperationHandle<IList<CardData>> obj)

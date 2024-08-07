@@ -31,7 +31,8 @@ public class CardManager : Singleton<CardManager>
         cards = new UICard[4];
     }
 
-    public void LoadDeck() {
+    public void LoadDeck() 
+    {
         DeckLoader newDeckLoaderComp = gameObject.AddComponent<DeckLoader>();
         newDeckLoaderComp.OnDeckLoaded += DeckLoaded;
         newDeckLoaderComp.LoadDeck(playersDeck);
@@ -55,7 +56,7 @@ public class CardManager : Singleton<CardManager>
 
         backupCardTransform.SetParent(cardSpawnPanel, true);
         //위치로 이동하고 스케일 조정
-        backupCardTransform.DOAnchorPos(new Vector2(-210f * (position + 1) + 20f, 0f),
+        backupCardTransform.DOAnchorPos(new Vector2(-310f + (200f * position), 0f),
                                         .2f + (.05f * position)).SetEase(Ease.OutQuad);
         backupCardTransform.localScale = Vector3.one;
 
@@ -77,11 +78,11 @@ public class CardManager : Singleton<CardManager>
 
         //새 카드 생성
         backupCardTransform = Instantiate<GameObject>(cardPrefab, cardsPanel).GetComponent<RectTransform>();
-        backupCardTransform.localScale = Vector3.one * 0.7f;
+        backupCardTransform.localScale = Vector3.one * 0.6f;
 
         //왼쪽 아래 모서리로 보냅니다.
-        backupCardTransform.anchoredPosition = new Vector2(180f, -300f);
-        backupCardTransform.DOAnchorPos(new Vector2(180f, 0f), .2f).SetEase(Ease.OutQuad);
+        backupCardTransform.anchoredPosition = new Vector2(0f, -300f);
+        backupCardTransform.DOAnchorPos(new Vector2(0f, -50f), .2f).SetEase(Ease.OutQuad);
 
         //Card 스크립트에 CardData 설정
         UICard cardScript = backupCardTransform.GetComponent<UICard>();
@@ -99,15 +100,15 @@ public class CardManager : Singleton<CardManager>
         cards[cardId].transform.Translate(dragAmount);
 
         // 플레이 필드에 카드가 있는지 확인하기 위해 레이캐스트를 수행
-        RaycastHit hit;
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        //RaycastHit hit;
+        Vector3 pos = InputManager.Instance.GetMouseWorldPosition() ;
 
-        bool planeHit = Physics.Raycast(ray, out hit, Mathf.Infinity, playingFieldMask);
+        bool planeHit = Physics2D.Raycast(pos, Vector2.zero, 0f, playingFieldMask);
 
         if (planeHit) {
             if (!cardIsActive) {
                 cardIsActive = true;
-                previewHolder.transform.position = hit.point;
+                previewHolder.transform.position = pos;
                 cards[cardId].ChangeActiveState(true); // 카드 숨기기
 
                 // CardData에서 배열을 가져옵니다.
@@ -118,7 +119,7 @@ public class CardManager : Singleton<CardManager>
                 for (int i = 0; i < dataToSpawn.Length; i++) 
                 {
                     GameObject newPlaceable = GameObject.Instantiate<GameObject>(dataToSpawn[i].towerIconPrefab,
-                                                                                hit.point + offsets[i] + inputCreationOffset,
+                                                                                pos + offsets[i] + inputCreationOffset,
                                                                                 Quaternion.identity,
                                                                                 previewHolder.transform);
                 }
@@ -126,7 +127,7 @@ public class CardManager : Singleton<CardManager>
             else 
             {
                 // 임시 복사본이 생성되었으며 커서와 함께 이동합니다.
-                previewHolder.transform.position = hit.point;
+                previewHolder.transform.position = pos;
             }
         } 
         else 
@@ -164,15 +165,16 @@ public class CardManager : Singleton<CardManager>
         } 
         else 
         {
-            cards[cardId].GetComponent<RectTransform>().DOAnchorPos(new Vector2(220f * (cardId + 1), 0f),
+            cards[cardId].GetComponent<RectTransform>().DOAnchorPos(new Vector2(-310f + (200f * cardId), 0f),
                                                                     .2f).SetEase(Ease.OutQuad);
         }
 
         //forbiddenAreaRenderer.enabled = false;
     }
 
-    //happens when the card is put down on the playing field, and while dragging (when moving out of the play field)
-    private void ClearPreviewObjects() {
+    
+    private void ClearPreviewObjects() 
+    {
         // 미리보기 PlaceableTower를 모두 제거
         for (int i = 0; i < previewHolder.transform.childCount; i++) {
             Destroy(previewHolder.transform.GetChild(i).gameObject);

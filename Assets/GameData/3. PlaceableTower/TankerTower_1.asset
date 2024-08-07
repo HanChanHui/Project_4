@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fd92ee31feb00e4c8a6d62bab71e620, type: 3}
   m_Name: TankerTower_1
   m_EditorClassIdentifier: 
-  towerType: 0
-  towerPrefab: {fileID: 0}
-  towerIconPrefab: {fileID: 0}
+  towerType: 2
+  towerPrefab: {fileID: 2738529185662124643, guid: 4c6c36da9d7a86c43bb6c4ea95673b18, type: 3}
+  towerIconPrefab: {fileID: 841211081241225511, guid: 230f2a710e6c46b4da506b04563df799, type: 3}
   towerID: 0
-  towerName: 
-  towerAttackType: 0
-  towerHP: 0
+  towerName: neco3
+  towerAttackType: 1
+  towerHP: 500
   towerDefence: 0
-  towerAttack: 0
-  towerAttackSpeed: 0
-  attackRange: 0
-  towerCost: 0
-  towerRecoveryCost: 0
-  towerRecoveryCostIncrease: 0
-  width: 0
-  height: 0
+  towerAttack: 10
+  towerAttackSpeed: 3
+  attackRange: 1
+  towerCost: 3
+  towerRecoveryCost: 3
+  towerRecoveryCostIncrease: 5
+  width: 1
+  height: 1

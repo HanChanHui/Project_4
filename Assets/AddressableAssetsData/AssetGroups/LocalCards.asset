@@ -16,7 +16,31 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 9bf9142f755ff2d4898db4c75e9ab664
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: b7a4f7883b4a0e1498c2826d72cc73ae
+    m_Address: Assets/GameData/2. Cards/DealerTower_1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Base
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e9ff1286c541de4c98bf8ab27bf93e8
+    m_Address: Assets/GameData/2. Cards/DealerTower_2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Base
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 90dd137c654561840a317ac464deba28
+    m_Address: Assets/GameData/2. Cards/TankerTower_1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Base
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8280f8ae3016a104899b72717085bc71
+    m_Address: Assets/GameData/2. Cards/TankerTower_2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Base
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 111d97d4281029f44ac1282aa648d0e6, type: 2}
   m_SchemaSet:

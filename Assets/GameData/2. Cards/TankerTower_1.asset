@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98080bcac942d3b4aa166b4237a5672e, type: 3}
   m_Name: TankerTower_1
   m_EditorClassIdentifier: 
-  cardImage: {fileID: 21300000, guid: ad1aff62351fdb44ba0e85b2c2a47f3b, type: 3}
-  towerData: []
-  relativeOffsets: []
+  cardImage: {fileID: 21300000, guid: 0ea74bb6c61cea64dac1def26c72372d, type: 3}
+  towerData:
+  - {fileID: 11400000, guid: d5be84378e227c74985d52c9a2999c00, type: 2}
+  relativeOffsets:
+  - {x: 0, y: 0, z: 0}

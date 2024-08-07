@@ -79,10 +79,13 @@ public abstract class BaseEnemy : LivingEntity
     private void UpdateDirection()
     {
         // 적의 방향 설정
-        if (aiPath.desiredVelocity.x >= 0.01f) {
-            spriteRenderer.flipX = false;
-        } else if (aiPath.desiredVelocity.x <= -0.01f) {
+        if (aiPath.desiredVelocity.x >= 0.01f) 
+        {
             spriteRenderer.flipX = true;
+        } 
+        else if (aiPath.desiredVelocity.x <= -0.01f) 
+        {
+            spriteRenderer.flipX = false;
         }
     }
 
