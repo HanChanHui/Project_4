@@ -1,10 +1,11 @@
+using Consts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 using UnityEngine.UI;
 using TMPro;
-using System.Data;
+
 
 public abstract class BaseEnemy : LivingEntity
 {
@@ -17,6 +18,7 @@ public abstract class BaseEnemy : LivingEntity
     protected Transform originalTarget;
     public Transform OriginalTarget {get {return originalTarget;} set{originalTarget = value;}}
 
+    [SerializeField] private EnemyType enemyType;
     [SerializeField] protected int maxDistance = 1;
     [SerializeField] private int attackRange = 1; // 공격 범위
     [SerializeField] protected float attackDamage; // 공격 데미지
@@ -43,6 +45,8 @@ public abstract class BaseEnemy : LivingEntity
     public delegate void EnemyDestroyedHandler(BaseEnemy enemy);
     public static event EnemyDestroyedHandler OnEnemyDestroyed;
 
+    public EnemyType EnemyType {get{return enemyType;} set{enemyType = value;}}
+
     protected virtual void Start()
     {
         aiPath = GetComponent<AIPath>();
@@ -53,7 +57,15 @@ public abstract class BaseEnemy : LivingEntity
         destinationSetter.target = originalTarget;
 
         StartCoroutine(MainRoutine());
-        SetHealth(100);
+
+        if(enemyType == EnemyType.General)
+        {
+            SetHealth(100);
+        }
+        else if(enemyType == EnemyType.Boss)
+        {
+            SetHealth(500);
+        }
         healthBar.Init();
 
         attackCoroutine = StartCoroutine(CoCheckDistance());

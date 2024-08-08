@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -10,6 +11,11 @@ public class UIManager : Singleton<UIManager>
     [Header("Parameter")]
     [SerializeField] private float natureAmount;
     [SerializeField] private float natureAmountMax;
+
+
+    [Header("UI")]
+    [SerializeField] private GameObject gameVictoryUI;
+    [SerializeField] private GameObject gameOverUI;
 
     public float NatureAmount { get { return natureAmount; } }
 
@@ -49,6 +55,16 @@ public class UIManager : Singleton<UIManager>
     public float GetNatureNormalized()
     {
         return (float)natureAmount / natureAmountMax;
+    }
+
+    public void ShowGameVictoryUI()
+    {
+        gameVictoryUI.SetActive(true);
+    }
+
+    public void ShowGameOverUI()
+    {
+        gameOverUI.SetActive(true);
     }
 
 }

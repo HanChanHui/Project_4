@@ -2,13 +2,16 @@ using UnityEngine;
 using Pathfinding;
 
 public class Spawner : MonoBehaviour {
-    [SerializeField] GameObject enemy;
+    [SerializeField] private GameObject enemy;
+    [SerializeField] private GameObject enemyBoss;
     [SerializeField] private Transform enemyTarget;
 
     public float coolTime;
+    private int enemyMaxCount;
     public bool spawnerEnabled = false;
 
     private Transform trans;
+    GameObject enemyInstance;
     private float nextSpawnTime;
 
     void Awake() {
@@ -19,25 +22,46 @@ public class Spawner : MonoBehaviour {
 
     private void Start() {
         enemy = ResourceManager.Instance.enemyPrefab;
+        enemyBoss = ResourceManager.Instance.enemyBossPrefab;
+        enemyMaxCount = GameManager.Instance.EnemyMaxDeathCount;
     }
 
     void Update() {
-        if (!spawnerEnabled) {
+        if (!spawnerEnabled) 
+        {
             return;
         }
 
-        if (Time.time >= this.nextSpawnTime) {
+        if (Time.time >= this.nextSpawnTime)
+        {
             var numToSpawn = 1;
 
             for (var i = 0; i < numToSpawn; i++) 
             {
-                GameObject enemyInstance = Instantiate(enemy, transform.position, enemy.transform.rotation);
-                enemyInstance.GetComponent<BaseEnemy>().OriginalTarget = enemyTarget;
+                if(enemyMaxCount - 1 <= GameManager.Instance.EnemySpawnCount)
+                {
+                    enemyInstance = Instantiate(enemyBoss, transform.position, enemy.transform.rotation);
+                    enemyInstance.GetComponent<BaseEnemy>().EnemyType = Consts.EnemyType.Boss;
+                }
+                else
+                {
+                    enemyInstance = Instantiate(enemy, transform.position, enemy.transform.rotation);
+                    enemyInstance.GetComponent<BaseEnemy>().EnemyType = Consts.EnemyType.General;
+                }
                 
+                
+                enemyInstance.GetComponent<BaseEnemy>().OriginalTarget = enemyTarget;
+                GameManager.Instance.EnemySpawnCount++;
                 GameManager.Instance.AddPlaceableEnemyList(enemyInstance.GetComponent<BaseEnemy>());
 
                 this.nextSpawnTime = Time.time + coolTime;
             }
+        }
+        
+
+        if(enemyMaxCount <= GameManager.Instance.EnemySpawnCount)
+        {
+            spawnerEnabled = false;
         }
     }
 }

@@ -14,14 +14,21 @@ public class UITowerSelectPanel : MonoBehaviour
     [SerializeField] private float natureBarSpeed = 10f; // 채워지는 속도
     [SerializeField] private float natureFillInterval = 0.01f; // 채워지는 간격
 
-    [Header("UI")]
-    [SerializeField] private Image barImage;
-    [SerializeField]private Image fullBarIamge;
+    
+    [Header("UI_LeftTop")]
     [SerializeField]private TextMeshProUGUI natureCountText;
     [SerializeField]private TextMeshProUGUI waveCountText;
     [SerializeField]private TextMeshProUGUI enemyCountText;
     [SerializeField]private TextMeshProUGUI enemyMaxCountText;
     [SerializeField]private TextMeshProUGUI targetCount;
+
+    [Header("UI_RightTop")]
+    [SerializeField] private GameObject speedx1Image;
+    [SerializeField] private GameObject speedx2Image;
+
+    [Header("UI_Bottom")]
+    [SerializeField] private Image barImage;
+    [SerializeField]private Image fullBarIamge;
 
     private int previousNatureSegment = 0;
     private int currentNatureSegment = 0;
@@ -103,6 +110,23 @@ public class UITowerSelectPanel : MonoBehaviour
     {
         enemyCountText.text = enemyDeathCount.ToString();
     }
+
+    public void ToggleTimeSpeedImageChange()
+    {
+        bool toggle = GameManager.Instance.ToggleTimeSpeed();
+        if(toggle)
+        {
+            speedx1Image.SetActive(false);
+            speedx2Image.SetActive(true);
+        }
+        else
+        {
+            speedx2Image.SetActive(false);
+            speedx1Image.SetActive(true);
+        }
+    }
+
+
 
     private void OnDisable() 
     {

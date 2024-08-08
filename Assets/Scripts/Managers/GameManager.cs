@@ -13,22 +13,23 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] private int natureAmount;
     [SerializeField] private int enemyWave;
+    [SerializeField] private int enemySpawnCount = 0;
     [SerializeField] private int enemyDeathCount;
     [SerializeField] private int enemyMaxDeathCount;
 
     private List<Tower> towerList = new List<Tower>();
     private List<BaseEnemy> enemyList = new List<BaseEnemy>();
-    
 
+    private bool isDoubleSpeed = false;
+    private bool timePaused = false;
+
+    public int EnemySpawnCount {get {return enemySpawnCount;} set{enemySpawnCount = value;}}
     public int EnemyMaxDeathCount {get{return enemyMaxDeathCount;} set{enemyMaxDeathCount = value;}}
 
     
+    // private Tower tower;
 
-
-    bool timePaused = false;
-    Tower tower;
-
-    public Tower Tower { get { return tower; } }
+    // public Tower Tower { get { return tower; } }
 
     private void Awake() 
     {
@@ -44,18 +45,21 @@ public class GameManager : Singleton<GameManager>
         cardManager.LoadDeck();
     }
  
-    public bool Pause() {
-        if (timePaused) {
-            return true;
+    public void Pause(float time) 
+    {
+        if (timePaused) 
+        {
+            return;
         }
 
-        Time.timeScale = 0;
+        Time.timeScale = time;
         timePaused = true;
-        return false;
     }
 
-    public void Resume() {
-        if (timePaused == false) {
+    public void Resume() 
+    {
+        if (timePaused == false) 
+        {
             return;
         }
 
@@ -63,9 +67,18 @@ public class GameManager : Singleton<GameManager>
         timePaused = false;
     }
 
-    public void TwoSpeedTime()
+    public bool ToggleTimeSpeed()
     {
-        Time.timeScale = 2;
+        if (isDoubleSpeed)
+        {
+            Time.timeScale = 1;
+        }
+        else
+        {
+            Time.timeScale = 2;
+        }
+        
+        return isDoubleSpeed = !isDoubleSpeed;
     }
 
     public void UseCard(CardData cardData, Vector3 position, List<GridPosition> towerGridPositionList, int towerCost) 
@@ -161,6 +174,10 @@ public class GameManager : Singleton<GameManager>
             enemyList.Remove(enemy);
             enemyDeathCount++;
             OnEnemyDeath?.Invoke(enemyDeathCount);
+            if(enemyDeathCount >= enemyMaxDeathCount)
+            {
+                OnEndGameVictory();
+            }
         }
     }
 
@@ -185,9 +202,17 @@ public class GameManager : Singleton<GameManager>
     }
     
 
-    // public void OnEndGameCutsceneOver() {
-    //     UIManager.ShowGameOverUI();
-    // }
+    public void OnEndGameVictory() 
+    {
+        uiManager.ShowGameVictoryUI();
+        Pause(0f);
+    }
+
+    public void OnEndGameOver() 
+    {
+        uiManager.ShowGameOverUI();
+        Pause(0f);
+    }
 
     private void OnDisable() 
     {

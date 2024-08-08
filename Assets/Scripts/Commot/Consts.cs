@@ -48,5 +48,11 @@ namespace Consts
        TargetBlock,
 
     }
+
+    public enum EnemyType
+    {
+       General,
+       Boss,
+    }
 }
 
