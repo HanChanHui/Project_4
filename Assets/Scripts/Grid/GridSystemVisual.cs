@@ -75,6 +75,7 @@ public class GridSystemVisual : MonoBehaviour {
     private void GridSystemVisualSelect(Transform prefab, GridPosition gridPosition, int x, int y)
     {
         Vector3 worldPosition = levelGrid.GetWorldPosition(gridPosition);
+        worldPosition.y -= 0.24f; // 임시
         Transform gridSystemVisualOneLayerTransform = Instantiate(prefab, worldPosition, Quaternion.identity);
         gridSystemVisualOneLayerTransform.transform.parent = transform;
         gridSystemVisualOneLayerArray[x, y] = gridSystemVisualOneLayerTransform.GetComponent<GridSystemVisualSingle>();

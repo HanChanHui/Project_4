@@ -2,7 +2,8 @@ using UnityEngine;
 using Pathfinding;
 
 public class Spawner : MonoBehaviour {
-    public GameObject enemy;
+    [SerializeField] GameObject enemy;
+    [SerializeField] private Transform enemyTarget;
 
     public float coolTime;
     public bool spawnerEnabled = false;
@@ -30,7 +31,10 @@ public class Spawner : MonoBehaviour {
 
             for (var i = 0; i < numToSpawn; i++) 
             {
-                var enemyInstance = Instantiate(enemy, transform.position, enemy.transform.rotation);
+                GameObject enemyInstance = Instantiate(enemy, transform.position, enemy.transform.rotation);
+                enemyInstance.GetComponent<BaseEnemy>().OriginalTarget = enemyTarget;
+                
+                GameManager.Instance.AddPlaceableEnemyList(enemyInstance.GetComponent<BaseEnemy>());
 
                 this.nextSpawnTime = Time.time + coolTime;
             }

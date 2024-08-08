@@ -7,8 +7,9 @@ using UnityEngine.UI;
 
 public class UITowerSelectPanel : MonoBehaviour
 {
-    [Header("Parameter")]
 
+
+    [Header("Parameter")]
     [SerializeField] private float fullBarSpeed = 0.5f; // 채워지는 속도
     [SerializeField] private float natureBarSpeed = 10f; // 채워지는 속도
     [SerializeField] private float natureFillInterval = 0.01f; // 채워지는 간격
@@ -17,6 +18,10 @@ public class UITowerSelectPanel : MonoBehaviour
     [SerializeField] private Image barImage;
     [SerializeField]private Image fullBarIamge;
     [SerializeField]private TextMeshProUGUI natureCountText;
+    [SerializeField]private TextMeshProUGUI waveCountText;
+    [SerializeField]private TextMeshProUGUI enemyCountText;
+    [SerializeField]private TextMeshProUGUI enemyMaxCountText;
+    [SerializeField]private TextMeshProUGUI targetCount;
 
     private int previousNatureSegment = 0;
     private int currentNatureSegment = 0;
@@ -24,7 +29,15 @@ public class UITowerSelectPanel : MonoBehaviour
 
     private void Start()
     {
+        UIManager.Instance.OnUseNature += OnIamgeUseNatureApple;
+        GameManager.Instance.OnEnemyDeath += OnEnemyDeathCount;
+
         StartCoroutine(FillNature());
+
+        waveCountText.text = "0";
+        enemyCountText.text = "0";
+        targetCount.text = "2";
+        enemyMaxCountText.text = GameManager.Instance.EnemyMaxDeathCount.ToString();
     }
     
 
@@ -76,7 +89,23 @@ public class UITowerSelectPanel : MonoBehaviour
         fullBarIamge.fillAmount = natureNormalized;
     }
 
-    private void OnDisable() {
+    private void OnIamgeUseNatureApple(float normalized, float natureAmount)
+    {
+        fullBarIamge.fillAmount = normalized;
+        barImage.fillAmount = normalized;
+        int cnt = (int)natureAmount;
+        natureCountText.text = cnt.ToString();
+        currentNatureSegment = Mathf.FloorToInt(UIManager.Instance.GetNatureNormalized() * 10);
+        previousNatureSegment = currentNatureSegment;
+    }
+
+    private void OnEnemyDeathCount(int enemyDeathCount)
+    {
+        enemyCountText.text = enemyDeathCount.ToString();
+    }
+
+    private void OnDisable() 
+    {
         StopAllCoroutines();
     }
 

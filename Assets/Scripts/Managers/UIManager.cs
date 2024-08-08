@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
 {
+    public event Action<float, float> OnUseNature;
+
     [Header("Parameter")]
     [SerializeField] private float natureAmount;
     [SerializeField] private float natureAmountMax;
@@ -11,9 +14,9 @@ public class UIManager : Singleton<UIManager>
     public float NatureAmount { get { return natureAmount; } }
 
 
-    public void Init() 
+    public void Init(int natureAmount) 
     {
-        NatureBarInit(10);
+        NatureBarInit(natureAmount);
     }
 
 
@@ -26,6 +29,8 @@ public class UIManager : Singleton<UIManager>
     public void UseNature(int amount)
     {
         natureAmount -= amount;
+        OnUseNature?.Invoke(GetNatureNormalized(), natureAmount);
+
         if(natureAmount < 0)
         {
             natureAmount = 0;

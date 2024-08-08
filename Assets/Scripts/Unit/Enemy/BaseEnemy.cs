@@ -15,6 +15,7 @@ public abstract class BaseEnemy : LivingEntity
     private GridPosition currentGridPosition;
     private GridPosition beforeGridPosition;
     protected Transform originalTarget;
+    public Transform OriginalTarget {get {return originalTarget;} set{originalTarget = value;}}
 
     [SerializeField] protected int maxDistance = 1;
     [SerializeField] private int attackRange = 1; // 공격 범위
@@ -48,7 +49,7 @@ public abstract class BaseEnemy : LivingEntity
         destinationSetter = GetComponent<AIDestinationSetter>();
         
         spriteRenderer = GetComponent<SpriteRenderer>();
-        originalTarget = ResourceManager.Instance.EnemyTarget;
+        //originalTarget = ResourceManager.Instance.EnemyTarget;
         destinationSetter.target = originalTarget;
 
         StartCoroutine(MainRoutine());
@@ -161,14 +162,16 @@ public abstract class BaseEnemy : LivingEntity
                 // 대각선 이동 처리
                 offsetGridPosition.Add(new GridPosition(0, yDirection));
                 offsetGridPosition.Add(new GridPosition(xDirection, yDirection));
-            } else if (Mathf.Abs(velX) > 0.01f) {
+            } 
+            else if (Mathf.Abs(velX) > 0.01f) 
+            {
                 int xDirection = velX > 0 ? 1 : -1;
-    
                 // 수평 이동 처리
                 offsetGridPosition.Add(new GridPosition(xDirection, 0));
-            } else if (Mathf.Abs(velY) > 0.01f) {
+            } 
+            else if (Mathf.Abs(velY) > 0.01f) 
+            {
                 int yDirection = velY > 0 ? 1 : -1;
-    
                 // 수직 이동 처리
                 offsetGridPosition.Add(new GridPosition(0, yDirection));
             }
@@ -177,7 +180,8 @@ public abstract class BaseEnemy : LivingEntity
             {
                 GridPosition testGridPosition = currentGridPosition + findPosition;
     
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) {
+                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) 
+                {
                     continue;
                 }
 
@@ -206,6 +210,11 @@ public abstract class BaseEnemy : LivingEntity
                 GridPosition testGridPosition = currentGridPosition + offsetGridPosition;
 
                 if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) 
+                {
+                    continue;
+                }
+
+                if(LevelGrid.Instance.HasAnyBlockOnGridPosition(testGridPosition))
                 {
                     continue;
                 }
@@ -307,12 +316,6 @@ public abstract class BaseEnemy : LivingEntity
             StopCoroutine(moveAttackCoroutine);
             moveAttackCoroutine = null;
         }
-
-        // if(attackCoroutine != null)
-        // {
-        //     StopCoroutine(attackCoroutine);
-        //     attackCoroutine = null;
-        // }
     }
 
     public override void TakeDamage(float damage, int obstacleDamage = 1, bool isCritical = false, bool showLabel = false)
@@ -324,6 +327,7 @@ public abstract class BaseEnemy : LivingEntity
 
         if (health <= 0)
         {
+            GameManager.Instance.RemovePlaceableEnemyList(this);
             DestroyEnemy();
         }
     }

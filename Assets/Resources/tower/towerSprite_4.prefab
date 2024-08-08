@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9052112046883021409}
-  - component: {fileID: 1422550391379561277}
+  - component: {fileID: 859929308447350475}
   m_Layer: 11
   m_Name: towerSprite_4
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 2605409956122334275}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1422550391379561277
+--- !u!114 &859929308447350475
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 925ecaf6533a1c84b856099b1d32dc28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  towerData: {fileID: 0}
 --- !u!1 &5400767787315084745
 GameObject:
   m_ObjectHideFlags: 0
@@ -71,7 +72,7 @@ Transform:
   m_GameObject: {fileID: 5400767787315084745}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.25, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -118,9 +119,9 @@ SpriteRenderer:
   m_SortingLayerID: 714422313
   m_SortingLayer: 6
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e8c8312de993c0b40aba9cc8eb2a1b2c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ad4ab8b34306df84abd40346845a2153, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 1
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 2.4, y: 2.2}

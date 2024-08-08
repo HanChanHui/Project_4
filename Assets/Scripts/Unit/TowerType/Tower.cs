@@ -31,6 +31,7 @@ public class Tower : LivingEntity
         {
             foreach (GridPosition pos in gridPositionList)
             {
+                LevelGrid.Instance.AddTowerAtGridPosition(pos, this);
                 if (pos.y - 1 < 0 || LevelGrid.Instance.HasAnyBlockOnGridPosition(pos))
                 {
                     continue;
@@ -136,6 +137,7 @@ public class Tower : LivingEntity
            {
                 LevelGrid.Instance.RemoveTowerAtGridPosition(gridPosition, this);
            }
+           GameManager.Instance.RemovePlaceableTowerList(this);
            Destroy(gameObject);
         }
     }

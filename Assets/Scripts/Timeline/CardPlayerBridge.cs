@@ -13,7 +13,7 @@ public class CardPlayerBridge : MonoBehaviour, INotificationReceiver
 
         if(cm != null)
         {
-            gameManager.UseCard(cm.card, cm.position);
+            gameManager.UseCard(cm.card, cm.position, cm.towerGridPosition, cm.towerCost);
         }
     }
 }

@@ -393,6 +393,8 @@ MonoBehaviour:
   cardId: 0
   cardData: {fileID: 0}
   portraitImage: {fileID: 247740407010916590}
+  towerPropertyImage: {fileID: 2752187933109923754}
+  towerCostText: {fileID: 2981724862704017429}
 --- !u!1 &6886281116821268948
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,11 +1,12 @@
 using Consts;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerVisualGrid : MonoBehaviour
 {
 
-    private PlaceableTowerData towerObject;
+    [SerializeField] private PlaceableTowerData towerData;
 
     private GridPosition gridPosition;
     public GridPosition GridPosition { get{ return gridPosition; } set{ gridPosition = value; }}
@@ -13,23 +14,19 @@ public class TowerVisualGrid : MonoBehaviour
     private GridSystemVisualSingle[,] gridSystemVisualSingleArray;
     private Material material;
 
-    private void Start() 
+    public void Init(PlaceableTowerData _towerData) 
     {
-        int count = ResourceManager.Instance.SelectedPrefabIndex;
-        if (count >= 0)
-        {
-            towerObject = ResourceManager.Instance.Prefabs[count];
-        }
-        
+        towerData = _towerData;
+
         gridSystemVisualSingleArray = new GridSystemVisualSingle[
-            towerObject.width,
-            towerObject.height
+            towerData.width,
+            towerData.height
         ];
         
         gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
 
         Material material = GridSystemVisual.Instance.GetGridVisualTypeMaterial(GridVisualType.Red);
-        if(towerObject.towerType == TowerType.Dealer)
+        if(towerData.towerType == TowerType.Dealer)
         {
             Transform gridSystemVisualSingleTransform = Instantiate(ResourceManager.Instance.GridSystemVisualSingPrefab2, transform.position, Quaternion.identity);
             gridSystemVisualSingleTransform.transform.parent = transform;
@@ -37,11 +34,11 @@ public class TowerVisualGrid : MonoBehaviour
             gridSystemVisualSingleArray[0, 0].Show(material);
             gridSystemVisualSingleArray[0, 0].GridLayerChange(LayerName.PlaceGrid.ToString());
         }
-        else if(towerObject.towerType == TowerType.Tanker)
+        else if(towerData.towerType == TowerType.Tanker)
         {
-            for (int x = 0; x < towerObject.width; x++) 
+            for (int x = 0; x < towerData.width; x++) 
             {
-                for (int y = 0; y < towerObject.height; y++) 
+                for (int y = 0; y < towerData.height; y++) 
                 {
                     Vector3 worldPosition = transform.position + new Vector3(x, y);
 
@@ -53,8 +50,11 @@ public class TowerVisualGrid : MonoBehaviour
                 }
             }
         }
+
+
         
     }
+
 
     public void ShowSingleTowerGridPositionRange(GridPosition gridPosition) 
     {
@@ -77,9 +77,9 @@ public class TowerVisualGrid : MonoBehaviour
     public void ShowRangeTowerGridPositionRange(GridPosition gridPosition) 
     {
 
-        for (int x = 0; x < towerObject.width; x++) 
+        for (int x = 0; x < towerData.width; x++) 
         {
-            for (int y = 0; y < towerObject.height; y++) 
+            for (int y = 0; y < towerData.height; y++) 
             {
                 GridPosition testGridPosition = new GridPosition(x, y) + gridPosition;
 
@@ -112,8 +112,8 @@ public class TowerVisualGrid : MonoBehaviour
 
     public void OutSideGridPositionList() 
     {
-        for (int x = 0; x < towerObject.width; x++) {
-            for (int y = 0; y < towerObject.height; y++) 
+        for (int x = 0; x < towerData.width; x++) {
+            for (int y = 0; y < towerData.height; y++) 
             {
                 GetMaterialGrid(x, y, GridVisualType.Red);
             }
@@ -122,8 +122,8 @@ public class TowerVisualGrid : MonoBehaviour
 
     public void DestroyGridPositionList() 
     {
-        for (int x = 0; x < towerObject.width; x++) {
-            for (int y = 0; y < towerObject.height; y++) {
+        for (int x = 0; x < towerData.width; x++) {
+            for (int y = 0; y < towerData.height; y++) {
                 Destroy(gridSystemVisualSingleArray[x, y].gameObject);
             }
         }
@@ -131,7 +131,11 @@ public class TowerVisualGrid : MonoBehaviour
 
     private void OnDisable() 
     {
-        DestroyGridPositionList();
+        StopAllCoroutines();
+        if (gridSystemVisualSingleArray != null)
+        {
+            DestroyGridPositionList();
+        }
     }
 
 }

@@ -17,6 +17,13 @@ namespace Consts
         Range,
    }
 
+   public enum TowerProperty
+   {
+        Fire,
+        Water,
+        Grass,
+   }
+
    public enum GridVisualType {
         Empty,
         White,

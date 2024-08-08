@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,23 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
 
+    public event Action<int> OnEnemyDeath;
+
     private CardManager cardManager;
-    private InputManager inputManager;
     private UIManager uiManager;
 
+    [SerializeField] private int natureAmount;
+    [SerializeField] private int enemyWave;
+    [SerializeField] private int enemyDeathCount;
+    [SerializeField] private int enemyMaxDeathCount;
+
+    private List<Tower> towerList = new List<Tower>();
+    private List<BaseEnemy> enemyList = new List<BaseEnemy>();
+    
+
+    public int EnemyMaxDeathCount {get{return enemyMaxDeathCount;} set{enemyMaxDeathCount = value;}}
+
+    
 
 
     bool timePaused = false;
@@ -26,7 +40,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start() 
     {
-        uiManager.Init();
+        uiManager.Init(natureAmount);
         cardManager.LoadDeck();
     }
  
@@ -49,18 +63,24 @@ public class GameManager : Singleton<GameManager>
         timePaused = false;
     }
 
-    public void UseCard(CardData cardData, Vector3 position) 
+    public void TwoSpeedTime()
     {
-        for (int pNum = 0; pNum < cardData.towerData.Length; pNum++) {
-            PlaceableTowerData pDataRef = cardData.towerData[pNum];
-            //Quaternion rot = (pFaction == Placeable.Faction.Player) ? Quaternion.identity : Quaternion.Euler(0f, 180f, 0f);
-            //Prefab to spawn is the associatedPrefab if it's the Player faction, otherwise it's alternatePrefab. But if alternatePrefab is null, then first one is taken
-            GameObject prefabToSpawn = pDataRef.towerPrefab;
-            GameObject newPlaceableGO = Instantiate<GameObject>(prefabToSpawn, position + cardData.relativeOffsets[pNum], Quaternion.identity);
+        Time.timeScale = 2;
+    }
 
-            //SetupPlaceable(newPlaceableGO, pDataRef);
-
+    public void UseCard(CardData cardData, Vector3 position, List<GridPosition> towerGridPositionList, int towerCost) 
+    {
+        PlaceableTowerData pDataRef = cardData.towerData;
+        GameObject prefabToSpawn = pDataRef.towerPrefab;
+        Tower newPlaceableGO = Instantiate(prefabToSpawn, position, Quaternion.identity).GetComponentInChildren<Tower>();
+        uiManager.UseNature(towerCost);
+        foreach (GridPosition gridPosition in towerGridPositionList) 
+        {
+            newPlaceableGO.GridPositionList.Add(gridPosition);
         }
+
+        AddPlaceableTowerList(newPlaceableGO);
+        //SetupPlaceable(newPlaceableGO, pDataRef);
 
     }
 
@@ -110,53 +130,69 @@ public class GameManager : Singleton<GameManager>
     //     go.GetComponent<Placeable>().OnDie += OnPlaceableDead;
     // }
 
-    // private void AddPlaceableToList(ThinkingPlaceable p) {
-    //     allThinkingPlaceables.Add(p);
+    public void AddPlaceableTowerList(Tower tower) 
+    {
+        if(tower != null)
+        {
+            towerList.Add(tower);
+        }
+    }
 
-    //     if (p.faction == Placeable.Faction.Player) {
-    //         allPlayers.Add(p);
+    public void AddPlaceableEnemyList(BaseEnemy enemy) 
+    {
+        if(enemy != null)
+        {
+            enemyList.Add(enemy);
+        }
+    }
 
-    //         if (p.pType == Placeable.PlaceableType.Unit)
-    //             playerUnits.add(p);
-    //         else
-    //             playerBuildings.Add(p);
-    //     } else if (p.faction == Placeable.Faction.Opponent) {
-    //         allOpponents.Add(p);
+    public void RemovePlaceableTowerList(Tower tower) 
+    {
+        if(tower != null)
+        {
+            towerList.Remove(tower);
+        }
+    }
 
-    //         if (p.pType == Placeable.PlaceableType.Unit)
-    //             opponentUnits.Add(p);
-    //         else
-    //             opponentBuildings.Add(p);
-    //     } else {
-    //         Debug.LogError("플레이서블을 플레이어/상대 리스트에 추가하는 중 오류 발생");
-    //     }
-    // }
-    // private void RemovePlaceableFromList(ThinkingPlaceable p) {
-    //     allThinkingPlaceables.Remove(p);
+    public void RemovePlaceableEnemyList(BaseEnemy enemy) 
+    {
+        if(enemy != null)
+        {
+            enemyList.Remove(enemy);
+            enemyDeathCount++;
+            OnEnemyDeath?.Invoke(enemyDeathCount);
+        }
+    }
 
-    //     if (p.faction == Placeable.Faction.Player) {
-    //         allPlayers.Remove(p);
+    private void DestroyObject()
+    {
+        if(towerList != null)
+        {
+            foreach (Tower tower in towerList) {
+                Destroy(tower);
+            }
+        }
 
-    //         if (p.pType == Placeable.PlaceableType.Unit)
-    //             playerUnits.Remove(p);
-    //         else
-    //             playerBuildings.Remove(p);
-    //     } else if (p.faction == Placeable.Faction.Opponent) {
-    //         allOpponents.Remove(p);
+        if(enemyList != null)
+        {
+            foreach (BaseEnemy enemy in enemyList) {
+                Destroy(enemy);
+            }
+        }
 
-    //         if (p.pType == Placeable.PlaceableType.Unit)
-    //             opponentUnits.Remove(p);
-    //         else
-    //             opponentBuildings.Remove(p);
-    //     } else {
-    //         Debug.LogError("플레이서블을 플레이어/상대 리스트에서 제거하는 중 오류 발생");
-    //     }
-    // }
+        towerList = null;
+        enemyList = null;
+    }
+    
 
     // public void OnEndGameCutsceneOver() {
     //     UIManager.ShowGameOverUI();
     // }
 
+    private void OnDisable() 
+    {
+        DestroyObject();
+    }
 
 
 }

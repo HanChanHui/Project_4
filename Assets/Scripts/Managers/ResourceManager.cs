@@ -6,8 +6,6 @@ public class ResourceManager : Singleton<ResourceManager>
 {
     [SerializeField] private List<PlaceableTowerData> prefabs;
     public List<PlaceableTowerData> Prefabs{get{return prefabs;}}
-    [SerializeField] private Transform enemyTarget;
-    public Transform EnemyTarget{get { return enemyTarget;}}
     public GameObject enemyPrefab;
 
     [SerializeField] private Transform gridSystemVisualSingPrefab;

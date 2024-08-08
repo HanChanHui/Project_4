@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fd92ee31feb00e4c8a6d62bab71e620, type: 3}
   m_Name: TankerTower_2
   m_EditorClassIdentifier: 
-  towerType: 0
+  towerType: 2
   towerPrefab: {fileID: 7765826215704485714, guid: 5a7f4f59bf6805445a05b1760fb91960, type: 3}
   towerIconPrefab: {fileID: 3910876822376822823, guid: b0471d059c4a1cc40ae04530d12002ba, type: 3}
   towerID: 0

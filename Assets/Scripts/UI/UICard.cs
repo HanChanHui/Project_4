@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using TMPro;
 
 public class UICard : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
  {
@@ -14,6 +15,8 @@ public class UICard : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDo
     [HideInInspector] public CardData cardData;
 
     public Image portraitImage; //Inspector-set reference
+    public Image towerPropertyImage;
+    public TextMeshProUGUI towerCostText;
     private CanvasGroup canvasGroup;
 
     private void Awake() 
@@ -26,6 +29,8 @@ public class UICard : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDo
     {
         cardData = cData;
         portraitImage.sprite = cardData.cardImage;
+        towerPropertyImage.sprite = cardData.cardPropertyImage;
+        towerCostText.text = cardData.towerData.towerCost.ToString();
     }
 
     public void OnPointerDown(PointerEventData pointerEvent) 

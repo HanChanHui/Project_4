@@ -1,36 +1,44 @@
+using Consts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
-using System;
+using Unity.VisualScripting;
+
 
 
 public class CardManager : Singleton<CardManager> 
 {
-    public Camera mainCamera; 
-    public LayerMask playingFieldMask;
-    public GameObject cardPrefab;
-    public DeckData playersDeck;
+ 
+    [SerializeField] private LayerMask playingFieldMask;
+    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private DeckData playersDeck;
+    [SerializeField] private LevelGrid levelGrid; 
     //public MeshRenderer forbiddenAreaRenderer;
 
-    public UnityAction<CardData, Vector3> OnCardUsed;
+    public UnityAction<CardData, Vector3, List<GridPosition>, int> OnCardUsed;
 
     [Header("UI Elements")]
-    public RectTransform backupCardTransform; 
-    public RectTransform cardSpawnPanel; 
-    public RectTransform cardsPanel; 
+    [SerializeField] private RectTransform backupCardTransform;
+    [SerializeField] private RectTransform cardSpawnPanel;
+    [SerializeField] private RectTransform cardsPanel; 
 
-    private UICard[] cards;
+    [SerializeField] private UICard[] cards;
     private bool cardIsActive = false;
+    private bool IsPlaceable = false;
     private GameObject previewHolder;
-    private Vector3 inputCreationOffset = new Vector3(0f, 0f, 1f); 
+    private GameObject newPlaceable;
+    private PlaceableTowerData dataToSpawn;
+    private List<GridPosition> towerGridPositionList = new List<GridPosition>();
+    private Vector3 resultTowerGridPos = new Vector3();
 
     private void Awake() {
         previewHolder = new GameObject("PreviewHolder");
         cards = new UICard[4];
     }
 
+    // 덱 Addressable에서 Load
     public void LoadDeck() 
     {
         DeckLoader newDeckLoaderComp = gameObject.AddComponent<DeckLoader>();
@@ -38,15 +46,15 @@ public class CardManager : Singleton<CardManager>
         newDeckLoaderComp.LoadDeck(playersDeck);
     }
 
-
+    // 덱 펼치기
     private void DeckLoaded() {
         Debug.Log("Player's deck loaded");
 
         //setup initial cards
         StartCoroutine(AddCardToDeck(.1f));
         for (int i = 0; i < cards.Length; i++) {
-            StartCoroutine(PromoteCardFromDeck(i, .4f + i));
-            StartCoroutine(AddCardToDeck(.8f + i));
+            StartCoroutine(PromoteCardFromDeck(i, 0.4f + i));
+            StartCoroutine(AddCardToDeck(0.8f + i));
         }
     }
 
@@ -57,7 +65,7 @@ public class CardManager : Singleton<CardManager>
         backupCardTransform.SetParent(cardSpawnPanel, true);
         //위치로 이동하고 스케일 조정
         backupCardTransform.DOAnchorPos(new Vector2(-310f + (200f * position), 0f),
-                                        .2f + (.05f * position)).SetEase(Ease.OutQuad);
+                                        0.2f + (0.05f * position)).SetEase(Ease.OutQuad);
         backupCardTransform.localScale = Vector3.one;
 
         //Card 컴포넌트를 배열에 저장
@@ -88,6 +96,7 @@ public class CardManager : Singleton<CardManager>
         UICard cardScript = backupCardTransform.GetComponent<UICard>();
         cardScript.InitialiseWithData(playersDeck.GetNextCardFromDeck());
     }
+
     // 카드가 탭 될 때 호출
     private void CardTapped(int cardId) 
     {
@@ -96,46 +105,46 @@ public class CardManager : Singleton<CardManager>
     }
 
     // 카드가 드래그 될 때 호출
-    private void CardDragged(int cardId, Vector2 dragAmount) {
+    private void CardDragged(int cardId, Vector2 dragAmount) 
+    {
         cards[cardId].transform.Translate(dragAmount);
 
-        // 플레이 필드에 카드가 있는지 확인하기 위해 레이캐스트를 수행
-        //RaycastHit hit;
-        Vector3 pos = InputManager.Instance.GetMouseWorldPosition() ;
-
-        bool planeHit = Physics2D.Raycast(pos, Vector2.zero, 0f, playingFieldMask);
-
-        if (planeHit) {
-            if (!cardIsActive) {
+        dataToSpawn = cards[cardId].cardData.towerData;
+        if (InputManager.Instance.GetPosition(out Vector3 position)) 
+        {
+            if (!cardIsActive) 
+            {
                 cardIsActive = true;
-                previewHolder.transform.position = pos;
+                previewHolder.transform.position = position;
                 cards[cardId].ChangeActiveState(true); // 카드 숨기기
 
                 // CardData에서 배열을 가져옵니다.
-                PlaceableTowerData[] dataToSpawn = cards[cardId].cardData.towerData;
-                Vector3[] offsets = cards[cardId].cardData.relativeOffsets;
+                Vector3 offsets = cards[cardId].cardData.relativeOffsets;
+                towerGridPositionList = new List<GridPosition>();
 
                 // 미리보기 PlaceableTower를 생성하고 cardPreview에 부모로 설정
-                for (int i = 0; i < dataToSpawn.Length; i++) 
-                {
-                    GameObject newPlaceable = GameObject.Instantiate<GameObject>(dataToSpawn[i].towerIconPrefab,
-                                                                                pos + offsets[i] + inputCreationOffset,
+                newPlaceable = GameObject.Instantiate<GameObject>(dataToSpawn.towerIconPrefab,
+                                                                                position + offsets,
                                                                                 Quaternion.identity,
                                                                                 previewHolder.transform);
-                }
+                newPlaceable.GetComponent<TowerVisualGrid>().Init(dataToSpawn);
             } 
             else 
             {
                 // 임시 복사본이 생성되었으며 커서와 함께 이동합니다.
-                previewHolder.transform.position = pos;
+                UpdateMousePosition(previewHolder);
+                HandleMouseHoldAction(dataToSpawn, position);
+                
             }
         } 
         else 
         {
             if (cardIsActive) 
             {
+                IsPlaceable = false;
                 cardIsActive = false;
                 cards[cardId].ChangeActiveState(false); // 카드 표시
+                newPlaceable.GetComponent<TowerVisualGrid>().OutSideGridPositionList(); // Grid Red
 
                 ClearPreviewObjects();
             }
@@ -146,15 +155,16 @@ public class CardManager : Singleton<CardManager>
     private void CardReleased(int cardId) 
     {
         // 플레이 필드에 카드가 있는지 확인하기 위해 레이캐스트를 수행
-        RaycastHit hit;
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+       
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, playingFieldMask)) 
+        if (InputManager.Instance.GetPosition(out Vector3 position) && IsPlaceable 
+            && (int)UIManager.Instance.NatureAmount >= dataToSpawn.towerCost) 
         {
+            cardIsActive = false;
             if (OnCardUsed != null)
             {
                 //GameManager가 실제 Placeable을 생성하도록 요청
-                OnCardUsed(cards[cardId].cardData, hit.point + inputCreationOffset); 
+                OnCardUsed(cards[cardId].cardData, resultTowerGridPos, towerGridPositionList, dataToSpawn.towerCost); 
             }
 
             ClearPreviewObjects();
@@ -165,20 +175,116 @@ public class CardManager : Singleton<CardManager>
         } 
         else 
         {
+            cardIsActive = false;
+            ClearPreviewObjects();
             cards[cardId].GetComponent<RectTransform>().DOAnchorPos(new Vector2(-310f + (200f * cardId), 0f),
-                                                                    .2f).SetEase(Ease.OutQuad);
+                                                                    0.2f).SetEase(Ease.OutQuad);
+            cards[cardId].ChangeActiveState(false);
         }
 
         //forbiddenAreaRenderer.enabled = false;
     }
 
+    private void HandleMouseHoldAction(PlaceableTowerData towerData, Vector3 position)
+    {
+        Vector3 pos = position;
+        if (levelGrid.HasAnyBlockTypeOnWorldPosition(pos)) {
+            pos.z = 2f;
+        }
+        GridPosition gridPosition = levelGrid.GetGridPosition(pos);
+        Vector2 gridTr = levelGrid.GetWorldPosition(gridPosition);
+        towerGridPositionList.Clear();
+
+        OnTowerTypeVisualGrid(towerData, gridPosition);
+
+        if (TryGetTowerGridPositions(gridPosition, towerData, out List<GridPosition> gridPositions)) 
+        {
+            towerGridPositionList = gridPositions;
+            resultTowerGridPos = gridTr;
+            IsPlaceable = true;
+        } 
+        else 
+        {
+            IsPlaceable = false;
+            return;
+        }
+
+    }
+
+    public void UpdateMousePosition(GameObject towerGhost)
+    {
+        Vector3 targetPosition = GetMouseWorldSnappedPosition();
+        towerGhost.transform.position = targetPosition;
+    }
+
+    private Vector3 GetMouseWorldSnappedPosition()
+    {
+        Vector3 mousePosition = InputManager.Instance.GetMouseWorldPosition();
+        if (levelGrid.HasAnyBlockTypeOnWorldPosition(mousePosition))
+        {
+            mousePosition.z = 2f;
+            return levelGrid.GetWorldPosition(levelGrid.GetGridPosition(mousePosition));
+        }
+        else
+        {
+            return levelGrid.GetWorldPosition(levelGrid.GetCameraGridPosition(mousePosition));
+        }
+    }
+
+    private bool TryGetTowerGridPositions(GridPosition gridPosition, PlaceableTowerData towerData, out List<GridPosition> gridPositions)
+    {
+        gridPositions = new List<GridPosition>();
+
+        if (towerData.towerType == TowerType.Dealer)
+        {
+            if (towerData.GetSingleGridPosition(gridPosition))
+            {
+                gridPositions.Add(gridPosition);
+                return true;
+            }
+        }
+        else if (towerData.towerType == TowerType.Tanker)
+        {
+            if (towerData.GetGridPositionList(gridPosition, out gridPositions))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void OnTowerTypeVisualGrid(PlaceableTowerData towerData, GridPosition gridPosition)
+    {
+        switch (towerData.towerType) 
+        {
+            case TowerType.Dealer:
+                newPlaceable.GetComponent<TowerVisualGrid>().ShowSingleTowerGridPositionRange(gridPosition);
+                break;
+            case TowerType.Tanker:
+                newPlaceable.GetComponent<TowerVisualGrid>().ShowRangeTowerGridPositionRange(gridPosition);
+                break;
+        }
+    }
     
     private void ClearPreviewObjects() 
     {
         // 미리보기 PlaceableTower를 모두 제거
-        for (int i = 0; i < previewHolder.transform.childCount; i++) {
+        for (int i = 0; i < previewHolder.transform.childCount; i++) 
+        {
             Destroy(previewHolder.transform.GetChild(i).gameObject);
         }
+
+        if(newPlaceable != null)
+        {
+            newPlaceable = null;
+        }
+
+        if(dataToSpawn != null)
+        {
+            dataToSpawn = null;
+        }
     }
+
 }
 
