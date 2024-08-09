@@ -16,15 +16,20 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private int enemySpawnCount = 0;
     [SerializeField] private int enemyDeathCount;
     [SerializeField] private int enemyMaxDeathCount;
+    [SerializeField] private int targetDeathCount;
 
     private List<Tower> towerList = new List<Tower>();
     private List<BaseEnemy> enemyList = new List<BaseEnemy>();
+    private List<Transform> targetList = new List<Transform>();
 
     private bool isDoubleSpeed = false;
     private bool timePaused = false;
 
     public int EnemySpawnCount {get {return enemySpawnCount;} set{enemySpawnCount = value;}}
     public int EnemyMaxDeathCount {get{return enemyMaxDeathCount;} set{enemyMaxDeathCount = value;}}
+    public int TargetDeathCount {get{return targetDeathCount;} set{targetDeathCount = value;}}
+    public List<Transform> TargetList {get{return targetList;} set{targetList = value;}}
+
 
     
     // private Tower tower;
@@ -85,11 +90,16 @@ public class GameManager : Singleton<GameManager>
     {
         PlaceableTowerData pDataRef = cardData.towerData;
         GameObject prefabToSpawn = pDataRef.towerPrefab;
-        Tower newPlaceableGO = Instantiate(prefabToSpawn, position, Quaternion.identity).GetComponentInChildren<Tower>();
+        Tower newPlaceableGO = Instantiate(prefabToSpawn, position, Quaternion.identity).GetComponent<Tower>();
         uiManager.UseNature(towerCost);
         foreach (GridPosition gridPosition in towerGridPositionList) 
         {
             newPlaceableGO.GridPositionList.Add(gridPosition);
+        }
+
+        if(cardData.towerData.towerType == Consts.TowerType.Tanker)
+        {
+            newPlaceableGO.SetHealth((int)cardData.towerData.towerHP);
         }
 
         AddPlaceableTowerList(newPlaceableGO);
@@ -159,6 +169,14 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void AddPlaceableTargetList(Transform target) 
+    {
+        if(target != null)
+        {
+            targetList.Add(target);
+        }
+    }
+
     public void RemovePlaceableTowerList(Tower tower) 
     {
         if(tower != null)
@@ -177,6 +195,18 @@ public class GameManager : Singleton<GameManager>
             if(enemyDeathCount >= enemyMaxDeathCount)
             {
                 OnEndGameVictory();
+            }
+        }
+    }
+
+    public void RemovePlaceableTargetList(Transform target) 
+    {
+        if(target != null)
+        {
+            targetList.Remove(target);
+            if(targetList.Count <= 0)
+            {
+                OnEndGameOver();
             }
         }
     }

@@ -15,6 +15,7 @@ public class Tower : LivingEntity
     [SerializeField] protected int maxDistance;
     [SerializeField] protected float attackDamage;
     [SerializeField] protected float attackSpeed;
+    [SerializeField] private HealthLabel healthBar;
 
     protected virtual void Awake()
     {
@@ -48,10 +49,24 @@ public class Tower : LivingEntity
         LevelGrid.Instance.OnEnemyExitedGridPosition += OnEnemyExitedGridPosition;
         BaseEnemy.OnEnemyDestroyed += OnEnemyDestroyed;
 
-        SetHealth(100);
+        //SetHealth(100);
+        if(healthBar != null)
+        {
+            healthBar.Init();
+        }
         StartCoroutine(CoCheckDistance());
         GridRangeCheck();
     }
+
+    // private IEnumerator CheckEnemy()
+    // {
+    //     while(enemiesInRange == null)
+    //     {
+    //         GridRangeCheck();
+    //         yield return new WaitForSeconds(1f);
+    //     }
+        
+    // }
 
     protected void OnEnemyEnteredGridPosition(BaseEnemy enemy, GridPosition gridPosition)
     {
@@ -81,6 +96,11 @@ public class Tower : LivingEntity
         {
             enemiesInRange.Remove(enemy);
         }
+        GridRangeCheck();
+        // if(enemiesInRange == null)
+        // {
+        //     StartCoroutine(CheckEnemy());
+        // }
     }
 
     protected bool IsWithinRange(GridPosition gridPosition)
@@ -128,6 +148,11 @@ public class Tower : LivingEntity
     public override void TakeDamage(float damage, int obstacleDamage = 1, bool isCritical = false, bool showLabel = false)
     {
         base.TakeDamage(damage, obstacleDamage, isCritical, showLabel);
+        if(healthBar != null)
+        {
+            healthBar.Show();
+            healthBar.UpdateHealth(health, maxHealth);
+        }
 
         StartCoroutine(FlashRed());
 

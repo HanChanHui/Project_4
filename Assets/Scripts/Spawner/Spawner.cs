@@ -49,7 +49,14 @@ public class Spawner : MonoBehaviour {
                     enemyInstance.GetComponent<BaseEnemy>().EnemyType = Consts.EnemyType.General;
                 }
                 
-                
+                if(enemyTarget != null)
+                {
+                    enemyInstance.GetComponent<BaseEnemy>().OriginalTarget = enemyTarget;
+                }
+                else
+                {
+                    enemyInstance.GetComponent<BaseEnemy>().OriginalTarget = GameManager.Instance.TargetList[0];
+                }
                 enemyInstance.GetComponent<BaseEnemy>().OriginalTarget = enemyTarget;
                 GameManager.Instance.EnemySpawnCount++;
                 GameManager.Instance.AddPlaceableEnemyList(enemyInstance.GetComponent<BaseEnemy>());

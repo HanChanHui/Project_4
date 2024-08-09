@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1773417550148626443}
   - component: {fileID: 4740694339389517874}
   - component: {fileID: 1436074844266469680}
-  - component: {fileID: 3526910575296988104}
   m_Layer: 11
   m_Name: tower_1
   m_TagString: Untagged
@@ -131,24 +130,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.3, y: 1.3}
   m_EdgeRadius: 0
---- !u!114 &3526910575296988104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 75826775719599010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49be2eae79b700b41ae4bcdd54115a5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemiesInRange: []
-  maxDistance: 2
-  attackDamage: 50
-  attackSpeed: 0.2
-  bulletPrefab: {fileID: 5870224901932606103, guid: bf116db3d1a4aa94eb6a8cc6b2621d49, type: 3}
-  shooterPos: {fileID: 5486871852820634755}
 --- !u!1 &7455969078846842470
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,6 +170,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8350399853320589565}
+  - component: {fileID: 9184563109479618074}
   m_Layer: 11
   m_Name: tower_1
   m_TagString: Untagged
@@ -213,3 +195,22 @@ Transform:
   - {fileID: 5486871852820634755}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9184563109479618074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7615203612565352041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49be2eae79b700b41ae4bcdd54115a5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemiesInRange: []
+  maxDistance: 2
+  attackDamage: 50
+  attackSpeed: 0.2
+  healthBar: {fileID: 0}
+  bulletPrefab: {fileID: 5870224901932606103, guid: bf116db3d1a4aa94eb6a8cc6b2621d49, type: 3}
+  shooterPos: {fileID: 5486871852820634755}

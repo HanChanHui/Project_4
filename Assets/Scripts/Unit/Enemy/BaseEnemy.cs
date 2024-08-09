@@ -29,7 +29,7 @@ public abstract class BaseEnemy : LivingEntity
     [SerializeField] private float knockbackDuration = 0.2f; // 밀려나는 시간
 
     
-    [SerializeField] private EnemyHealthLabel healthBar;
+    [SerializeField] private HealthLabel healthBar;
     [SerializeField] private GameObject textDamage;
     [SerializeField] private Transform textDamageSpawnPosition;
 
@@ -53,7 +53,7 @@ public abstract class BaseEnemy : LivingEntity
         destinationSetter = GetComponent<AIDestinationSetter>();
         
         spriteRenderer = GetComponent<SpriteRenderer>();
-        //originalTarget = ResourceManager.Instance.EnemyTarget;
+
         destinationSetter.target = originalTarget;
 
         StartCoroutine(MainRoutine());
@@ -104,8 +104,14 @@ public abstract class BaseEnemy : LivingEntity
 
     private void CheckTargetReached()
     {
-        if (!isAttackingTower && aiPath.reachedEndOfPath && aiPath.remainingDistance <= aiPath.endReachedDistance)
+        if (originalTarget == null) 
         {
+            originalTarget = GameManager.Instance.TargetList[0];
+            SetNewTarget(originalTarget);
+        }
+        else if (!isAttackingTower && aiPath.reachedEndOfPath && aiPath.remainingDistance <= aiPath.endReachedDistance)
+        {
+            originalTarget.GetComponent<Block>().TakeDamage(10f);
             Destroy(gameObject);
         }
     }
@@ -143,6 +149,7 @@ public abstract class BaseEnemy : LivingEntity
                     else if(towerList.Count > 0 && !isMoveAttacking)
                     {
                         aiPath.canMove = true; // 이동 재개
+                        
 
                         if(towerList[0] == null)
                         {
