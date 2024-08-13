@@ -29,6 +29,7 @@ namespace Consts
         White,
         Green,
         Red,
+        Forbidden,
     }
 
     public enum LayerName
@@ -54,5 +55,13 @@ namespace Consts
        General,
        Boss,
     }
+
+    public enum AttackDirection 
+    {
+       Up,
+       Down,
+       Left,
+       Right
+   }
 }
 

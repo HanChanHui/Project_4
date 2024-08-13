@@ -125,6 +125,12 @@ public class LevelGrid : MonoBehaviour
         && gridObject.GetBlock().BlockType == Consts.BlockType.Block;
     }
 
+    public bool HasAnyTowerAndBlockOnGridPosition(GridPosition gridPosition)
+    {
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        return gridObject != null && (gridObject.HasAnyTower() || gridObject.HasAnyBlock());
+    }
+
     public bool HasAnyEnemyOnGridPosition(GridPosition gridPosition)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);

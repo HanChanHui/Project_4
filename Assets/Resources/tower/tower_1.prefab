@@ -170,7 +170,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8350399853320589565}
-  - component: {fileID: 9184563109479618074}
+  - component: {fileID: 5837976468164644086}
   m_Layer: 11
   m_Name: tower_1
   m_TagString: Untagged
@@ -195,7 +195,7 @@ Transform:
   - {fileID: 5486871852820634755}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9184563109479618074
+--- !u!114 &5837976468164644086
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -204,13 +204,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7615203612565352041}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49be2eae79b700b41ae4bcdd54115a5b, type: 3}
+  m_Script: {fileID: 11500000, guid: 88597789adb106543a0b945cfc404a75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemiesInRange: []
   maxDistance: 2
-  attackDamage: 50
+  attackDamage: 10
   attackSpeed: 0.2
   healthBar: {fileID: 0}
   bulletPrefab: {fileID: 5870224901932606103, guid: bf116db3d1a4aa94eb6a8cc6b2621d49, type: 3}
   shooterPos: {fileID: 5486871852820634755}
+  stickImage: {fileID: 0}

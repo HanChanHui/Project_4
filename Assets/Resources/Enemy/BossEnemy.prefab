@@ -300,7 +300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 0
-  maxDistance: 1
+  maxDistance: 2
   attackRange: 2
   attackDamage: 1
   attackInterval: 1

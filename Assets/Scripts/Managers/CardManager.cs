@@ -124,6 +124,7 @@ public class CardManager : Singleton<CardManager>
 
                 // 슬로우 시간
                 GameManager.Instance.Pause(0.2f);
+                GridSystemVisual.Instance.UpdateGridVisual(dataToSpawn.towerType, true);
 
                 // 미리보기 PlaceableTower를 생성하고 cardPreview에 부모로 설정
                 newPlaceable = GameObject.Instantiate<GameObject>(dataToSpawn.towerIconPrefab,
@@ -147,7 +148,6 @@ public class CardManager : Singleton<CardManager>
                 IsPlaceable = false;
                 cardIsActive = false;
                 cards[cardId].ChangeActiveState(false); // 카드 표시
-                newPlaceable.GetComponent<TowerVisualGrid>().OutSideGridPositionList(); // Grid Red
 
                 ClearPreviewObjects();
             }
@@ -170,7 +170,9 @@ public class CardManager : Singleton<CardManager>
                 OnCardUsed(cards[cardId].cardData, resultTowerGridPos, towerGridPositionList, dataToSpawn.towerCost); 
             }
             
-            GameManager.Instance.Resume();
+            //GameManager.Instance.Resume();
+            UIManager.Instance.ShowDirectionJoystickUI(resultTowerGridPos);
+            GridSystemVisual.Instance.UpdateGridVisual(dataToSpawn.towerType, false);
 
             ClearPreviewObjects();
             Destroy(cards[cardId].gameObject); // 카드를 제거
@@ -181,6 +183,7 @@ public class CardManager : Singleton<CardManager>
         else 
         {
             GameManager.Instance.Resume();
+            GridSystemVisual.Instance.UpdateGridVisual(dataToSpawn.towerType, false);
             cardIsActive = false;
             ClearPreviewObjects();
             cards[cardId].GetComponent<RectTransform>().DOAnchorPos(new Vector2(-310f + (200f * cardId), 0f),
@@ -201,16 +204,17 @@ public class CardManager : Singleton<CardManager>
         Vector2 gridTr = levelGrid.GetWorldPosition(gridPosition);
         towerGridPositionList.Clear();
 
-        OnTowerTypeVisualGrid(towerData, gridPosition);
 
         if (TryGetTowerGridPositions(gridPosition, towerData, out List<GridPosition> gridPositions)) 
         {
+            newPlaceable.GetComponent<TowerVisualGrid>().ShowAllGridPosition();
             towerGridPositionList = gridPositions;
             resultTowerGridPos = gridTr;
             IsPlaceable = true;
         } 
         else 
         {
+            newPlaceable.GetComponent<TowerVisualGrid>().HideAllGridPosition();
             IsPlaceable = false;
             return;
         }
@@ -260,18 +264,28 @@ public class CardManager : Singleton<CardManager>
         return false;
     }
 
-    private void OnTowerTypeVisualGrid(PlaceableTowerData towerData, GridPosition gridPosition)
+    private void TryGetTowerGridVisual(PlaceableTowerData towerData, bool isActive)
     {
-        switch (towerData.towerType) 
+        TowerType type = towerData.towerType;
+        switch(type)
         {
             case TowerType.Dealer:
-                newPlaceable.GetComponent<TowerVisualGrid>().ShowSingleTowerGridPositionRange(gridPosition);
+                if(isActive)
+                {
+
+                }
+                else
+                {
+
+                }
                 break;
             case TowerType.Tanker:
-                newPlaceable.GetComponent<TowerVisualGrid>().ShowRangeTowerGridPositionRange(gridPosition);
+                
                 break;
         }
+
     }
+
     
     private void ClearPreviewObjects() 
     {

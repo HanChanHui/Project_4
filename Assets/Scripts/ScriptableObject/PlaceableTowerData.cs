@@ -19,7 +19,7 @@ public class PlaceableTowerData : ScriptableObject
     public float towerDefence;
     public float towerAttack;
     public float towerAttackSpeed;
-    public float attackRange;
+    public int attackRange;
 
     [Header("Tower Cost")]
     public int towerCost;

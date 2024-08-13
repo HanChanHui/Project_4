@@ -84,6 +84,7 @@ public abstract class BaseEnemy : LivingEntity
             UpdateDirection();
             CheckTargetReached();
             UpdateGridPosition();
+            GridRangeFind();
 
             yield return new WaitForSeconds(0.1f);
         }
@@ -123,7 +124,6 @@ public abstract class BaseEnemy : LivingEntity
         {
             LevelGrid.Instance.EnemyMovedGridPosition(this, beforeGridPosition, currentGridPosition);
             beforeGridPosition = currentGridPosition;
-            GridRangeFind();
         }
     }
 
@@ -218,33 +218,21 @@ public abstract class BaseEnemy : LivingEntity
             return null;
         }
 
+   
     private void GridRangeFind() {
         List<Tower> foundTowers = new List<Tower>();
 
-        for (int x = -maxDistance; x <= maxDistance; x++) 
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, maxDistance, LayerMask.GetMask("Tower"));
+
+        foreach (var hit in hits) 
         {
-            for (int y = -maxDistance; y <= maxDistance; y++) 
+            Tower tower = hit.GetComponent<Tower>();
+            if (tower != null) 
             {
-                GridPosition offsetGridPosition = new GridPosition(x, y);
-                GridPosition testGridPosition = currentGridPosition + offsetGridPosition;
-
-                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition)) 
-                {
-                    continue;
-                }
-
-                if(LevelGrid.Instance.HasAnyBlockOnGridPosition(testGridPosition))
-                {
-                    continue;
-                }
-
-                if (LevelGrid.Instance.HasAnyTowerOnGridPosition(testGridPosition)) 
-                {
-                    Tower tower = LevelGrid.Instance.GetTowerAtGridPosition(testGridPosition);
-                    foundTowers.Add(tower);
-                }
+                foundTowers.Add(tower);
             }
         }
+        DrawCircle(transform.position, maxDistance);
 
         foreach (Tower tower in towerList)
         {
@@ -266,8 +254,23 @@ public abstract class BaseEnemy : LivingEntity
     }
     #endregion
 
+    private void DrawCircle(Vector3 center, float radius, int segments = 100) 
+    {
+        float angleStep = 360f / segments;
+        Vector3 start = center + new Vector3(radius, 0, 0);
+        Vector3 end = start;
+
+        for (int i = 1; i <= segments; i++) {
+            float angle = i * angleStep * Mathf.Deg2Rad;
+            end = center + new Vector3(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius, 0);
+
+            Debug.DrawLine(start, end, Color.green, 0.1f); // 0.1f는 지속 시간
+            start = end;
+        }
+    }
+
     #region Tower Crash
-        private void HandleTowerPlaced(Tower tower) 
+    private void HandleTowerPlaced(Tower tower) 
         {
             foreach (GridPosition grid in tower.GridPositionList) 
             {

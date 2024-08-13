@@ -65,7 +65,7 @@ public class GridSystemVisual : MonoBehaviour {
                 if (levelGrid.HasAnyBlockTypeOnGridPosition(gridPosition))
                 {
                     GridPosition newGridPosition = new GridPosition(x, y, 2);
-                    GridSystemVisualSelect(gridSystemVisualBlockPrefab, newGridPosition, x, y);
+                    TwoLayerGridSystemVisualSelect(gridSystemVisualBlockPrefab, newGridPosition, x, y);
                 }
                 GridSystemVisualSelect(gridSystemVisualFloorPrefab, gridPosition, x, y);
             }
@@ -81,6 +81,15 @@ public class GridSystemVisual : MonoBehaviour {
         gridSystemVisualOneLayerArray[x, y] = gridSystemVisualOneLayerTransform.GetComponent<GridSystemVisualSingle>();
     }
 
+    private void TwoLayerGridSystemVisualSelect(Transform prefab, GridPosition gridPosition, int x, int y)
+    {
+        Vector3 worldPosition = levelGrid.GetWorldPosition(gridPosition);
+        worldPosition.y -= 0.24f; // 임시
+        Transform gridSystemVisualTwoLayerTransform = Instantiate(prefab, worldPosition, Quaternion.identity);
+        gridSystemVisualTwoLayerTransform.transform.parent = transform;
+        gridSystemVisualTwoLayerArray[x, y] = gridSystemVisualTwoLayerTransform.GetComponent<GridSystemVisualSingle>();
+    }
+
     public void HideAllGridPosition() 
     {
         for (int x = 0; x < levelGrid.GetWidth(); x++) 
@@ -88,7 +97,10 @@ public class GridSystemVisual : MonoBehaviour {
             for (int y = 0; y < levelGrid.GetHeight(); y++) 
             {
                 gridSystemVisualOneLayerArray[x, y].Hide();
-                gridSystemVisualTwoLayerArray[x, y].Hide();
+                if(gridSystemVisualTwoLayerArray[x, y] != null)
+                {
+                    gridSystemVisualTwoLayerArray[x, y].Hide();
+                }
             }
         }
     }
@@ -99,9 +111,113 @@ public class GridSystemVisual : MonoBehaviour {
         {
             for (int y = 0; y < levelGrid.GetHeight(); y++) 
             {
-                gridSystemVisualOneLayerArray[x, y].Show(GetGridVisualMaterial());
-                gridSystemVisualTwoLayerArray[x, y].Show(GetGridVisualMaterial());
+                gridSystemVisualOneLayerArray[x, y].Show(GetGridVisualTypeMaterial(GridVisualType.White));
+                if(gridSystemVisualTwoLayerArray[x, y] != null)
+                {
+                    gridSystemVisualTwoLayerArray[x, y].Show(GetGridVisualTypeMaterial(GridVisualType.White));
+                }
             }
+        }
+    }
+
+    private void ShowGridPositionOneLayerRange(GridVisualType gridVisualType)
+    {
+        List<GridPosition> gridPositionList = new List<GridPosition>();
+        for (int x = 0; x < levelGrid.GetWidth(); x++)
+        {
+            for (int z = 0; z < levelGrid.GetHeight(); z++)
+            {
+                GridPosition testGridPosition = new GridPosition(x, z);
+
+                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                {
+                    continue;
+                }
+
+                if(LevelGrid.Instance.HasAnyTowerAndBlockOnGridPosition(testGridPosition))
+                {
+                    continue;
+                }
+
+                gridPositionList.Add(testGridPosition);
+            }
+        }
+
+        ShowOneLayerGridPositionList(gridPositionList, gridVisualType);
+    }
+
+    private void ShowGridPositionTwoLayerRange(GridVisualType gridVisualType)
+    {
+        List<GridPosition> gridPositionList = new List<GridPosition>();
+
+        for (int x = 0; x < levelGrid.GetWidth(); x++)
+        {
+            for (int z = 0; z < levelGrid.GetHeight(); z++)
+            {
+                GridPosition testGridPosition = new GridPosition(x, z);
+
+                if (!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
+                {
+                    continue;
+                }
+
+                if(LevelGrid.Instance.HasAnyTowerOnGridPosition(testGridPosition))
+                {
+                    continue;
+                }
+
+                gridPositionList.Add(testGridPosition);
+            }
+        }
+
+        ShowTwoLayerGridPositionList(gridPositionList, gridVisualType);
+    }
+
+    public void ShowOneLayerGridPositionList(List<GridPosition> gridPositionList, GridVisualType gridVisualType)
+    {
+        foreach(GridPosition gridPosition in gridPositionList)
+        {
+            gridSystemVisualOneLayerArray[gridPosition.x, gridPosition.y].Show(GetGridVisualTypeMaterial(gridVisualType));
+        }
+    }
+
+    public void ShowTwoLayerGridPositionList(List<GridPosition> gridPositionList, GridVisualType gridVisualType)
+    {
+        foreach(GridPosition gridPosition in gridPositionList)
+        {
+            if(gridSystemVisualTwoLayerArray[gridPosition.x, gridPosition.y] != null)
+            {
+                gridSystemVisualTwoLayerArray[gridPosition.x, gridPosition.y].Show(GetGridVisualTypeMaterial(gridVisualType));
+            }
+        }
+    }
+
+    public void UpdateGridVisual(TowerType type, bool isActive)
+    {
+        HideAllGridPosition();
+
+        switch(type)
+        {
+            case TowerType.Dealer:
+                if(isActive)
+                {
+                    ShowGridPositionTwoLayerRange(GridVisualType.Green);
+                }
+                else
+                {
+                    ShowAllGridPosition();
+                }
+                break;
+            case TowerType.Tanker:
+                if(isActive)
+                {
+                    ShowGridPositionOneLayerRange(GridVisualType.Green);
+                }
+                else
+                {
+                    ShowAllGridPosition();
+                }
+                break;
         }
     }
 
@@ -112,6 +228,10 @@ public class GridSystemVisual : MonoBehaviour {
             for (int y = 0; y < levelGrid.GetHeight(); y++) 
             {
                 Destroy(gridSystemVisualOneLayerArray[x, y].gameObject);
+                if(gridSystemVisualTwoLayerArray[x, y] != null)
+                {
+                    Destroy(gridSystemVisualTwoLayerArray[x, y].gameObject);
+                }
             }
         }
     }
@@ -137,5 +257,10 @@ public class GridSystemVisual : MonoBehaviour {
             return gridVisualTypeMaterial.material;
         }
         return null;
+    }
+
+    private void OnDisable() 
+    {
+        DestroyGridPositionList();
     }
 }

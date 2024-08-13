@@ -8,7 +8,12 @@ public class TankerTower : Tower
 
     protected override void Start() {
         base.Start();
-        //AstarPath.active.Scan();
+
+        if(healthBar != null)
+        {
+            healthBar.Init();
+        }
+
     }
 
     protected override IEnumerator CoCheckDistance()

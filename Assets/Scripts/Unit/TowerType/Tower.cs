@@ -8,18 +8,21 @@ public class Tower : LivingEntity
     private Color originalColor;
 
     protected List<GridPosition> gridPositionList = new List<GridPosition>();
-    public List<GridPosition> GridPositionList { get { return gridPositionList; } set { gridPositionList = value; } }
-    [SerializeField] protected List<BaseEnemy> enemiesInRange = new List<BaseEnemy>();
-    public List<BaseEnemy> EnemiesInRange { get { return enemiesInRange; } }
+    protected List<BaseEnemy> enemiesInRange = new List<BaseEnemy>();
 
     [SerializeField] protected int maxDistance;
     [SerializeField] protected float attackDamage;
     [SerializeField] protected float attackSpeed;
-    [SerializeField] private HealthLabel healthBar;
+    [SerializeField] protected HealthLabel healthBar;
+
+
+    public List<GridPosition> GridPositionList { get { return gridPositionList; } set { gridPositionList = value; } }
+    public List<BaseEnemy> EnemiesInRange { get { return enemiesInRange; } }
+
 
     protected virtual void Awake()
     {
-        sprite = GetComponent<SpriteRenderer>();
+        sprite = GetComponentInChildren<SpriteRenderer>();
         if (sprite != null)
         {
             originalColor = sprite.color;
@@ -50,23 +53,8 @@ public class Tower : LivingEntity
         BaseEnemy.OnEnemyDestroyed += OnEnemyDestroyed;
 
         //SetHealth(100);
-        if(healthBar != null)
-        {
-            healthBar.Init();
-        }
         StartCoroutine(CoCheckDistance());
-        GridRangeCheck();
     }
-
-    // private IEnumerator CheckEnemy()
-    // {
-    //     while(enemiesInRange == null)
-    //     {
-    //         GridRangeCheck();
-    //         yield return new WaitForSeconds(1f);
-    //     }
-        
-    // }
 
     protected void OnEnemyEnteredGridPosition(BaseEnemy enemy, GridPosition gridPosition)
     {
@@ -96,11 +84,7 @@ public class Tower : LivingEntity
         {
             enemiesInRange.Remove(enemy);
         }
-        GridRangeCheck();
-        // if(enemiesInRange == null)
-        // {
-        //     StartCoroutine(CheckEnemy());
-        // }
+
     }
 
     protected bool IsWithinRange(GridPosition gridPosition)
@@ -116,28 +100,6 @@ public class Tower : LivingEntity
             }
         }
         return false;
-    }
-
-    protected void GridRangeCheck()
-    {
-        for(int x = -maxDistance; x <= maxDistance; x++)
-        {
-            for(int y = -maxDistance; y <= maxDistance; y++)
-            {
-                GridPosition offsetGridPosition = new GridPosition(x, y);
-                GridPosition testGridPosition = gridPositionList[0] + offsetGridPosition;
-
-                if(!LevelGrid.Instance.IsValidGridPosition(testGridPosition))
-                {
-                    continue;
-                }
-
-                if(LevelGrid.Instance.HasAnyEnemyOnGridPosition(testGridPosition) && IsWithinRange(testGridPosition))
-                {
-                    enemiesInRange.Add(LevelGrid.Instance.GetEnemiesAtGridPosition(testGridPosition));
-                }
-            }
-        }
     }
 
     protected virtual IEnumerator CoCheckDistance()

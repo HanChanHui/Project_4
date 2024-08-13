@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemiesInRange: []
-  maxDistance: 3
+  maxDistance: 2
   attackDamage: 30
   attackSpeed: 0.1
   healthBar: {fileID: 0}

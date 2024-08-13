@@ -16,6 +16,7 @@ public class UIManager : Singleton<UIManager>
     [Header("UI")]
     [SerializeField] private GameObject gameVictoryUI;
     [SerializeField] private GameObject gameOverUI;
+    [SerializeField] private GameObject towerAttackDirectionJoystickUI;
 
     public float NatureAmount { get { return natureAmount; } }
 
@@ -65,6 +66,17 @@ public class UIManager : Singleton<UIManager>
     public void ShowGameOverUI()
     {
         gameOverUI.SetActive(true);
+    }
+
+    public void ShowDirectionJoystickUI(Vector3 towerTr)
+    {
+        towerAttackDirectionJoystickUI.GetComponentInChildren<JoystickController>().towerTr = towerTr;
+        towerAttackDirectionJoystickUI.SetActive(true);
+    }
+
+    public void HideDirectionJoystickUI()
+    {
+        towerAttackDirectionJoystickUI.SetActive(false);
     }
 
 }
