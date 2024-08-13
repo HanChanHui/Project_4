@@ -170,7 +170,6 @@ public class CardManager : Singleton<CardManager>
                 OnCardUsed(cards[cardId].cardData, resultTowerGridPos, towerGridPositionList, dataToSpawn.towerCost); 
             }
             
-            //GameManager.Instance.Resume();
             UIManager.Instance.ShowDirectionJoystickUI(resultTowerGridPos);
             GridSystemVisual.Instance.UpdateGridVisual(dataToSpawn.towerType, false);
 

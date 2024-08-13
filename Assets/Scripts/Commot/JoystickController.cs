@@ -7,7 +7,7 @@ public class JoystickController : MonoBehaviour, IPointerDownHandler, IDragHandl
     public Image joystickBackground;
     public Image joystickHandle;
     public Vector3 towerTr; // Tower의 Transform을 연결할 변수
-    public float threshold = 0.8f; // 이벤트 발생을 위한 임계값
+    public float threshold = 0.9f; // 이벤트 발생을 위한 임계값
     private Vector2 inputVector;
     private Camera mainCamera;
 
@@ -71,6 +71,7 @@ public class JoystickController : MonoBehaviour, IPointerDownHandler, IDragHandl
         if (inputVector.magnitude >= threshold)
         {
             OnAttackDirectionSelecte(inputVector);
+            GameManager.Instance.Resume();
         }
     }
 

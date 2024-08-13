@@ -12,22 +12,33 @@ public class DealerNeco_1 : DealerTower
 
     public JoystickController joystickController;
 
+    
 
     protected override void Start()
     {
         base.Start();
 
-        atkDirection = AttackDirection.Left;
         gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-        GenerateAttackPattern(atkDirection);
-
+        joystickController = UIManager.Instance.GetJoystickPanel().GetComponentInChildren<JoystickController>();
         joystickController.AttackDirectionSelected += OnAttackDirectionSelected;
     }
 
     void OnAttackDirectionSelected(Vector2 direction)
     {
-        // 공격 방향을 설정하고 행동을 수행
-        Debug.Log("Tower attacks in direction: " + direction);
+        direction.Normalize();
+
+        if (direction.x > 0 && direction.y < 0) {
+            atkDirection = AttackDirection.Right;
+        } else if (direction.x < 0 && direction.y > 0) {
+            atkDirection = AttackDirection.Left;
+        } else if (direction.x < 0 && direction.y < 0) {
+            atkDirection = AttackDirection.Down;
+        } else if (direction.x > 0 && direction.y > 0) {
+            atkDirection = AttackDirection.Up;
+        }
+ 
+        UIManager.Instance.HideDirectionJoystickUI();
+        GenerateAttackPattern(atkDirection);
     }
 
     private IEnumerator CoCheckAttackRange()
@@ -77,6 +88,8 @@ public class DealerNeco_1 : DealerTower
 
     private void FindEnemy()
     {
+        List<BaseEnemy> currentEnemiesInRange = new List<BaseEnemy>();
+
         foreach (GridPosition gridPos in atkRangeGridList)
         {
             BaseEnemy enemy = LevelGrid.Instance.GetEnemiesAtGridPosition(gridPos);
@@ -84,7 +97,13 @@ public class DealerNeco_1 : DealerTower
             {
                 enemiesInRange.Add(enemy);
             }
+            if (enemy != null) 
+            {
+                currentEnemiesInRange.Add(enemy);
+            }
         }
+
+        enemiesInRange.RemoveAll(enemy => !currentEnemiesInRange.Contains(enemy));
     }
 
     private void OnDisable() 

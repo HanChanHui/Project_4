@@ -13,7 +13,6 @@ public class Tower : LivingEntity
     [SerializeField] protected int maxDistance;
     [SerializeField] protected float attackDamage;
     [SerializeField] protected float attackSpeed;
-    [SerializeField] protected HealthLabel healthBar;
 
 
     public List<GridPosition> GridPositionList { get { return gridPositionList; } set { gridPositionList = value; } }
@@ -48,8 +47,8 @@ public class Tower : LivingEntity
             }
         }
 
-        LevelGrid.Instance.OnEnemyEnteredGridPosition += OnEnemyEnteredGridPosition;
-        LevelGrid.Instance.OnEnemyExitedGridPosition += OnEnemyExitedGridPosition;
+        //LevelGrid.Instance.OnEnemyEnteredGridPosition += OnEnemyEnteredGridPosition;
+        //LevelGrid.Instance.OnEnemyExitedGridPosition += OnEnemyExitedGridPosition;
         BaseEnemy.OnEnemyDestroyed += OnEnemyDestroyed;
 
         //SetHealth(100);
@@ -110,11 +109,6 @@ public class Tower : LivingEntity
     public override void TakeDamage(float damage, int obstacleDamage = 1, bool isCritical = false, bool showLabel = false)
     {
         base.TakeDamage(damage, obstacleDamage, isCritical, showLabel);
-        if(healthBar != null)
-        {
-            healthBar.Show();
-            healthBar.UpdateHealth(health, maxHealth);
-        }
 
         StartCoroutine(FlashRed());
 
@@ -129,7 +123,7 @@ public class Tower : LivingEntity
         }
     }
 
-    private IEnumerator FlashRed()
+    protected IEnumerator FlashRed()
     {
         if (sprite != null)
         {

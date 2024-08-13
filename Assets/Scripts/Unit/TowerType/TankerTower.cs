@@ -6,6 +6,8 @@ using Pathfinding;
 public class TankerTower : Tower
 {
 
+    [SerializeField] protected HealthLabel healthBar;
+
     protected override void Start() {
         base.Start();
 
@@ -45,6 +47,18 @@ public class TankerTower : Tower
     private void AttackEnemy(BaseEnemy enemy)
     {
         enemy.TakeDamage(attackDamage); // 적에게 데미지를 입힘
+    }
+
+    public override void TakeDamage(float damage, int obstacleDamage = 1, bool isCritical = false, bool showLabel = false)
+    {
+        base.TakeDamage(damage, obstacleDamage, isCritical, showLabel);
+        if(healthBar != null)
+        {
+            healthBar.Show();
+            healthBar.UpdateHealth(health, maxHealth);
+        }
+
+        //StartCoroutine(FlashRed());
     }
 
     private void OnDisable() {

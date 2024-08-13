@@ -8,7 +8,7 @@ public class TowerVisualGrid : MonoBehaviour
     private enum AttackRangeType
     {
         Straight,
-
+        Jet,
     }
 
 
@@ -53,7 +53,6 @@ public class TowerVisualGrid : MonoBehaviour
 
     private void StraightAttackRange()
     {
-        
         for(int x = 1; x <= towerData.attackRange; x++)
         {
             Vector3 worldPosition = transform.position + new Vector3(x * 2, 0);
@@ -63,6 +62,33 @@ public class TowerVisualGrid : MonoBehaviour
             gridSystemVisualSingleArray[x - 1, 0] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
             gridSystemVisualSingleArray[x - 1, 0].Hide();
             gridSystemVisualSingleArray[x - 1, 0].GridLayerChange(LayerName.PlaceGrid.ToString());
+        }
+    }
+
+    int[,] basePatternArray = new int[,] {
+        { 1, 1, 1, 0 },
+        { 0, 1, 1, 1 },
+        { 1, 1, 1, 0 },
+    };
+
+    private void JetAttackRange() 
+    {
+        int rows = basePatternArray.GetLength(0);
+        int cols = basePatternArray.GetLength(1);
+
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < cols; x++) {
+                if (basePatternArray[y, x] == 1) 
+                {
+                    Vector3 worldPosition = transform.position + new Vector3(x * 2 , (y - 1) * 2);
+                    Debug.Log(worldPosition + "," + x + ", "+ y);
+                    Transform gridSystemVisualSingleTransform = Instantiate(ResourceManager.Instance.GridSystemVisualSingPrefab, worldPosition, Quaternion.identity);
+                    gridSystemVisualSingleTransform.transform.parent = transform;
+                    gridSystemVisualSingleArray[x, y] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
+                    gridSystemVisualSingleArray[x, y].Hide();
+                    gridSystemVisualSingleArray[x, y].GridLayerChange(LayerName.PlaceGrid.ToString());
+                }
+            }
         }
     }
 
@@ -101,6 +127,8 @@ public class TowerVisualGrid : MonoBehaviour
         {
             case AttackRangeType.Straight:
                 return StraightAttackRange;
+            case AttackRangeType.Jet:
+                return JetAttackRange;
             default:
                 return null;
         }

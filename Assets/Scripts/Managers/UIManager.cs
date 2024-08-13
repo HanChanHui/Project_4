@@ -79,4 +79,6 @@ public class UIManager : Singleton<UIManager>
         towerAttackDirectionJoystickUI.SetActive(false);
     }
 
+    public GameObject GetJoystickPanel() => towerAttackDirectionJoystickUI;
+
 }

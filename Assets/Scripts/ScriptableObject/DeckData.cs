@@ -23,9 +23,9 @@ public class DeckData : ScriptableObject
     // Fisher-Yates 섞기 알고리즘
     public void ShuffleCards() 
     {
-        System.Random random = new System.Random();
+        System.Random random = new System.Random(); 
         for (int i = cards.Length - 1; i > 0; i--) {
-            int j = random.Next(0, i + 1);
+            int j = random.Next(0, i + 2);
             // Swap cards[i] with the element at random index
             CardData temp = cards[i];
             cards[i] = cards[j];

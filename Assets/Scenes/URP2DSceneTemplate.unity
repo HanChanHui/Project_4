@@ -6587,8 +6587,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: +2
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1af8e6ecb70652248b98719942dc7d91, type: 2}
+  m_sharedMaterial: {fileID: 4485714677492286206, guid: 1af8e6ecb70652248b98719942dc7d91, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7493,8 +7493,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Sell Tower
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1af8e6ecb70652248b98719942dc7d91, type: 2}
+  m_sharedMaterial: {fileID: 4485714677492286206, guid: 1af8e6ecb70652248b98719942dc7d91, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -8024,7 +8024,7 @@ MonoBehaviour:
   joystickBackground: {fileID: 1128639384}
   joystickHandle: {fileID: 421195963}
   towerTr: {x: 0, y: 0, z: 0}
-  threshold: 0.8
+  threshold: 0.9
 --- !u!114 &1128639384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10818,7 +10818,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.0000009536743}
+  m_Offset: {x: -0.00000023841858, y: 0.9426069}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -10829,7 +10829,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 10.842535, y: 19.179728}
+  m_Size: {x: 8.989275, y: 13.268471}
   m_EdgeRadius: 0
 --- !u!1001 &1559438135
 PrefabInstance:
@@ -14455,7 +14455,7 @@ PrefabInstance:
     - target: {fileID: 5776718429716483907, guid: fe0324d6c99fde7429a47a8d7a476299, type: 3}
       propertyPath: gridVisualTypeMaterialList.Array.data[4].material
       value: 
-      objectReference: {fileID: 2100000, guid: f70aa89bdfb38f34ca7d691f50173075, type: 2}
+      objectReference: {fileID: 2100000, guid: f16d8a9d191b84f4fa8b302629cc0dad, type: 2}
     - target: {fileID: 5776718429716483907, guid: fe0324d6c99fde7429a47a8d7a476299, type: 3}
       propertyPath: gridVisualTypeMaterialList.Array.data[4].gridVisualType
       value: 4
