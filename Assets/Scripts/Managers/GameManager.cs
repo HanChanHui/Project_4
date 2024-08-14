@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private int natureAmount;
     [SerializeField] private int enemyWave;
     [SerializeField] private int enemySpawnCount = 0;
+    [SerializeField] private int enemyMaxSpawnCount = 0;
     [SerializeField] private int enemyDeathCount;
     [SerializeField] private int enemyMaxDeathCount;
     [SerializeField] private int targetDeathCount;
@@ -24,10 +25,13 @@ public class GameManager : Singleton<GameManager>
 
     private bool isDoubleSpeed = false;
     private bool timePaused = false;
+    private bool isTimeTwoSpeed = false;
 
     public int EnemySpawnCount {get {return enemySpawnCount;} set{enemySpawnCount = value;}}
+    public int EnemyMaxSpawnCount {get{return enemyMaxSpawnCount;} set{enemyMaxSpawnCount = value;}}
     public int EnemyMaxDeathCount {get{return enemyMaxDeathCount;} set{enemyMaxDeathCount = value;}}
     public int TargetDeathCount {get{return targetDeathCount;} set{targetDeathCount = value;}}
+    public bool IsTimeTwoSpeed {get{return isTimeTwoSpeed;} set{isTimeTwoSpeed = value;}}
     public List<Transform> TargetList {get{return targetList;} set{targetList = value;}}
 
 
@@ -68,7 +72,14 @@ public class GameManager : Singleton<GameManager>
             return;
         }
 
-        Time.timeScale = 1;
+        if(isTimeTwoSpeed)
+        {
+            Time.timeScale = 2;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
         timePaused = false;
     }
 
@@ -77,10 +88,12 @@ public class GameManager : Singleton<GameManager>
         if (isDoubleSpeed)
         {
             Time.timeScale = 1;
+            isTimeTwoSpeed = false;
         }
         else
         {
             Time.timeScale = 2;
+            isTimeTwoSpeed = true;
         }
         
         return isDoubleSpeed = !isDoubleSpeed;
@@ -102,56 +115,16 @@ public class GameManager : Singleton<GameManager>
             newPlaceableGO.SetHealth((int)cardData.towerData.towerHP);
         }
 
-        AddPlaceableTowerList(newPlaceableGO);
-        //SetupPlaceable(newPlaceableGO, pDataRef);
-
+        SetupPlaceable(newPlaceableGO, pDataRef);
     }
 
 
-    // private void SetupPlaceable(GameObject go, PlaceableTowerData pDataRef) {
-    //     //Add the appropriate script
-    //     switch (pDataRef.pType) {
-    //         case Placeable.PlaceableType.Unit:
-    //             Unit uScript = go.GetComponent<Unit>();
-    //             uScript.Activate(pFaction, pDataRef); //enables NavMeshAgent
-    //             uScript.OnDealDamage += OnPlaceableDealtDamage;
-    //             uScript.OnProjectileFired += OnProjectileFired;
-    //             AddPlaceableToList(uScript); //add the Unit to the appropriate list
-    //             UIManager.AddHealthUI(uScript);
-    //             break;
+    private void SetupPlaceable(Tower tower, PlaceableTowerData pDataRef) {
+        //Add the appropriate script
+        tower.Init(pDataRef.attackRange, pDataRef.towerAttack, pDataRef.towerAttackSpeed, pDataRef.towerHP, pDataRef.towerDefence);
 
-    //         case Placeable.PlaceableType.Building:
-    //         case Placeable.PlaceableType.Castle:
-    //             Building bScript = go.GetComponent<Building>();
-    //             bScript.Activate(pFaction, pDataRef);
-    //             bScript.OnDealDamage += OnPlaceableDealtDamage;
-    //             bScript.OnProjectileFired += OnProjectileFired;
-    //             AddPlaceableToList(bScript); //add the Building to the appropriate list
-    //             UIManager.AddHealthUI(bScript);
-
-    //             //special case for castles
-    //             if (pDataRef.pType == Placeable.PlaceableType.Castle) {
-    //                 bScript.OnDie += OnCastleDead;
-    //             }
-
-    //             navMesh.BuildNavMesh(); //rebake the Navmesh
-    //             break;
-
-    //         case Placeable.PlaceableType.Obstacle:
-    //             Obstacle oScript = go.GetComponent<Obstacle>();
-    //             oScript.Activate(pDataRef);
-    //             navMesh.BuildNavMesh(); //rebake the Navmesh
-    //             break;
-
-    //         case Placeable.PlaceableType.Spell:
-    //             //Spell sScript = newPlaceable.AddComponent<Spell>();
-    //             //sScript.Activate(pFaction, cardData.hitPoints);
-    //             //TODO: activate the spell and… ?
-    //             break;
-    //     }
-
-    //     go.GetComponent<Placeable>().OnDie += OnPlaceableDead;
-    // }
+        AddPlaceableTowerList(tower);
+    }
 
     public void AddPlaceableTowerList(Tower tower) 
     {
@@ -192,7 +165,7 @@ public class GameManager : Singleton<GameManager>
             enemyList.Remove(enemy);
             enemyDeathCount++;
             OnEnemyDeath?.Invoke(enemyDeathCount);
-            if(enemyDeathCount >= enemyMaxDeathCount)
+            if(enemyDeathCount >= enemyMaxSpawnCount)
             {
                 OnEndGameVictory();
             }
