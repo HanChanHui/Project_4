@@ -19,6 +19,10 @@ public class UICard : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDo
     public TextMeshProUGUI towerCostText;
     private CanvasGroup canvasGroup;
 
+    private bool isDragging = false;
+    private float clickTime;
+    private const float clickThreshold = 0.2f;
+
     private void Awake() 
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -35,6 +39,9 @@ public class UICard : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDo
 
     public void OnPointerDown(PointerEventData pointerEvent) 
     {
+        isDragging = false;
+        clickTime = Time.time;
+
         if (OnTapDownAction != null)
         {
             OnTapDownAction(cardId);
@@ -51,8 +58,17 @@ public class UICard : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDo
 
     public void OnPointerUp(PointerEventData pointerEvent) 
     {
-        if (OnTapReleaseAction != null)
+        if (OnTapReleaseAction != null) 
         {
+            // 클릭과 드래그 구분 로직
+            if (!isDragging && (Time.time - clickTime) <= clickThreshold) {
+                // 단일 클릭으로 처리
+                Debug.Log("Single click detected");
+            } else {
+                // 드래그 후 놓기로 처리
+                Debug.Log("Drag and drop detected");
+            }
+
             OnTapReleaseAction(cardId);
         }
     }
