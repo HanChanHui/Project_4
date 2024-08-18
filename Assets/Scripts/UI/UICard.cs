@@ -14,21 +14,20 @@ public class UICard : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDo
     [HideInInspector] public int cardId;
     [HideInInspector] public CardData cardData;
 
-    public Image portraitImage; //Inspector-set reference
+    public Image portraitImage;
     public Image towerPropertyImage;
     public TextMeshProUGUI towerCostText;
     private CanvasGroup canvasGroup;
 
     private bool isDragging = false;
-    private float clickTime;
-    private const float clickThreshold = 0.2f;
+    private Vector2 initialPointerPosition;
+    private const float dragThreshold  = 1f;
 
     private void Awake() 
     {
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    //called by CardManager, it feeds CardData so this card can display the placeable's portrait
     public void InitialiseWithData(CardData cData) 
     {
         cardData = cData;
@@ -40,7 +39,7 @@ public class UICard : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDo
     public void OnPointerDown(PointerEventData pointerEvent) 
     {
         isDragging = false;
-        clickTime = Time.time;
+        initialPointerPosition = pointerEvent.position;
 
         if (OnTapDownAction != null)
         {
@@ -50,26 +49,36 @@ public class UICard : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDo
 
     public void OnDrag(PointerEventData pointerEvent)
      {
-        if (OnDragAction != null)
+        float distance = Vector2.Distance(pointerEvent.position, initialPointerPosition);
+
+        if (distance > dragThreshold)
         {
-            OnDragAction(cardId, pointerEvent.delta);
+            isDragging = true;
+
+            if (OnDragAction != null)
+            {
+                OnDragAction(cardId, pointerEvent.delta);
+            }
         }
     }
 
     public void OnPointerUp(PointerEventData pointerEvent) 
     {
-        if (OnTapReleaseAction != null) 
+        if (OnTapReleaseAction != null)
         {
-            // Å¬¸¯°ú µå·¡±× ±¸ºÐ ·ÎÁ÷
-            if (!isDragging && (Time.time - clickTime) <= clickThreshold) {
-                // ´ÜÀÏ Å¬¸¯À¸·Î Ã³¸®
-                Debug.Log("Single click detected");
-            } else {
-                // µå·¡±× ÈÄ ³õ±â·Î Ã³¸®
-                Debug.Log("Drag and drop detected");
+            // í´ë¦­ê³¼ ë“œëž˜ê·¸ êµ¬ë¶„ ë¡œì§
+            if (isDragging)
+            {
+                // ë“œëž˜ê·¸ í›„ ë†“ê¸°ë¡œ ì²˜ë¦¬
+                Debug.Log("Drag click detected");
+                OnTapReleaseAction(cardId);
             }
-
-            OnTapReleaseAction(cardId);
+            else
+            {
+                // ë‹¨ì¼ í´ë¦­ìœ¼ë¡œ ì²˜ë¦¬
+                Debug.Log("Single click detected");
+                UIManager.Instance.ShowTowerInfoUI();
+            }
         }
     }
 
