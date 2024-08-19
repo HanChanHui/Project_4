@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class Tower : LivingEntity
 {
-    protected SpriteRenderer sprite;
+    public SpriteRenderer sprite;
     private Color originalColor;
+    public PlaceableTowerData ptowerData;
 
     protected List<GridPosition> gridPositionList = new List<GridPosition>();
     protected List<BaseEnemy> enemiesInRange = new List<BaseEnemy>();

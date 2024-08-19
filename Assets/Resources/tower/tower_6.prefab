@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3213297280300278566}
   - component: {fileID: 2507211482568547872}
+  - component: {fileID: 1323383995553575768}
   m_Layer: 11
   m_Name: tower_6
   m_TagString: Untagged
@@ -50,6 +51,19 @@ MonoBehaviour:
   attackDamage: 0
   attackSpeed: 0
   joystickController: {fileID: 0}
+--- !u!114 &1323383995553575768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3294395087921489502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e27a93e13fa76d41af8efb5e48672c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tower: {fileID: 0}
 --- !u!1 &7711295114860602852
 GameObject:
   m_ObjectHideFlags: 0

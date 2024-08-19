@@ -171,6 +171,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6444866142526383552}
   - component: {fileID: 4828839480510067226}
+  - component: {fileID: 7188536960278876559}
   m_Layer: 11
   m_Name: tower_2
   m_TagString: Untagged
@@ -214,3 +215,16 @@ MonoBehaviour:
   bulletPrefab: {fileID: 5870224901932606103, guid: bf116db3d1a4aa94eb6a8cc6b2621d49, type: 3}
   shooterPos: {fileID: 6245691552515729277}
   joystickController: {fileID: 0}
+--- !u!114 &7188536960278876559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3888004110574695357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e27a93e13fa76d41af8efb5e48672c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tower: {fileID: 0}

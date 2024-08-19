@@ -14,10 +14,12 @@ public class UIManager : Singleton<UIManager>
 
 
     [Header("UI")]
+    [SerializeField] private Canvas canvas;
     [SerializeField] private GameObject gameVictoryUI;
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private GameObject towerAttackDirectionJoystickUI;
     [SerializeField] private GameObject towerInfoUI;
+    [SerializeField] private GameObject towerSellInfoUI;
 
     public float NatureAmount { get { return natureAmount; } }
 
@@ -83,7 +85,7 @@ public class UIManager : Singleton<UIManager>
     public void ShowTowerInfoUI()
     {
         towerInfoUI.SetActive(true);
-        GameManager.Instance.Pause(0.2f);
+        GameManager.Instance.Pause(0f);
     }
 
     public void HideTowerInfoUI()
@@ -92,6 +94,19 @@ public class UIManager : Singleton<UIManager>
         GameManager.Instance.Resume();
     }
 
+    public void ShowTowerSellInfoUI()
+    {
+        towerSellInfoUI.SetActive(true);
+        GameManager.Instance.Pause(0.1f);
+    }
+
+    public void HideTowerSellInfoUI()
+    {
+        towerSellInfoUI.SetActive(false);
+        GameManager.Instance.Resume();
+    }
+
     public GameObject GetJoystickPanel() => towerAttackDirectionJoystickUI;
+    public Canvas GetCanvas() => canvas;
 
 }

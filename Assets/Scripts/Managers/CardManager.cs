@@ -4,14 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
-using Unity.VisualScripting;
-
 
 
 public class CardManager : Singleton<CardManager> 
 {
  
-    [SerializeField] private LayerMask playingFieldMask;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private DeckData playersDeck;
     [SerializeField] private LevelGrid levelGrid; 
@@ -257,28 +254,6 @@ public class CardManager : Singleton<CardManager>
         }
 
         return false;
-    }
-
-    private void TryGetTowerGridVisual(PlaceableTowerData towerData, bool isActive)
-    {
-        TowerType type = towerData.towerType;
-        switch(type)
-        {
-            case TowerType.Dealer:
-                if(isActive)
-                {
-
-                }
-                else
-                {
-
-                }
-                break;
-            case TowerType.Tanker:
-                
-                break;
-        }
-
     }
 
     

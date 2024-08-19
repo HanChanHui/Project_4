@@ -104,7 +104,11 @@ public class GameManager : Singleton<GameManager>
         PlaceableTowerData pDataRef = cardData.towerData;
         GameObject prefabToSpawn = pDataRef.towerPrefab;
         Tower newPlaceableGO = Instantiate(prefabToSpawn, position, Quaternion.identity).GetComponent<Tower>();
+        newPlaceableGO.ptowerData = pDataRef;
         uiManager.UseNature(towerCost);
+        UITower uiTower = newPlaceableGO.GetComponent<UITower>();
+        TowerInfoManager.Instance.PromoteTowerFromTowerUI(uiTower);
+
         foreach (GridPosition gridPosition in towerGridPositionList) 
         {
             newPlaceableGO.GridPositionList.Add(gridPosition);

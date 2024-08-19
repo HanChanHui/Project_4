@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4501491416588237551}
   - component: {fileID: 6245045972962530028}
   - component: {fileID: 5338905933539610194}
+  - component: {fileID: 2689676801016549922}
   m_Layer: 11
   m_Name: tower_3
   m_TagString: Untagged
@@ -120,6 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d36d9ffa8feecf04594df8f8edbdf165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defence: 0
   maxDistance: 1
   attackDamage: 20
   attackSpeed: 3
@@ -127,6 +129,19 @@ MonoBehaviour:
   healthBar: {fileID: 8701763534915965151}
   effectSpawnDistance: 1
   joystickController: {fileID: 0}
+--- !u!114 &2689676801016549922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2738529185662124643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e27a93e13fa76d41af8efb5e48672c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tower: {fileID: 0}
 --- !u!1 &5768827657704837899
 GameObject:
   m_ObjectHideFlags: 0
