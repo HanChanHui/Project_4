@@ -1,37 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using DG.Tweening;
+using UnityEngine.UI;
 
 
-public class UITower : MonoBehaviour
+public class UITower : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 {
-    public UnityAction OnDragAction, OnTapReleaseAction;
+    public UnityAction<Vector2> OnDragAction;
     public UnityAction<Tower> OnTapDownAction;
-    public Tower tower;
+    public UnityAction OnTapReleaseAction;
+    private Tower towerData;
+    private Image image;
 
+    
 
-
-    private void Start() 
+    private void Awake()
     {
-        tower = GetComponent<Tower>();
+        image = GetComponent<Image>();
+    }
+
+    public void InitialiseWithData(Tower tData) 
+    {
+        towerData = tData;
+        image.sprite = towerData.sprite.sprite;
     }
 
 
-    public void OnMouseDown() {
+    public void OnPointerDown(PointerEventData pointerEvent)
+    {
         if (OnTapDownAction != null)
-            OnTapDownAction(tower);
+        {
+            OnTapDownAction(towerData);
+        }
     }
 
-    public void OnMouseDrag() {
+    public void OnDrag(PointerEventData pointerEvent)
+    {
         if (OnDragAction != null)
-            OnDragAction();
+        {
+            OnDragAction(pointerEvent.delta);
+        }
     }
 
-    public void OnMouseUp() {
+    public void OnPointerUp(PointerEventData pointerEvent) 
+    {
         if (OnTapReleaseAction != null)
+        {
             OnTapReleaseAction();
+        }
     }
 
 }

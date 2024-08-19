@@ -104,10 +104,7 @@ public class GameManager : Singleton<GameManager>
         PlaceableTowerData pDataRef = cardData.towerData;
         GameObject prefabToSpawn = pDataRef.towerPrefab;
         Tower newPlaceableGO = Instantiate(prefabToSpawn, position, Quaternion.identity).GetComponent<Tower>();
-        newPlaceableGO.ptowerData = pDataRef;
         uiManager.UseNature(towerCost);
-        UITower uiTower = newPlaceableGO.GetComponent<UITower>();
-        TowerInfoManager.Instance.PromoteTowerFromTowerUI(uiTower);
 
         foreach (GridPosition gridPosition in towerGridPositionList) 
         {
@@ -120,11 +117,15 @@ public class GameManager : Singleton<GameManager>
         }
 
         SetupPlaceable(newPlaceableGO, pDataRef);
+
+        // UITower 설정
+        //UITower uiTower = newPlaceableGO.GetComponent<UITower>();
+        TowerInfoManager.Instance.PromoteTowerFromTowerUI(newPlaceableGO);
     }
 
 
-    private void SetupPlaceable(Tower tower, PlaceableTowerData pDataRef) {
-        //Add the appropriate script
+    private void SetupPlaceable(Tower tower, PlaceableTowerData pDataRef) 
+    {
         tower.Init(pDataRef.attackRange, pDataRef.towerAttack, pDataRef.towerAttackSpeed, pDataRef.towerHP, pDataRef.towerDefence);
 
         AddPlaceableTowerList(tower);

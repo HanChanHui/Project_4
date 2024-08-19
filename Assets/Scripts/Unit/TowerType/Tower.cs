@@ -2,12 +2,14 @@ using Consts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Tower : LivingEntity
 {
+    public UnityAction<Tower> OnClickAction;
+
     public SpriteRenderer sprite;
     private Color originalColor;
-    public PlaceableTowerData ptowerData;
 
     protected List<GridPosition> gridPositionList = new List<GridPosition>();
     protected List<BaseEnemy> enemiesInRange = new List<BaseEnemy>();
@@ -16,6 +18,7 @@ public class Tower : LivingEntity
     [SerializeField] protected int maxDistance;
     [SerializeField] protected float attackDamage;
     [SerializeField] protected float attackSpeed;
+    protected bool isClickUI = false;
 
 
     public List<GridPosition> GridPositionList { get { return gridPositionList; } set { gridPositionList = value; } }
@@ -38,9 +41,11 @@ public class Tower : LivingEntity
         this.attackSpeed = attackSpeed;
         this.health = health;
         this.defence = defence;
+
+        MyInit();
     }
 
-    protected virtual void Start()
+    protected virtual void MyInit()
     {
         if (gridPositionList != null)
         {
@@ -61,7 +66,6 @@ public class Tower : LivingEntity
 
         BaseEnemy.OnEnemyDestroyed += OnEnemyDestroyed;
 
-        //SetHealth(100);
         StartCoroutine(CoCheckDistance());
     }
 
@@ -74,19 +78,14 @@ public class Tower : LivingEntity
 
     }
 
-    protected bool IsWithinRange(GridPosition gridPosition)
+    public void OnMouseDown() 
     {
-        foreach (GridPosition towerPosition in gridPositionList)
+        Debug.Log(OnClickAction);
+        if (isClickUI && OnClickAction != null)
         {
-            int dx = Mathf.Abs(gridPosition.x - towerPosition.x);
-            int dy = Mathf.Abs(gridPosition.y - towerPosition.y);
-            int distance = Mathf.Max(dx, dy);
-            if (distance <= maxDistance)
-            {
-                return true;
-            }
+            Debug.Log("tower Click");
+            OnClickAction(this);
         }
-        return false;
     }
 
     protected virtual IEnumerator CoCheckDistance()
@@ -111,9 +110,8 @@ public class Tower : LivingEntity
         return patternList;
     }
 
-    protected List<Vector2Int> GetDirectionVector(AttackDirection direction, int[,] patternArray) {
-
-
+    protected List<Vector2Int> GetDirectionVector(AttackDirection direction, int[,] patternArray) 
+    {
         List<Vector2Int> pattern = ConvertPatternToList(patternArray);
 
         switch (direction) {

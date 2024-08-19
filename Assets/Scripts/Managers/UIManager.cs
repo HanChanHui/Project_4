@@ -97,7 +97,7 @@ public class UIManager : Singleton<UIManager>
     public void ShowTowerSellInfoUI()
     {
         towerSellInfoUI.SetActive(true);
-        GameManager.Instance.Pause(0.1f);
+        GameManager.Instance.Pause(0f);
     }
 
     public void HideTowerSellInfoUI()

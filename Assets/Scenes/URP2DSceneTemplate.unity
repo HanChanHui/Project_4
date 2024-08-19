@@ -11564,6 +11564,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backuptowerTransform: {fileID: 0}
   newTowerSpriteUI: {fileID: 901094996484172608, guid: a0dc5546d5ab1884a927056d75159b30, type: 3}
+  towerData: {fileID: 0}
 --- !u!1 &1715032696
 GameObject:
   m_ObjectHideFlags: 0

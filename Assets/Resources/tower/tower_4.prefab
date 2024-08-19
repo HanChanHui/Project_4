@@ -266,7 +266,6 @@ GameObject:
   - component: {fileID: 2220781286378754036}
   - component: {fileID: 1067864988595556874}
   - component: {fileID: 1385624261197466668}
-  - component: {fileID: 6213358965057882388}
   m_Layer: 11
   m_Name: tower_4
   m_TagString: Untagged
@@ -375,6 +374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08733b642e49f5e4ca5406e078313c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sprite: {fileID: 0}
   defence: 0
   maxDistance: 1
   attackDamage: 50
@@ -383,19 +383,6 @@ MonoBehaviour:
   healthBar: {fileID: 322427318199301787}
   effectSpawnDistance: 2
   joystickController: {fileID: 0}
---- !u!114 &6213358965057882388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7765826215704485714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e27a93e13fa76d41af8efb5e48672c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tower: {fileID: 0}
 --- !u!1 &8976256146405539625
 GameObject:
   m_ObjectHideFlags: 0

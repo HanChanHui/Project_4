@@ -16,6 +16,7 @@ public class UITowerSellPanel : MonoBehaviour
     private void ClosePanel()
     {
         UIManager.Instance.HideTowerSellInfoUI();
+        TowerInfoManager.Instance.CloneTowerInfoUI();
         gameObject.SetActive(false);
     }
 
