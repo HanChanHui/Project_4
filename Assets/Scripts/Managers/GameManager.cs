@@ -8,6 +8,7 @@ public class GameManager : Singleton<GameManager>
 
     public event Action<int> OnEnemyDeath;
     public event Action<float, float> OnUseNature;
+    public event Action<float, float> OnFullNature;
 
     private CardManager cardManager;
     private UIManager uiManager;
@@ -203,7 +204,7 @@ public class GameManager : Singleton<GameManager>
     private void NatureBarInit(float amount)
     {
         //natureAmountMax = amount;
-        natureAmount = natureAmountMax;
+        natureAmount = amount;
     }
 
     public void UseNature(int amount)
@@ -220,6 +221,8 @@ public class GameManager : Singleton<GameManager>
     public void FullNature(float amount)
     {
         natureAmount += amount;
+        OnFullNature?.Invoke(GetNatureNormalized(), natureAmount);
+
         if(natureAmount > natureAmountMax)
         {
             natureAmount = natureAmountMax;

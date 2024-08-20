@@ -11,7 +11,6 @@ public class TowerInfoManager : Singleton<TowerInfoManager>
 
     [Header("tower Elements")]
     private RectTransform previewUIHolder;
-    [SerializeField] private LayerMask sellUILayerMask;
     [SerializeField] private GameObject newTowerSpriteUI;
     [SerializeField] private Canvas canvas;
     private Tower towerData;
@@ -76,15 +75,7 @@ public class TowerInfoManager : Singleton<TowerInfoManager>
     // 카드를 놓을 때 호출
     private void TowerReleased() 
     {
-        pointerEventData = new PointerEventData(eventSystem);
-        pointerEventData.position = Input.mousePosition;
-
-        RaycastResult finalResult = new RaycastResult(); // 최종적으로 감지된 UI 요소
-
-        // Raycast 실행
-        graphicRaycaster.Raycast(pointerEventData, new List<RaycastResult> { finalResult });
-        Debug.Log(finalResult.gameObject.layer);
-        if(finalResult.gameObject != null && finalResult.gameObject.layer == sellUILayerMask)
+        if(IsPointerOverTargetUILayer())
         {
             towerIsActive = false;
             if(OnTowerSell != null)
@@ -101,6 +92,25 @@ public class TowerInfoManager : Singleton<TowerInfoManager>
             previewUIHolder.anchoredPosition = originTransform;
             CloneTowerInfoUI();
         }   
+    }
+
+    private bool IsPointerOverTargetUILayer() 
+    {
+        pointerEventData = new PointerEventData(eventSystem);
+        pointerEventData.position = Input.mousePosition;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        graphicRaycaster.Raycast(pointerEventData, results);
+
+        foreach (var result in results)
+        {
+            if (result.gameObject.layer == LayerMask.NameToLayer("TrashArea"))
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     public void CloneTowerInfoUI()

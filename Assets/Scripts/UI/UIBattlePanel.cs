@@ -40,6 +40,7 @@ public class UIBattlePanel : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         gameManager.OnUseNature += OnIamgeUseNatureApple;
+        gameManager.OnFullNature += OnIamgeUseNatureApple;
         gameManager.OnEnemyDeath += OnEnemyDeathCount;
 
         StartCoroutine(FillNature());
