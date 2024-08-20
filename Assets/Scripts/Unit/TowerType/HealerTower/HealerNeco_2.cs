@@ -43,7 +43,7 @@ public class HealerNeco_2 : HealerTower
         UIManager.Instance.HideDirectionJoystickUI();
         joystickController.UnregisterDirectionSelectedHandler(OnAttackDirectionSelected);
         GenerateAttackPattern(atkDirection);
-        isClickUI = true;
+        OnCreateComplete();
     }
 
     private IEnumerator CoCheckAttackRange() {

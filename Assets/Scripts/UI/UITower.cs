@@ -1,31 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
-using DG.Tweening;
-using UnityEngine.UI;
+
 
 
 public class UITower : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler
 {
-    public UnityAction<Vector2> OnDragAction;
+    public UnityAction OnDragAction;
     public UnityAction<Tower> OnTapDownAction;
     public UnityAction OnTapReleaseAction;
     private Tower towerData;
-    private Image image;
 
-    
 
-    private void Awake()
-    {
-        image = GetComponent<Image>();
-    }
 
-    public void InitialiseWithData(Tower tData) 
-    {
-        towerData = tData;
-        image.sprite = towerData.sprite.sprite;
+    private void Start() {
+        towerData = GetComponent<Tower>();
     }
 
 
@@ -41,7 +30,7 @@ public class UITower : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerD
     {
         if (OnDragAction != null)
         {
-            OnDragAction(pointerEvent.delta);
+            OnDragAction();
         }
     }
 
@@ -51,6 +40,13 @@ public class UITower : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerD
         {
             OnTapReleaseAction();
         }
+    }
+
+    public void ChangeActiveState(bool isActive) 
+    {
+        Color color = towerData.sprite.color;
+        color.a = (isActive) ? .05f : 1f;
+        towerData.sprite.color = color;
     }
 
 }

@@ -18,11 +18,13 @@ public class Tower : LivingEntity
     [SerializeField] protected int maxDistance;
     [SerializeField] protected float attackDamage;
     [SerializeField] protected float attackSpeed;
+    [SerializeField] protected int towerSellCost;
     protected bool isClickUI = false;
 
 
     public List<GridPosition> GridPositionList { get { return gridPositionList; } set { gridPositionList = value; } }
     public List<BaseEnemy> EnemiesInRange { get { return enemiesInRange; } }
+    public int TowerSellCost { get {return towerSellCost; } }
 
 
     protected virtual void Awake()
@@ -34,13 +36,14 @@ public class Tower : LivingEntity
         }
     }
 
-    public void Init(int maxDistance, float attackDamage, float attackSpeed, int health, float defence)
+    public void Init(int maxDistance, float attackDamage, float attackSpeed, int health, float defence, int towerSellCost)
     {
         this.maxDistance = maxDistance;
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
         this.health = health;
         this.defence = defence;
+        this.towerSellCost = towerSellCost;
 
         MyInit();
     }
@@ -78,12 +81,10 @@ public class Tower : LivingEntity
 
     }
 
-    public void OnMouseDown() 
+    public void OnCreateComplete() 
     {
-        Debug.Log(OnClickAction);
-        if (isClickUI && OnClickAction != null)
+        if (OnClickAction != null)
         {
-            Debug.Log("tower Click");
             OnClickAction(this);
         }
     }
@@ -164,10 +165,6 @@ public class Tower : LivingEntity
 
         if (health <= 0)
         {
-           foreach(GridPosition gridPosition in gridPositionList)
-           {
-                LevelGrid.Instance.RemoveTowerAtGridPosition(gridPosition, this);
-           }
            GameManager.Instance.RemovePlaceableTowerList(this);
            Destroy(gameObject);
         }
@@ -192,5 +189,9 @@ public class Tower : LivingEntity
     protected virtual void OnDestroy()
     {
         BaseEnemy.OnEnemyDestroyed -= OnEnemyDestroyed;
+
+        foreach (GridPosition gridPosition in gridPositionList) {
+            LevelGrid.Instance.RemoveTowerAtGridPosition(gridPosition, this);
+        }
     }
 }

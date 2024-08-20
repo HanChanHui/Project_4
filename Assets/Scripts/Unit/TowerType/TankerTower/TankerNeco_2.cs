@@ -41,7 +41,7 @@ public class TankerNeco_2 : TankerTower
         UIManager.Instance.HideDirectionJoystickUI();
         joystickController.UnregisterDirectionSelectedHandler(OnAttackDirectionSelected);
         GenerateAttackPattern(atkDirection);
-        isClickUI = true;
+        OnCreateComplete();
     }
 
     private IEnumerator CoCheckAttackRange() {

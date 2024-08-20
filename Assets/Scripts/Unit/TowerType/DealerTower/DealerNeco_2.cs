@@ -45,7 +45,7 @@ public class DealerNeco_2 : DealerTower {
         UIManager.Instance.HideDirectionJoystickUI();
         joystickController.UnregisterDirectionSelectedHandler(OnAttackDirectionSelected);
         GenerateAttackPattern(atkDirection);
-        isClickUI = true;
+        OnCreateComplete();
     }
 
     private IEnumerator CoCheckAttackRange() {
