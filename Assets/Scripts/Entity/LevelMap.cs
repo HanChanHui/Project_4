@@ -4,6 +4,6 @@ namespace HornSpirit
 {
     [System.Serializable]
     public class LevelMap {
-        public List<Level> Level;
+        public List<LevelData> Level;
     }
 }
