@@ -12,7 +12,7 @@ public class GameManager : Singleton<GameManager>
 
     private CardManager cardManager;
     private UIManager uiManager;
-    private TowerInfoManager towerInfoManager;
+    private TowerTouchManager towerInfoManager;
 
     [Header("Parameter")]
     private float natureAmount;
@@ -50,7 +50,7 @@ public class GameManager : Singleton<GameManager>
     {
         uiManager = UIManager.Instance;
         cardManager = CardManager.Instance;
-        towerInfoManager = TowerInfoManager.Instance;
+        towerInfoManager = TowerTouchManager.Instance;
 
         cardManager.OnCardUsed += UseCard;
         towerInfoManager.OnTowerSell += SellTower;

@@ -4,7 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TowerInfoManager : Singleton<TowerInfoManager> 
+public class TowerTouchManager : Singleton<TowerTouchManager> 
 {
     public UnityAction<Tower> OnTowerSell;
 

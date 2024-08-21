@@ -20,11 +20,14 @@ public class Tower : LivingEntity
     [SerializeField] protected float attackSpeed;
     [SerializeField] protected int towerSellCost;
     protected bool isClickUI = false;
+    [SerializeField] private bool isTwoType = false; // 임시로 1층과 2층 구분
 
 
     public List<GridPosition> GridPositionList { get { return gridPositionList; } set { gridPositionList = value; } }
     public List<BaseEnemy> EnemiesInRange { get { return enemiesInRange; } }
     public int TowerSellCost { get {return towerSellCost; } }
+    public bool IsTwoType { get {return isTwoType; } }
+
 
 
     protected virtual void Awake()

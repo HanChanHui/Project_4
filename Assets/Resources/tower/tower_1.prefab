@@ -215,6 +215,8 @@ MonoBehaviour:
   maxDistance: 2
   attackDamage: 20
   attackSpeed: 1
+  towerSellCost: 0
+  isTwoType: 1
   bulletPrefab: {fileID: 5870224901932606103, guid: bf116db3d1a4aa94eb6a8cc6b2621d49, type: 3}
   shooterPos: {fileID: 5486871852820634755}
   joystickController: {fileID: 0}
@@ -302,4 +304,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e27a93e13fa76d41af8efb5e48672c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 0
