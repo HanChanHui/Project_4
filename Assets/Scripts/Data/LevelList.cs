@@ -30,10 +30,10 @@ namespace HornSpirit {
             
             int Length = column.Length;
 
-            
-            for(int i = 5; i < Length - 1; i++)
+            UnityEngine.Debug.Log(Length);
+            for(int i = 5; i < Length; i++)
             {
-                if(!string.IsNullOrEmpty(column[i]))
+                if(!string.IsNullOrWhiteSpace(column[i]))
                 {
                     string[] blockInfo = column[i].Split(',');
                     UnityEngine.Debug.Log(blockInfo[0] + ", " + blockInfo[1] + ", " + blockInfo[2]);

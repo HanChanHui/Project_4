@@ -11,21 +11,20 @@ public class GameManager : Singleton<GameManager>
     private CardManager cardManager;
     private UIManager uiManager;
     private TowerTouchManager towerInfoManager;
-    private WaveSpawner waveSpawner;
+    private LevelManager levelManager;
+    private WaveManager waveManager;
 
     [Header("Parameter")]
-    private float natureAmount;
+    [SerializeField] private int LevelAndSpawnId;
     [SerializeField] private float natureAmountMax;
     [SerializeField] private int enemyWave;
-    [SerializeField] private int enemySpawnCount = 0;
     [SerializeField] private int enemyMaxSpawnCount = 0;
-    [SerializeField] private int enemyDeathCount;
-    [SerializeField] private int enemyMaxDeathCount;
+    [SerializeField] private int enemyDeathCount = 0;
     [SerializeField] private int targetDeathCount;
 
     private List<Tower> towerList = new List<Tower>();
     private List<BaseEnemy> enemyList = new List<BaseEnemy>();
-    private List<Transform> targetList = new List<Transform>();
+    [SerializeField] private List<Transform> targetList = new List<Transform>();
 
     //public delegate void EnemyKilledDelegate(int amount);
     //public event EnemyKilledDelegate OnEnemyKilledEvent;
@@ -38,9 +37,8 @@ public class GameManager : Singleton<GameManager>
     private bool timePaused = false;
     private bool isTimeTwoSpeed = false;
 
-    public int EnemySpawnCount {get {return enemySpawnCount;} set{enemySpawnCount = value;}}
+    public int GetLevelAndSpawnId {get{return LevelAndSpawnId <= 0 ? 1 : LevelAndSpawnId;}}
     public int EnemyMaxSpawnCount {get{return enemyMaxSpawnCount;} set{enemyMaxSpawnCount = value;}}
-    public int EnemyMaxDeathCount {get{return enemyMaxDeathCount;} set{enemyMaxDeathCount = value;}}
     public int TargetDeathCount {get{return targetDeathCount;} set{targetDeathCount = value;}}
     public bool IsTimeTwoSpeed {get{return isTimeTwoSpeed;} set{isTimeTwoSpeed = value;}}
     public List<Transform> TargetList {get{return targetList;} set{targetList = value;}}
@@ -53,6 +51,10 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake() 
     {
+
+        LevelAndSpawnId = Preferences.GetCurrentLvl();
+        levelManager = LevelManager.Instance;
+        waveManager = WaveManager.Instance;
         uiManager = UIManager.Instance;
         cardManager = CardManager.Instance;
         towerInfoManager = TowerTouchManager.Instance;
@@ -64,8 +66,11 @@ public class GameManager : Singleton<GameManager>
     private void Start() 
     {
         gameSpeed = 1f;
+        levelManager.Init();
+        waveManager.Init();
+        enemyMaxSpawnCount = waveManager.MaxEnemyDeathCount();
         uiManager.NatureBarInit(natureAmountMax);
-        uiManager.Init(targetDeathCount, enemyDeathCount);
+        uiManager.Init(targetDeathCount, enemyMaxSpawnCount);
         cardManager.LoadDeck();
         //waveSpawner.SpawnCurrentWave();
     }
@@ -84,6 +89,7 @@ public class GameManager : Singleton<GameManager>
         // waveSpawner.OnWaveComplete -= WaveFinished;
         // waveSpawner.OnAllWavesComplete -= WinLevel;
         DestroyObject();
+        Preferences.ResetCurrentLvl();
     }
  
     public void Pause(float time) 
@@ -189,12 +195,10 @@ public class GameManager : Singleton<GameManager>
         if(enemy != null)
         {
             enemyList.Remove(enemy);
+            enemyDeathCount++;
             //OnEnemyKilledEvent?.Invoke(enemy.GetPoints());
             OnEnemyDeath?.Invoke(enemyDeathCount);
-            if (enemyList.Count == 0) 
-            {
-                OnAllEnemiesDeadEvent?.Invoke();
-            }
+            
             if(enemyDeathCount >= enemyMaxSpawnCount)
             {
                 OnEndGameVictory();
@@ -213,14 +217,13 @@ public class GameManager : Singleton<GameManager>
             }
         }
     }
+    public List<Transform> GetTargetList() => targetList;
     public List<BaseEnemy> GetEnemiesList() => enemyList;
     public int GetEnemyCount() => enemyList.Count;
     public void ClearEnemiesList() => enemyList.Clear();
 
     private void WaveFinished() {
-        if (waveSpawner.GetCurrentState() == Consts.SpawnState.Waiting && GetEnemyCount() == 0) {
-            ActivateWaveFinishDialog();
-        }
+        ActivateWaveFinishDialog();
     }
 
     private void ActivateWaveFinishDialog() 
@@ -239,7 +242,9 @@ public class GameManager : Singleton<GameManager>
     private void UnlockNextLevel() 
     {
         int currLvl = Preferences.GetCurrentLvl();
-        Preferences.SetMaxLvl(currLvl + 1);
+        Debug.Log(currLvl);
+        Preferences.SetCurrentLvl(currLvl + 1);
+        Debug.Log(Preferences.GetCurrentLvl());
     }
 
     private void DestroyObject()
@@ -266,13 +271,20 @@ public class GameManager : Singleton<GameManager>
     public void OnEndGameVictory() 
     {
         uiManager.ShowGameVictoryUI();
-        Pause(0f);
+        UnlockNextLevel();
+        //Pause(0f);
+        NextScene();
     }
 
     public void OnEndGameOver() 
     {
         uiManager.ShowGameOverUI();
         Pause(0f);
+    }
+
+    public void NextScene()
+    {
+        SceneManagerEx.Instance.LoadScene(Consts.SceneType.BattleScene);
     }
 
 }

@@ -10,6 +10,14 @@ public class Block : LivingEntity
     [SerializeField] private BlockType blockType;
     public BlockType BlockType {get{return blockType;}}
 
+    private void Awake() {
+        if(blockType == BlockType.TargetBlock)
+        {
+            InitHealth(100);
+            GameManager.Instance.AddPlaceableTargetList(transform);
+        }
+    }
+
     void Start()
     {
         gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
@@ -19,12 +27,6 @@ public class Block : LivingEntity
         {
             healthBar.Init();
         }
-        
-        if(blockType == BlockType.TargetBlock)
-        {
-            InitHealth(100);
-            GameManager.Instance.AddPlaceableTargetList(transform);
-        }
     }
 
     public override void TakeDamage(float damage, int obstacleDamage = 1, bool showLabel = false)
@@ -32,8 +34,8 @@ public class Block : LivingEntity
         base.TakeDamage(damage, obstacleDamage, showLabel);
         healthBar.Show();
         healthBar.UpdateHealth(health, maxHealth);
-        int count = GameManager.Instance.EnemyMaxDeathCount + 1;
-        GameManager.Instance.EnemyMaxDeathCount = count;
+        int count = GameManager.Instance.TargetDeathCount + 1;
+        GameManager.Instance.TargetDeathCount = count;
         if (health <= 0)
         {
             DestroyTarget();

@@ -1,40 +1,32 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace HornSpirit {
-    public class Wave 
+    public class Wave
     {
-        private List<SubWave> subWaves = new List<SubWave>();
-        private float spawnRate;
-        private float timeBetweenSubWaves;
+        private int enemyId;
+        private int enemySpawnMaxCount;
+        private float interval;
 
-        //Normal Wave
-        public Wave(List<SubWave> subWaves, float spawnRate, float timeBetweenSubWaves) {
-            this.subWaves = subWaves;
-            this.spawnRate = spawnRate;
-            this.timeBetweenSubWaves = timeBetweenSubWaves;
-        }
-
-        //Boss Wave
-        public Wave(SubWave bossSubWave) {
-            subWaves.Add(bossSubWave);
-            spawnRate = 0;
-            timeBetweenSubWaves = 1;
-        }
-
-        public float GetSpawnRate()
+        public Wave(int enemyId, int enemySpawnMaxCount, float interval) 
         {
-            return spawnRate;
+            this.enemyId = enemyId;
+            this.enemySpawnMaxCount = enemySpawnMaxCount;
+            this.interval = interval;
         }
 
-        public List<SubWave> GetSubWaves()
+        public GameObject GetEnemyPrefab() 
         {
-            return subWaves;
+            return Resources.Load<GameObject>("Enemy/" + "Enemy_" + enemyId % 500);
         }
 
-        public float GetTimeBetweenSubWaves()
+        public int GetEnemySpawnMaxCount()
         {
-            return timeBetweenSubWaves;
+            return enemySpawnMaxCount;
+        }
+
+        public float GetInterval()
+        {
+            return interval;
         }
     }
 }

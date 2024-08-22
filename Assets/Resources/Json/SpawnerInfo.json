@@ -120,29 +120,579 @@
             "id": 1002,
             "spawnerNumber": 2,
             "targetHP": 10,
-            "maxEnemyCount": 0,
-            "WaveList": []
+            "maxEnemyCount": 91,
+            "WaveList": [
+                {
+                    "spawnerId": 1,
+                    "destinationId": 2,
+                    "waveCount": 3,
+                    "waveInfoList": [
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 502,
+                                    "enemySpawnMaxCount": 1,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "spawnerId": 2,
+                    "destinationId": 1,
+                    "waveCount": 3,
+                    "waveInfoList": [
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 0,
+                            "waveTermList": []
+                        },
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
             "id": 1003,
             "spawnerNumber": 3,
             "targetHP": 10,
-            "maxEnemyCount": 0,
-            "WaveList": []
+            "maxEnemyCount": 152,
+            "WaveList": [
+                {
+                    "spawnerId": 1,
+                    "destinationId": 2,
+                    "waveCount": 3,
+                    "waveInfoList": [
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 502,
+                                    "enemySpawnMaxCount": 1,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "spawnerId": 1,
+                    "destinationId": 1,
+                    "waveCount": 3,
+                    "waveInfoList": [
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 0,
+                            "waveTermList": []
+                        },
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "spawnerId": 1,
+                    "destinationId": 2,
+                    "waveCount": 3,
+                    "waveInfoList": [
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 502,
+                                    "enemySpawnMaxCount": 1,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
             "id": 1004,
             "spawnerNumber": 3,
             "targetHP": 10,
-            "maxEnemyCount": 0,
-            "WaveList": []
+            "maxEnemyCount": 152,
+            "WaveList": [
+                {
+                    "spawnerId": 1,
+                    "destinationId": 1,
+                    "waveCount": 3,
+                    "waveInfoList": [
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 502,
+                                    "enemySpawnMaxCount": 1,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "spawnerId": 1,
+                    "destinationId": 1,
+                    "waveCount": 3,
+                    "waveInfoList": [
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 0,
+                            "waveTermList": []
+                        },
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "spawnerId": 1,
+                    "destinationId": 1,
+                    "waveCount": 3,
+                    "waveInfoList": [
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 502,
+                                    "enemySpawnMaxCount": 1,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         },
         {
             "id": 1005,
             "spawnerNumber": 2,
             "targetHP": 10,
-            "maxEnemyCount": 0,
-            "WaveList": []
+            "maxEnemyCount": 91,
+            "WaveList": [
+                {
+                    "spawnerId": 1,
+                    "destinationId": 1,
+                    "waveCount": 3,
+                    "waveInfoList": [
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 502,
+                                    "enemySpawnMaxCount": 1,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                },
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 10,
+                                    "Interval": 1.0
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "spawnerId": 2,
+                    "destinationId": 1,
+                    "waveCount": 3,
+                    "waveInfoList": [
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 0,
+                            "waveTermList": []
+                        },
+                        {
+                            "waveNumber": 3,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                },
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 5,
+                                    "Interval": 2.0
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }

@@ -2,8 +2,7 @@ using Consts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Pathfinding;
-using System.Linq;
+using Pathfinding; 
 using TMPro;
 
 
@@ -113,7 +112,8 @@ public abstract class BaseEnemy : LivingEntity
         }
         else if (!isAttackingTower && aiPath.reachedEndOfPath && aiPath.remainingDistance <= aiPath.endReachedDistance)
         {
-            originalTarget.GetComponent<Block>().TakeDamage(10f);
+            originalTarget.GetComponent<Block>().TakeDamage(1f);
+            GameManager.Instance.RemovePlaceableEnemyList(this);
             Destroy(gameObject);
         }
     }
@@ -321,7 +321,7 @@ public abstract class BaseEnemy : LivingEntity
         StopAllCoroutines();
     }
 
-    protected void SetNewTarget(Transform newTarget)
+    public void SetNewTarget(Transform newTarget)
     {
         destinationSetter.target = newTarget;
         aiPath.canMove = true;

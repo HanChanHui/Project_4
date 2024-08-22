@@ -36,7 +36,7 @@ public class UIBattlePanel : MonoBehaviour
     private int currentNatureSegment = 0;
     private bool isFilling = false;
 
-    public void Init(UIManager uiManager, int TargetCount, int EnemyDeathCount)
+    public void Init(UIManager uiManager, int TargetCount, int MaxEnemyDeathCount)
     {
         this.uiManager = uiManager;
         uiManager.OnUseNature += OnIamgeUseNatureApple;
@@ -48,7 +48,7 @@ public class UIBattlePanel : MonoBehaviour
         waveCountText.text = "0";
         enemyCountText.text = "0";
         targetCount.text = TargetCount.ToString();
-        enemyMaxCountText.text = EnemyDeathCount.ToString();
+        enemyMaxCountText.text = MaxEnemyDeathCount.ToString();
     }
     
 

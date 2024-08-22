@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 8087773520757422767}
   - component: {fileID: 2560556406925392043}
   m_Layer: 10
-  m_Name: BossEnemy
+  m_Name: Enemy_3
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,7 +166,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5578956309694754834}
@@ -306,8 +306,6 @@ MonoBehaviour:
   attackInterval: 2
   moveAttackSpeed: 2
   moveWaitTime: 0.4
-  knockbackForce: 2
-  knockbackDuration: 0.2
   healthBar: {fileID: 5469947012016063114}
   textDamage: {fileID: 4691782142634938849, guid: 334eac695a40a84428127dc3e7e4b6c9, type: 3}
   textDamageSpawnPosition: {fileID: 5718747084566088773}

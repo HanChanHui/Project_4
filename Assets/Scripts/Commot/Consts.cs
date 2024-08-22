@@ -67,5 +67,11 @@ namespace Consts {
       Waiting, 
       Finish 
    }
+
+   public enum SceneType
+   {
+      TitleScene,
+      BattleScene,
+   }
 }
 

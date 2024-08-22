@@ -3,22 +3,30 @@ using UnityEngine;
 namespace HornSpirit {
     public class SubWave 
     {
-        private GameObject _enemyPrefab;
-        private int _numOfEnemies;
+        // private int enemyId;
+        // private int enemySpawnMaxCount;
+        // private float interval;
 
-        public SubWave(GameObject enemyPrefab, int numOfEnemies) {
-            _enemyPrefab = enemyPrefab;
-            _numOfEnemies = numOfEnemies;
-        }
+        // public SubWave(int enemyId, int enemySpawnMaxCount, float interval) 
+        // {
+        //     this.enemyId = enemyId;
+        //     this.enemySpawnMaxCount = enemySpawnMaxCount;
+        //     this.interval = interval;
+        // }
 
-        public GameObject GetEnemyPrefab()
-        {
-            return _enemyPrefab;
-        }
+        // public GameObject GetEnemyPrefab() 
+        // {
+        //     return Resources.Load<GameObject>("Enemy/" + "Enemy_" + enemyId % 500);
+        // }
 
-        public int GetNumOfEnemies()
-        {
-            return _numOfEnemies;
-        }
+        // public int GetEnemySpawnMaxCount()
+        // {
+        //     return enemySpawnMaxCount;
+        // }
+
+        // public float GetInterval()
+        // {
+        //     return interval;
+        // }
     }
 }

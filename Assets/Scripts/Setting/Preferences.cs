@@ -14,4 +14,6 @@ public class Preferences : MonoBehaviour
     
     public static void SetMaxLvl(int lvl) => PlayerPrefs.SetInt(MAX_LVL, lvl);
 
+    public static void ResetCurrentLvl() => PlayerPrefs.DeleteKey(CURRENT_LVL);
+
 }

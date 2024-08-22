@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 
 namespace HornSpirit {
-    public class LevelManager : MonoBehaviour 
+    public class LevelManager : Singleton<LevelManager> 
     {
         [SerializeField] private LevelData levelData;
         [SerializeField] private LevelGrid levelGrid;
@@ -17,10 +17,10 @@ namespace HornSpirit {
 
         void Awake() 
         {
-            LoadLevelData(1000 + (levelId <= 0 ? 1 : levelId)); // 예를 들어 ID가 1001인 레벨을 로드
+            LoadLevelData(1000 + GameManager.Instance.GetLevelAndSpawnId); // 예를 들어 ID가 1001인 레벨을 로드
         }
 
-        private void Start() 
+        public void Init()
         {
             if(levelData != null)
             {

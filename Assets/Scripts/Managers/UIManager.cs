@@ -28,9 +28,9 @@ public class UIManager : Singleton<UIManager>
 
     public float NatureAmount { get { return natureAmount; } }
 
-    public void Init(int TargetCount, int EnemyDeathCount)
+    public void Init(int TargetCount, int MaxEnemyDeathCount)
     {
-        uiBattlePanel.Init(this, TargetCount, EnemyDeathCount);
+        uiBattlePanel.Init(this, TargetCount, MaxEnemyDeathCount);
     }
 
     public void NatureBarInit(float amount)
