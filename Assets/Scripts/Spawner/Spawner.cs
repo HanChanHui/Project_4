@@ -67,7 +67,7 @@ public class Spawner : MonoBehaviour {
                 }
                 enemyInstance.GetComponent<BaseEnemy>().OriginalTarget = enemyTarget;
                 GameManager.Instance.EnemySpawnCount++;
-                GameManager.Instance.AddPlaceableEnemyList(enemyInstance.GetComponent<BaseEnemy>());
+                //GameManager.Instance.AddPlaceableEnemyList(enemyInstance.GetComponent<BaseEnemy>());
 
                 this.nextSpawnTime = Time.time + coolTime;
             }

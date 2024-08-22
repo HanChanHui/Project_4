@@ -1,4 +1,7 @@
 
+using System.Diagnostics;
+using UnityEditor.Build.Pipeline.Interfaces;
+
 namespace HornSpirit {
     [System.Serializable]
     public class LevelList : SpreadToJSON
@@ -24,12 +27,16 @@ namespace HornSpirit {
             level.stageType = int.Parse(column[2]);
             level.x = int.Parse(column[3]);
             level.y = int.Parse(column[4]);
+            
+            int Length = column.Length;
 
-            for(int i = 5; i < column.Length - 1; i++)
+            
+            for(int i = 5; i < Length - 1; i++)
             {
-                if(column[i] != "")
+                if(!string.IsNullOrEmpty(column[i]))
                 {
                     string[] blockInfo = column[i].Split(',');
+                    UnityEngine.Debug.Log(blockInfo[0] + ", " + blockInfo[1] + ", " + blockInfo[2]);
                     BlockData blockList = new BlockData(int.Parse(blockInfo[0]),
                                                     int.Parse(blockInfo[1]),
                                                     int.Parse(blockInfo[2]));

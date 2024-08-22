@@ -67,6 +67,7 @@ public abstract class BaseEnemy : LivingEntity
             InitHealth(400);
         }
         healthBar.Init();
+        GameManager.Instance.AddPlaceableEnemyList(this);
 
         attackCoroutine = StartCoroutine(CoCheckDistance());
 

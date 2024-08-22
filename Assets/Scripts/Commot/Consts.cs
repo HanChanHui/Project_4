@@ -61,5 +61,11 @@ namespace Consts {
       Grass,
 
    }
+
+   public enum SpawnState { 
+      Spawning, 
+      Waiting, 
+      Finish 
+   }
 }
 

@@ -30,25 +30,25 @@ public class UIBattlePanel : MonoBehaviour
     [SerializeField] private Image barImage;
     [SerializeField]private Image fullBarIamge;
 
-    private GameManager gameManager;
+    private UIManager uiManager;
 
     private int previousNatureSegment = 0;
     private int currentNatureSegment = 0;
     private bool isFilling = false;
 
-    private void Start()
+    public void Init(UIManager uiManager, int TargetCount, int EnemyDeathCount)
     {
-        gameManager = GameManager.Instance;
-        gameManager.OnUseNature += OnIamgeUseNatureApple;
-        gameManager.OnFullNature += OnIamgeUseNatureApple;
-        gameManager.OnEnemyDeath += OnEnemyDeathCount;
+        this.uiManager = uiManager;
+        uiManager.OnUseNature += OnIamgeUseNatureApple;
+        uiManager.OnFullNature += OnIamgeUseNatureApple;
+        GameManager.Instance.OnEnemyDeath += OnEnemyDeathCount;
 
         StartCoroutine(FillNature());
 
         waveCountText.text = "0";
         enemyCountText.text = "0";
-        targetCount.text = gameManager.TargetList.Count.ToString();
-        enemyMaxCountText.text = gameManager.EnemyMaxDeathCount.ToString();
+        targetCount.text = TargetCount.ToString();
+        enemyMaxCountText.text = EnemyDeathCount.ToString();
     }
     
 
@@ -56,17 +56,17 @@ public class UIBattlePanel : MonoBehaviour
     {
         while (!isFilling)
         {
-            gameManager.FullNature(fullBarSpeed * natureFillInterval);
-            float normalize = gameManager.GetNatureNormalized();
+            uiManager.FullNature(fullBarSpeed * natureFillInterval);
+            float normalize = uiManager.GetNatureNormalized();
             SetNature(normalize);
 
-            currentNatureSegment = Mathf.FloorToInt(gameManager.GetNatureNormalized() * 10);
+            currentNatureSegment = Mathf.FloorToInt(uiManager.GetNatureNormalized() * 10);
 
             if (currentNatureSegment > previousNatureSegment)
             {
                 previousNatureSegment = currentNatureSegment;
                 StartCoroutine(SmoothFillNatureBar());
-                int natureCnt = (int)gameManager.NatureAmount;
+                int natureCnt = (int)uiManager.NatureAmount;
                 natureCountText.text = natureCnt.ToString();
                 //yield return new WaitForSeconds(0.2f); // 10단위 도달 시 멈춤
             }
@@ -106,7 +106,7 @@ public class UIBattlePanel : MonoBehaviour
         barImage.fillAmount = normalized;
         int cnt = (int)natureAmount;
         natureCountText.text = cnt.ToString();
-        currentNatureSegment = Mathf.FloorToInt(gameManager.GetNatureNormalized() * 10);
+        currentNatureSegment = Mathf.FloorToInt(uiManager.GetNatureNormalized() * 10);
         previousNatureSegment = currentNatureSegment;
     }
 

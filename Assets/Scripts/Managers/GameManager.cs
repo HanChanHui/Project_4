@@ -1,18 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using HornSpirit;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-
     public event Action<int> OnEnemyDeath;
-    public event Action<float, float> OnUseNature;
-    public event Action<float, float> OnFullNature;
 
     private CardManager cardManager;
     private UIManager uiManager;
     private TowerTouchManager towerInfoManager;
+    private WaveSpawner waveSpawner;
 
     [Header("Parameter")]
     private float natureAmount;
@@ -28,11 +27,17 @@ public class GameManager : Singleton<GameManager>
     private List<BaseEnemy> enemyList = new List<BaseEnemy>();
     private List<Transform> targetList = new List<Transform>();
 
+    //public delegate void EnemyKilledDelegate(int amount);
+    //public event EnemyKilledDelegate OnEnemyKilledEvent;
+        
+    public delegate void AllEnemiesDeadDelegate();
+    public event AllEnemiesDeadDelegate OnAllEnemiesDeadEvent;
+
+    private float gameSpeed;
     private bool isDoubleSpeed = false;
     private bool timePaused = false;
     private bool isTimeTwoSpeed = false;
 
-    public float NatureAmount { get { return natureAmount; } }
     public int EnemySpawnCount {get {return enemySpawnCount;} set{enemySpawnCount = value;}}
     public int EnemyMaxSpawnCount {get{return enemyMaxSpawnCount;} set{enemyMaxSpawnCount = value;}}
     public int EnemyMaxDeathCount {get{return enemyMaxDeathCount;} set{enemyMaxDeathCount = value;}}
@@ -58,8 +63,27 @@ public class GameManager : Singleton<GameManager>
 
     private void Start() 
     {
-        NatureBarInit(natureAmountMax);
+        gameSpeed = 1f;
+        uiManager.NatureBarInit(natureAmountMax);
+        uiManager.Init(targetDeathCount, enemyDeathCount);
         cardManager.LoadDeck();
+        //waveSpawner.SpawnCurrentWave();
+    }
+
+    private void OnEnable() {
+        //OnEnemyKilledEvent += AddToMoney;
+        OnAllEnemiesDeadEvent += WaveFinished;
+        // waveSpawner.OnWaveComplete += WaveFinished;
+        // waveSpawner.OnAllWavesComplete += WinLevel;
+    }
+
+    private void OnDisable() 
+    {
+        //OnEnemyKilledEvent -= AddToMoney;
+        OnAllEnemiesDeadEvent -= WaveFinished;
+        // waveSpawner.OnWaveComplete -= WaveFinished;
+        // waveSpawner.OnAllWavesComplete -= WinLevel;
+        DestroyObject();
     }
  
     public void Pause(float time) 
@@ -69,7 +93,7 @@ public class GameManager : Singleton<GameManager>
             return;
         }
 
-        Time.timeScale = time;
+        SetGameSpeed(time);
         timePaused = true;
     }
 
@@ -82,37 +106,48 @@ public class GameManager : Singleton<GameManager>
 
         if(isTimeTwoSpeed)
         {
-            Time.timeScale = 2;
+            gameSpeed = 2f;
+            SetGameSpeed(gameSpeed);
         }
         else
         {
-            Time.timeScale = 1;
+            gameSpeed = 1f;
+            SetGameSpeed(gameSpeed);
         }
         timePaused = false;
+    }
+
+    public void SetGameSpeed(float speed) 
+    {
+        Time.timeScale = speed;
     }
 
     public bool ToggleTimeSpeed()
     {
         if (isDoubleSpeed)
         {
-            Time.timeScale = 1;
+            gameSpeed = 1f;
+            SetGameSpeed(gameSpeed);
             isTimeTwoSpeed = false;
         }
         else
         {
-            Time.timeScale = 2;
+            gameSpeed = 2f;
+            SetGameSpeed(gameSpeed);
             isTimeTwoSpeed = true;
         }
         
         return isDoubleSpeed = !isDoubleSpeed;
     }
 
+    public float NatureAmount() => uiManager.NatureAmount;
+
     public void UseCard(CardData cardData, Vector3 position, List<GridPosition> towerGridPositionList, int towerCost) 
     {
         PlaceableTowerData pDataRef = cardData.towerData;
         GameObject prefabToSpawn = pDataRef.towerPrefab;
         Tower newPlaceableGO = Instantiate(prefabToSpawn, position, Quaternion.identity).GetComponent<Tower>();
-        UseNature(towerCost);
+        uiManager.UseNature(towerCost);
         newPlaceableGO.OnClickAction += towerInfoManager.PromoteTowerFromTowerUI;
 
         foreach (GridPosition gridPosition in towerGridPositionList) 
@@ -131,7 +166,7 @@ public class GameManager : Singleton<GameManager>
     public void SellTower(Tower tower)
     {
         Debug.Log("tower 삭제");
-        FullNature(tower.TowerSellCost);
+        uiManager.FullNature(tower.TowerSellCost);
         Destroy(tower.gameObject);
     }
 
@@ -143,45 +178,23 @@ public class GameManager : Singleton<GameManager>
         AddPlaceableTowerList(tower);
     }
 
-    public void AddPlaceableTowerList(Tower tower) 
-    {
-        if(tower != null)
-        {
-            towerList.Add(tower);
-        }
-    }
+    public void AddPlaceableTowerList(Tower tower) => towerList.Add(tower);
+    public void AddPlaceableEnemyList(BaseEnemy enemy) => enemyList.Add(enemy);
+    public void AddPlaceableTargetList(Transform target) => targetList.Add(target);
 
-    public void AddPlaceableEnemyList(BaseEnemy enemy) 
-    {
-        if(enemy != null)
-        {
-            enemyList.Add(enemy);
-        }
-    }
-
-    public void AddPlaceableTargetList(Transform target) 
-    {
-        if(target != null)
-        {
-            targetList.Add(target);
-        }
-    }
-
-    public void RemovePlaceableTowerList(Tower tower) 
-    {
-        if(tower != null)
-        {
-            towerList.Remove(tower);
-        }
-    }
+    public void RemovePlaceableTowerList(Tower tower) => towerList.Remove(tower);
 
     public void RemovePlaceableEnemyList(BaseEnemy enemy) 
     {
         if(enemy != null)
         {
             enemyList.Remove(enemy);
-            enemyDeathCount++;
+            //OnEnemyKilledEvent?.Invoke(enemy.GetPoints());
             OnEnemyDeath?.Invoke(enemyDeathCount);
+            if (enemyList.Count == 0) 
+            {
+                OnAllEnemiesDeadEvent?.Invoke();
+            }
             if(enemyDeathCount >= enemyMaxSpawnCount)
             {
                 OnEndGameVictory();
@@ -200,38 +213,33 @@ public class GameManager : Singleton<GameManager>
             }
         }
     }
+    public List<BaseEnemy> GetEnemiesList() => enemyList;
+    public int GetEnemyCount() => enemyList.Count;
+    public void ClearEnemiesList() => enemyList.Clear();
 
-    private void NatureBarInit(float amount)
-    {
-        //natureAmountMax = amount;
-        natureAmount = amount;
-    }
-
-    public void UseNature(int amount)
-    {
-        natureAmount -= amount;
-        OnUseNature?.Invoke(GetNatureNormalized(), natureAmount);
-
-        if(natureAmount < 0)
-        {
-            natureAmount = 0;
+    private void WaveFinished() {
+        if (waveSpawner.GetCurrentState() == Consts.SpawnState.Waiting && GetEnemyCount() == 0) {
+            ActivateWaveFinishDialog();
         }
     }
 
-    public void FullNature(float amount)
+    private void ActivateWaveFinishDialog() 
     {
-        natureAmount += amount;
-        OnFullNature?.Invoke(GetNatureNormalized(), natureAmount);
-
-        if(natureAmount > natureAmountMax)
-        {
-            natureAmount = natureAmountMax;
-        }
+        //_dialogManager.ActivateWaveFinishLabel();
+        Debug.Log("Wave 종료");
     }
 
-    public float GetNatureNormalized()
+    private void WinLevel() 
     {
-        return (float)natureAmount / natureAmountMax;
+        gameSpeed = 0;
+        SetGameSpeed(gameSpeed);
+        UnlockNextLevel();
+        uiManager.ShowGameVictoryUI();
+    }
+    private void UnlockNextLevel() 
+    {
+        int currLvl = Preferences.GetCurrentLvl();
+        Preferences.SetMaxLvl(currLvl + 1);
     }
 
     private void DestroyObject()
@@ -266,11 +274,5 @@ public class GameManager : Singleton<GameManager>
         uiManager.ShowGameOverUI();
         Pause(0f);
     }
-
-    private void OnDisable() 
-    {
-        DestroyObject();
-    }
-
 
 }

@@ -159,7 +159,7 @@ public class CardManager : Singleton<CardManager>
        
 
         if (input.GetPosition(out Vector3 position) && IsPlaceable 
-            && (int)gameManager.NatureAmount >= dataToSpawn.towerCost) 
+            && (int)gameManager.NatureAmount() >= dataToSpawn.towerCost) 
         {
             cardIsActive = false;
             if (OnCardUsed != null)
