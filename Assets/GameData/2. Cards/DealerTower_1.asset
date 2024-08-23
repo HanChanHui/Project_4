@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: DealerTower_1
   m_EditorClassIdentifier: 
   cardImage: {fileID: 21300000, guid: b041da8963f2621428c9156cf058399e, type: 3}
-  cardPropertyImage: {fileID: 21300000, guid: f104dd3c0c6acde46a1780c1a5555be5, type: 3}
+  cardPropertyImage: {fileID: 21300000, guid: 180ceac2a2a691343b40d6ccf5e38020, type: 3}
+  cardBackgroundImage: {fileID: 21300000, guid: a8b0a6b1f448ae44d9a35ebf1351ed44, type: 3}
   towerData: {fileID: 11400000, guid: 1120dd9b842ae254db320d8d1dfde039, type: 2}
   relativeOffsets: {x: 0, y: 0, z: 0}

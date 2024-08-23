@@ -2169,11 +2169,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a1420c163d6eb438a0159e443f9ab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabs: []
-  enemyPrefab: {fileID: 2573575432457491810, guid: 7605b5af6663faf45a40c86bede4851a, type: 3}
-  enemyBossPrefab: {fileID: 6153383026595147439, guid: a0287f8bc8ef54b489c6f46e2d7b3e07, type: 3}
   gridSystemVisualSingPrefab: {fileID: 1119162169778905687, guid: 9da27aa4d2dda6a4d8e51695bd075097, type: 3}
   gridSystemVisualSingPrefab2: {fileID: 1119162169778905687, guid: 9b3e3559c9b2fab4f83c785050d1fb50, type: 3}
+  patternData: {fileID: 11400000, guid: b52f3b606fa10ee43855873fec1f2fce, type: 2}
 --- !u!1 &495575344
 GameObject:
   m_ObjectHideFlags: 0

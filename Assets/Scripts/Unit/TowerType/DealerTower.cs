@@ -1,3 +1,4 @@
+using Consts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,9 @@ public class DealerTower : Tower
 {
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform shooterPos;
+    protected AttackDirection atkDirection;
+    protected JoystickController joystickController;
+    protected List<GridPosition> atkRangeGridList;
     private bool isBulletActive = false;
 
     protected override void MyInit()
@@ -68,6 +72,68 @@ public class DealerTower : Tower
             bullet.Damage = attackDamage; // 설정한 데미지 값
         }
     }
+
+    protected virtual void OnAttackDirectionSelected(Vector2 direction) 
+    {
+        direction.Normalize();
+
+        if (direction.x > 0 && direction.y < 0) {
+            atkDirection = AttackDirection.Right;
+        } else if (direction.x < 0 && direction.y > 0) {
+            atkDirection = AttackDirection.Left;
+        } else if (direction.x < 0 && direction.y < 0) {
+            atkDirection = AttackDirection.Down;
+        } else if (direction.x > 0 && direction.y > 0) {
+            atkDirection = AttackDirection.Up;
+        }
+    }
+
+    public void GenerateAttackPattern(AttackDirection direction, GridPosition gridPosition, List<Vector2Int> basePatternArray) {
+        atkRangeGridList = new List<GridPosition>();
+
+        List<Vector2Int> directionVectors = patternData.GetDirectionVector(basePatternArray, direction);
+
+        foreach (Vector2Int directionVector in directionVectors) {
+            GridPosition attackGridPosition = gridPosition + new GridPosition(directionVector.x, directionVector.y);
+            Debug.Log(attackGridPosition);
+            atkRangeGridList.Add(attackGridPosition);
+        }
+
+        FilterInvalidGridPositions(atkRangeGridList);
+        StartCoroutine(CoCheckAttackRange());
+    }
+
+    protected void FilterInvalidGridPositions(List<GridPosition> atkRangeGridList) {
+        atkRangeGridList.RemoveAll(gridPos =>
+            !LevelGrid.Instance.IsValidGridPosition(gridPos) ||
+            LevelGrid.Instance.HasAnyBlockOnGridPosition(gridPos) ||
+            LevelGrid.Instance.HasAnyTowerOnGridPosition(gridPos)
+        );
+    }
+
+    private IEnumerator CoCheckAttackRange() {
+        while (true) {
+            FindEnemy();
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    private void FindEnemy() {
+        List<BaseEnemy> currentEnemiesInRange = new List<BaseEnemy>();
+
+        foreach (GridPosition gridPos in atkRangeGridList) {
+            BaseEnemy enemy = LevelGrid.Instance.GetEnemiesAtGridPosition(gridPos);
+            if (enemy != null && !enemiesInRange.Contains(enemy)) {
+                enemiesInRange.Add(enemy);
+            }
+            if (enemy != null) {
+                currentEnemiesInRange.Add(enemy);
+            }
+        }
+
+        enemiesInRange.RemoveAll(enemy => !currentEnemiesInRange.Contains(enemy));
+    }
+    
 
     private void OnBulletDestroyed()
     {

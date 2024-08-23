@@ -13,6 +13,7 @@ public class Tower : LivingEntity
 
     protected List<GridPosition> gridPositionList = new List<GridPosition>();
     protected List<BaseEnemy> enemiesInRange = new List<BaseEnemy>();
+    protected PatternData patternData;
 
     [SerializeField] protected float defence;
     [SerializeField] protected int maxDistance;
@@ -20,7 +21,7 @@ public class Tower : LivingEntity
     [SerializeField] protected float attackSpeed;
     [SerializeField] protected int towerSellCost;
     protected bool isClickUI = false;
-    [SerializeField] private bool isTwoType = false; // 임시로 1층과 2층 구분
+    [SerializeField] protected bool isTwoType = false; // 임시로 1층과 2층 구분
 
 
     public List<GridPosition> GridPositionList { get { return gridPositionList; } set { gridPositionList = value; } }
@@ -32,7 +33,8 @@ public class Tower : LivingEntity
 
     protected virtual void Awake()
     {
-        sprite = GetComponentInChildren<SpriteRenderer>();
+        sprite = GetComponent<SpriteRenderer>();
+        patternData = ResourceManager.Instance.GetPatternData;
         if (sprite != null)
         {
             originalColor = sprite.color;
@@ -89,75 +91,13 @@ public class Tower : LivingEntity
         if (OnClickAction != null)
         {
             OnClickAction(this);
+            GameManager.Instance.Resume();
         }
     }
 
     protected virtual IEnumerator CoCheckDistance()
     {
         yield return null;
-    }
-
-    private List<Vector2Int> ConvertPatternToList(int[,] patternArray) {
-        List<Vector2Int> patternList = new List<Vector2Int>();
-
-        int rows = patternArray.GetLength(0);
-        int cols = patternArray.GetLength(1);
-
-        for (int y = 0; y < rows; y++) {
-            for (int x = 0; x < cols; x++) {
-                if (patternArray[y, x] == 1) {
-                    patternList.Add(new Vector2Int(x - cols / 2, y - rows / 2)); // 중앙 정렬
-                }
-            }
-        }
-
-        return patternList;
-    }
-
-    protected List<Vector2Int> GetDirectionVector(AttackDirection direction, int[,] patternArray) 
-    {
-        List<Vector2Int> pattern = ConvertPatternToList(patternArray);
-
-        switch (direction) {
-            case AttackDirection.Right:
-                return pattern;
-
-            case AttackDirection.Left:
-                return MirrorPattern(pattern); // 좌우 반전으로 Left 방향 변환
-
-            case AttackDirection.Up:
-                return RotatePatternUp(pattern); // 90도 회전으로 Up 방향 변환
-
-            case AttackDirection.Down:
-                return RotatePatternDown(pattern); // 90도 회전으로 Down 방향 변환
-
-            default:
-                return pattern;
-        }
-    }
-
-    private List<Vector2Int> MirrorPattern(List<Vector2Int> pattern) {
-        List<Vector2Int> mirroredPattern = new List<Vector2Int>();
-        foreach (Vector2Int vector in pattern) {
-            mirroredPattern.Add(new Vector2Int(-vector.x, vector.y));
-        }
-        return mirroredPattern;
-    }
-
-    private List<Vector2Int> RotatePatternDown(List<Vector2Int> pattern) {
-        List<Vector2Int> rotatedPattern = new List<Vector2Int>();
-        foreach (Vector2Int vector in pattern) {
-            rotatedPattern.Add(new Vector2Int(vector.y, -vector.x));
-        }
-        return rotatedPattern;
-    }
-
-    private List<Vector2Int> RotatePatternUp(List<Vector2Int> pattern) {
-        List<Vector2Int> rotatedPattern = new List<Vector2Int>();
-        foreach (Vector2Int vector in pattern) {
-            rotatedPattern.Add(new Vector2Int(-vector.y, vector.x));
-        }
-        return rotatedPattern;
     }
 
     public override void TakeDamage(float damage, int obstacleDamage = 1, bool showLabel = false)

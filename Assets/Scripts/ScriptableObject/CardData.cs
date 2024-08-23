@@ -8,6 +8,7 @@ public class CardData : ScriptableObject
     [Header("Card graphics")]
     public Sprite cardImage;
     public Sprite cardPropertyImage;
+    public Sprite cardBackgroundImage;
 
     [Header("List of Placeables")]
     public PlaceableTowerData towerData;

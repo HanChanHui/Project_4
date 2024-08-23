@@ -55,7 +55,6 @@ namespace HornSpirit {
         private void OnWaveSpawnerComplete()
         {
             activeSpawners--;
-            Debug.Log("호출" + activeSpawners);
             if (activeSpawners == 0)
             {
                 activeSpawners = waveSpawnerList.Count;

@@ -1,11 +1,14 @@
+using Consts;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class HealerTower : Tower
 {
     protected List<Tower> towersInRange = new List<Tower>();
+    protected AttackDirection atkDirection;
+    protected JoystickController joystickController;
+    protected List<GridPosition> atkRangeGridList;
     private bool isHealing = false;
  
 
@@ -56,6 +59,66 @@ public class HealerTower : Tower
         }
 
         isHealing = false;
+    }
+
+    protected virtual void OnAttackDirectionSelected(Vector2 direction) 
+    {
+        direction.Normalize();
+
+        if (direction.x > 0 && direction.y < 0) {
+            atkDirection = AttackDirection.Right;
+        } else if (direction.x < 0 && direction.y > 0) {
+            atkDirection = AttackDirection.Left;
+        } else if (direction.x < 0 && direction.y < 0) {
+            atkDirection = AttackDirection.Down;
+        } else if (direction.x > 0 && direction.y > 0) {
+            atkDirection = AttackDirection.Up;
+        }
+    }
+
+    public void GenerateAttackPattern(AttackDirection direction, GridPosition gridPosition, List<Vector2Int> basePatternArray) {
+        atkRangeGridList = new List<GridPosition>();
+
+        List<Vector2Int> directionVectors = patternData.GetDirectionVector(basePatternArray, direction);
+
+        foreach (Vector2Int directionVector in directionVectors) {
+            GridPosition attackGridPosition = gridPosition + new GridPosition(directionVector.x, directionVector.y);
+            atkRangeGridList.Add(attackGridPosition);
+        }
+
+        FilterInvalidGridPositions(atkRangeGridList);
+        StartCoroutine(CoCheckAttackRange());
+    }
+
+    protected void FilterInvalidGridPositions(List<GridPosition> atkRangeGridList) {
+        atkRangeGridList.RemoveAll(gridPos =>
+            !LevelGrid.Instance.IsValidGridPosition(gridPos)
+        );
+    }
+
+    protected IEnumerator CoCheckAttackRange() {
+        while (true) {
+            FindTower();
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    protected void FindTower() {
+        List<Tower> currentTowersInRange = new List<Tower>();
+
+        foreach (GridPosition gridPos in atkRangeGridList) {
+            Tower tower = LevelGrid.Instance.GetTowerAtGridPosition(gridPos);
+            if (tower != null && !towersInRange.Contains(tower)) 
+            {
+                towersInRange.Add(tower);
+                towersInRange.Sort((t1, t2) => t1.Health.CompareTo(t2.Health));
+            }
+            if (tower != null) {
+                currentTowersInRange.Add(tower);
+            }
+        }
+
+        towersInRange.RemoveAll(tower => !currentTowersInRange.Contains(tower));
     }
     
 }

@@ -16,6 +16,7 @@ public class UICard : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDo
 
     public Image portraitImage;
     public Image towerPropertyImage;
+    public Image towerBackgroundImage;
     public TextMeshProUGUI towerCostText;
     private CanvasGroup canvasGroup;
 
@@ -33,6 +34,7 @@ public class UICard : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDo
         cardData = cData;
         portraitImage.sprite = cardData.cardImage;
         towerPropertyImage.sprite = cardData.cardPropertyImage;
+        towerBackgroundImage.sprite = cardData.cardBackgroundImage;
         towerCostText.text = cardData.towerData.towerCost.ToString();
     }
 

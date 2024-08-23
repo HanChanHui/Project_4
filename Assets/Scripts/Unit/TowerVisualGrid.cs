@@ -5,207 +5,125 @@ using UnityEngine;
 
 public class TowerVisualGrid : MonoBehaviour
 {
-    private enum AttackRangeType
-    {
-        Straight,
-        Jet,
-        Line,
-        Round,
-    }
 
-
-    [SerializeField] private PlaceableTowerData towerData;
-
+    private PatternData patternData;
     [SerializeField] private AttackRangeType attackRangeType;
-    private GridSystemVisualSingle[,] gridSystemVisualSingleArray;
+    [SerializeField] private AttackDirection attackDirectionType = AttackDirection.None;
+    private List<GridSystemVisualSingle> gridSystemVisualSingleList;
     private Material material;
+    private bool isTwoLayerType = false;
 
     delegate void RangeFunc();
     RangeFunc rangeFunc;
 
-    public void Init(PlaceableTowerData _towerData) 
+    public void Init() 
     {
-        towerData = _towerData;
-
-        gridSystemVisualSingleArray = new GridSystemVisualSingle[
-            towerData.attackRange,
-            towerData.attackRange
-        ];
+        gridSystemVisualSingleList = new List<GridSystemVisualSingle>();
         
         material = GridSystemVisual.Instance.GetGridVisualTypeMaterial(GridVisualType.Forbidden);
-
-        SetType(this.attackRangeType);
+        patternData = ResourceManager.Instance.GetPatternData;
+        SetType(attackRangeType, attackDirectionType);
         rangeFunc();
     }
 
-    private void SetType(AttackRangeType type)
+    public void SetDirection(bool isTwoLayer, AttackDirection attackDirectionType)
+    {
+        this.isTwoLayerType = isTwoLayer;
+        this.attackDirectionType = attackDirectionType;
+    }
+
+    private void SetType(AttackRangeType type, AttackDirection directionType)
     {
         this.attackRangeType = type;
-        rangeFunc = GetRangeFunc(type);
+        this.attackDirectionType = directionType;
+        rangeFunc = GetRangeFunc();
     }
 
     private void RemoveType(AttackRangeType type)
     {
-        rangeFunc -= GetRangeFunc(type);
+        rangeFunc -= GetRangeFunc();
     }
 
-    private void StraightAttackRange()
+    private void SetGridSystemVisualList(Vector3 worldPosition)
     {
-        for(int x = 1; x <= towerData.attackRange; x++)
+        Transform gridSystemVisualSingleTransform = Instantiate(ResourceManager.Instance.GridSystemVisualSingPrefab, worldPosition, Quaternion.identity);
+        gridSystemVisualSingleTransform.transform.parent = transform;
+        gridSystemVisualSingleList.Add(gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>());
+    }
+
+    private void AttackPatternRange() 
+    {
+        List<Vector2Int> pattern;
+        if(attackDirectionType != AttackDirection.None)
         {
-            Vector3 worldPosition = transform.position + new Vector3(x * 2, 0);
-
-            Transform gridSystemVisualSingleTransform = Instantiate(ResourceManager.Instance.GridSystemVisualSingPrefab, worldPosition, Quaternion.identity);
-            gridSystemVisualSingleTransform.transform.parent = transform;
-            gridSystemVisualSingleArray[x - 1, 0] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
-            gridSystemVisualSingleArray[x - 1, 0].Hide();
-            gridSystemVisualSingleArray[x - 1, 0].GridLayerChange(LayerName.PlaceGrid.ToString());
+            pattern = patternData.GetDirectionVector(patternData.GetPattern((int)attackRangeType), attackDirectionType);
         }
-    }
+        else
+        {
+            pattern = patternData.GetDirectionVector(patternData.GetPattern((int)attackRangeType));
+        }
 
-    int[,] jetPatternArray = new int[,] {
-        { 1, 1, 1, 0 },
-        { 0, 1, 1, 1 },
-        { 1, 1, 1, 0 },
-    };
-
-    private void JetAttackRange() 
-    {
-        int rows = jetPatternArray.GetLength(0);
-        int cols = jetPatternArray.GetLength(1);
-
-        for (int y = 0; y < rows; y++) {
-            for (int x = 0; x < cols; x++) {
-                if (jetPatternArray[y, x] == 1) 
-                {
-                    Vector3 worldPosition = transform.position + new Vector3(x * 2 , (y - 1) * 2);
-                    Transform gridSystemVisualSingleTransform = Instantiate(ResourceManager.Instance.GridSystemVisualSingPrefab, worldPosition, Quaternion.identity);
-                    gridSystemVisualSingleTransform.transform.parent = transform;
-                    gridSystemVisualSingleArray[x, y] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
-                    gridSystemVisualSingleArray[x, y].Hide();
-                    gridSystemVisualSingleArray[x, y].GridLayerChange(LayerName.PlaceGrid.ToString());
-                }
+        if(isTwoLayerType) 
+        {
+            foreach (Vector2Int directionVector in pattern) 
+            {
+                Vector3 worldPosition = transform.position + new Vector3(directionVector.x * 2, directionVector.y * 2 - 0.65f, 0);
+                SetGridSystemVisualList(worldPosition);
             }
         }
-    }
-
-    int[,] LinePatternArray = new int[,] {
-        { 0, 1 },
-        { 0, 1 },
-        { 0, 1 },
-    };
-
-    private void LineAttackRange() 
-    {
-        int rows = LinePatternArray.GetLength(0);
-        int cols = LinePatternArray.GetLength(1);
-        for (int y = 0; y < rows; y++) {
-            for (int x = 0; x < cols; x++) {
-                if (LinePatternArray[y, x] == 1) 
-                {
-                    Vector3 worldPosition = transform.position + new Vector3(x * 2 , (y - 1) * 2);
-                    Transform gridSystemVisualSingleTransform = Instantiate(ResourceManager.Instance.GridSystemVisualSingPrefab, worldPosition, Quaternion.identity);
-                    gridSystemVisualSingleTransform.transform.parent = transform;
-                    gridSystemVisualSingleArray[x, y] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
-                    gridSystemVisualSingleArray[x, y].Hide();
-                    gridSystemVisualSingleArray[x, y].GridLayerChange(LayerName.PlaceGrid.ToString());
-                }
+        else
+        {
+            foreach (Vector2Int directionVector in pattern) 
+            {
+                Vector3 worldPosition = transform.position + new Vector3(directionVector.x * 2, directionVector.y * 2, 0);
+                SetGridSystemVisualList(worldPosition);
             }
         }
-    }
 
-    int[,] roundPatternArray = new int[,] {
-        { 1, 1, 1 },
-        { 1, 0, 1 },
-        { 1, 1, 1 },
-    };
-
-    private void RoundAttackRange() 
-    {
-        int rows = roundPatternArray.GetLength(0);
-        int cols = roundPatternArray.GetLength(1);
-
-        for (int y = 0; y < rows; y++) {
-            for (int x = 0; x < cols; x++) {
-                if (roundPatternArray[y, x] == 1) 
-                {
-                    Vector3 worldPosition = transform.position + new Vector3((x - cols / 2) * 2, (y - rows / 2) * 2);
-                    Transform gridSystemVisualSingleTransform = Instantiate(ResourceManager.Instance.GridSystemVisualSingPrefab, worldPosition, Quaternion.identity);
-                    gridSystemVisualSingleTransform.transform.parent = transform;
-                    gridSystemVisualSingleArray[x, y] = gridSystemVisualSingleTransform.GetComponent<GridSystemVisualSingle>();
-                    gridSystemVisualSingleArray[x, y].Hide();
-                    gridSystemVisualSingleArray[x, y].GridLayerChange(LayerName.PlaceGrid.ToString());
-                }
-            }
+        foreach(GridSystemVisualSingle gridVisual in gridSystemVisualSingleList)
+        {
+            gridVisual.Hide();
+            gridVisual.GridLayerChange(LayerName.PlaceGrid.ToString());
         }
+        
     }
-
 
     public void HideAllGridPosition()
     {
-        for (int x = 0; x < towerData.attackRange; x++)
+        foreach(GridSystemVisualSingle gridVisual in gridSystemVisualSingleList)
         {
-            for (int y = 0; y < towerData.attackRange; y++)
-            {
-                if(gridSystemVisualSingleArray[x, y] != null)
-                {
-                    gridSystemVisualSingleArray[x, y].Hide();
-                }
-            }
+            gridVisual.Hide();
         }
     }
+
     public void ShowAllGridPosition()
     {
-        for (int x = 0; x < towerData.attackRange; x++)
+        foreach(GridSystemVisualSingle gridVisual in gridSystemVisualSingleList)
         {
-            for (int y = 0; y < towerData.attackRange; y++)
-            {
-                if(gridSystemVisualSingleArray[x, y] != null)
-                {
-                    gridSystemVisualSingleArray[x, y].Show(material);   
-                }
-            }
+            gridVisual.Show(material);
         }
     }
 
-
-    private RangeFunc GetRangeFunc(AttackRangeType type)
+    private RangeFunc GetRangeFunc()
     {
-        switch(type)
-        {
-            case AttackRangeType.Straight:
-                return StraightAttackRange;
-            case AttackRangeType.Jet:
-                return JetAttackRange;
-            case AttackRangeType.Line:
-                return LineAttackRange;
-            case AttackRangeType.Round:
-                return RoundAttackRange;
-            default:
-                return null;
-        }
+        return AttackPatternRange;
     }
 
     public void DestroyGridPositionList() 
     {
-        for (int x = 0; x < towerData.width; x++) {
-            for (int y = 0; y < towerData.height; y++) 
-            {
-                if(gridSystemVisualSingleArray[x, y] != null)
-                {
-                    Destroy(gridSystemVisualSingleArray[x, y].gameObject);
-                }
-                
-            }
+        foreach(GridSystemVisualSingle gridVisual in gridSystemVisualSingleList)
+        {
+            Destroy(gridVisual.gameObject);
         }
     }
 
     private void OnDisable() 
     {
         StopAllCoroutines();
-        if (gridSystemVisualSingleArray != null)
+        if (gridSystemVisualSingleList != null)
         {
             DestroyGridPositionList();
+            RemoveType(attackRangeType);
         }
     }
 

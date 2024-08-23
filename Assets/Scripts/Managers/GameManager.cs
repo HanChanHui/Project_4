@@ -51,8 +51,8 @@ public class GameManager : Singleton<GameManager>
 
     private void Awake() 
     {
-
         LevelAndSpawnId = Preferences.GetCurrentLvl();
+        //LevelAndSpawnId = Preferences.GetCurrentLvl();
         levelManager = LevelManager.Instance;
         waveManager = WaveManager.Instance;
         uiManager = UIManager.Instance;
@@ -78,6 +78,7 @@ public class GameManager : Singleton<GameManager>
     private void OnEnable() {
         //OnEnemyKilledEvent += AddToMoney;
         OnAllEnemiesDeadEvent += WaveFinished;
+        
         // waveSpawner.OnWaveComplete += WaveFinished;
         // waveSpawner.OnAllWavesComplete += WinLevel;
     }
@@ -89,7 +90,7 @@ public class GameManager : Singleton<GameManager>
         // waveSpawner.OnWaveComplete -= WaveFinished;
         // waveSpawner.OnAllWavesComplete -= WinLevel;
         DestroyObject();
-        Preferences.ResetCurrentLvl();
+        //Preferences.ResetCurrentLvl();
     }
  
     public void Pause(float time) 
@@ -273,6 +274,7 @@ public class GameManager : Singleton<GameManager>
         uiManager.ShowGameVictoryUI();
         UnlockNextLevel();
         //Pause(0f);
+        LevelAndSpawnId++;
         NextScene();
     }
 
@@ -287,4 +289,8 @@ public class GameManager : Singleton<GameManager>
         SceneManagerEx.Instance.LoadScene(Consts.SceneType.BattleScene);
     }
 
+    private void OnApplicationQuit() 
+    {
+        Preferences.ResetCurrentLvl();
+    }
 }

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: DealerTower_2
   m_EditorClassIdentifier: 
   towerType: 1
-  towerPrefab: {fileID: 3888004110574695357, guid: 9efe014661ade9244a517fdb3d1e4127, type: 3}
-  towerIconPrefab: {fileID: 2858560182924785193, guid: 837556026ea5419429d0af4062f01762, type: 3}
+  towerPrefab: {fileID: 3060976928220081373, guid: aa0e3c602648c1c468acb41b97134b82, type: 3}
+  towerIconPrefab: {fileID: 7967675787034762208, guid: 2405a7fbf6e655542bceb4e532a32f85, type: 3}
   towerID: 0
-  towerName: neco2
+  towerName: DealerNeco_2
   towerAttackType: 1
   towerHP: 100
   towerDefence: 0

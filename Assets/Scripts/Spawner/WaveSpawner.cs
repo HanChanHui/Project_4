@@ -47,7 +47,6 @@ namespace HornSpirit {
 
         public void StartWaveSet()
         {
-            Debug.Log("실행" + currentWaveInfoIndex);
             if(currentWaveInfoIndex < waveCount)
             {
                 List<WaveTerm> waveTermList = waveInfoDataList[currentWaveInfoIndex].waveTermList;

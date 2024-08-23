@@ -10,16 +10,23 @@ public class UITower : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerD
     public UnityAction<Tower> OnTapDownAction;
     public UnityAction OnTapReleaseAction;
     private Tower towerData;
+    private TowerVisualGrid towerVisualGrid;
 
+    private bool isDragging = false;
+    private bool isPatternDirection = false;
+    private Vector2 initialPointerPosition;
+    private const float dragThreshold  = 1f;
 
-
-    private void Start() {
+    private void Awake() {
         towerData = GetComponent<Tower>();
+        towerVisualGrid = GetComponent<TowerVisualGrid>();
     }
-
 
     public void OnPointerDown(PointerEventData pointerEvent)
     {
+        isDragging = false;
+        initialPointerPosition = pointerEvent.position;
+
         if (OnTapDownAction != null)
         {
             OnTapDownAction(towerData);
@@ -28,9 +35,16 @@ public class UITower : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerD
 
     public void OnDrag(PointerEventData pointerEvent)
     {
-        if (OnDragAction != null)
+        float distance = Vector2.Distance(pointerEvent.position, initialPointerPosition);
+
+        if (distance > dragThreshold)
         {
-            OnDragAction();
+            isDragging = true;
+
+            if (OnDragAction != null) 
+            {
+                OnDragAction();
+            }
         }
     }
 
@@ -38,7 +52,31 @@ public class UITower : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerD
     {
         if (OnTapReleaseAction != null)
         {
-            OnTapReleaseAction();
+            // 클릭과 드래그 구분 로직
+            if (isDragging)
+            {
+                // 드래그 후 놓기로 처리
+                Debug.Log("Drag click detected");
+                isPatternDirection = false;
+                towerVisualGrid.HideAllGridPosition();
+                OnTapReleaseAction();
+            }
+            else
+            {
+                // 단일 클릭으로 처리
+                Debug.Log("Single click detected");
+                if(!isPatternDirection)
+                {
+                    isPatternDirection = true;
+                    towerVisualGrid.ShowAllGridPosition();
+                }
+                else
+                {
+                    isPatternDirection = false;
+                    towerVisualGrid.HideAllGridPosition();
+                }
+                
+            }
         }
     }
 

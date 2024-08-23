@@ -129,7 +129,7 @@ public class CardManager : Singleton<CardManager>
                                                                                 position + offsets,
                                                                                 Quaternion.identity,
                                                                                 previewHolder.transform);
-                newPlaceable.GetComponent<TowerVisualGrid>().Init(dataToSpawn);
+                newPlaceable.GetComponent<TowerVisualGrid>().Init();
             } 
             else 
             {
@@ -168,7 +168,7 @@ public class CardManager : Singleton<CardManager>
                 OnCardUsed(cards[cardId].cardData, resultTowerGridPos, towerGridPositionList, dataToSpawn.towerCost); 
             }
             
-            UIManager.Instance.ShowDirectionJoystickUI(resultTowerGridPos);
+            //UIManager.Instance.ShowDirectionJoystickUI(resultTowerGridPos);
             gridSV.UpdateGridVisual(dataToSpawn.towerType, false);
 
             ClearPreviewObjects();

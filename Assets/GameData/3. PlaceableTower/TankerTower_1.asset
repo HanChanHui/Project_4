@@ -16,7 +16,7 @@ MonoBehaviour:
   towerPrefab: {fileID: 2738529185662124643, guid: 4c6c36da9d7a86c43bb6c4ea95673b18, type: 3}
   towerIconPrefab: {fileID: 841211081241225511, guid: 230f2a710e6c46b4da506b04563df799, type: 3}
   towerID: 0
-  towerName: neco3
+  towerName: TankerNeco_1
   towerAttackType: 1
   towerHP: 300
   towerDefence: 0

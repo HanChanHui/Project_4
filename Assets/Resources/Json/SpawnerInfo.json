@@ -124,7 +124,7 @@
             "WaveList": [
                 {
                     "spawnerId": 1,
-                    "destinationId": 2,
+                    "destinationId": 1,
                     "waveCount": 3,
                     "waveInfoList": [
                         {
@@ -181,7 +181,7 @@
                 },
                 {
                     "spawnerId": 2,
-                    "destinationId": 1,
+                    "destinationId": 2,
                     "waveCount": 3,
                     "waveInfoList": [
                         {

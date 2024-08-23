@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: HealerTower_1
   m_EditorClassIdentifier: 
   cardImage: {fileID: 21300000, guid: 9808e494068c11e4b9f9614d46e20895, type: 3}
-  cardPropertyImage: {fileID: 21300000, guid: a5c39ab0b013e3e48a58d5e187bdf6c4, type: 3}
+  cardPropertyImage: {fileID: 21300000, guid: dff8b50019e9949438ad626d0115d469, type: 3}
+  cardBackgroundImage: {fileID: 21300000, guid: a8b0a6b1f448ae44d9a35ebf1351ed44, type: 3}
   towerData: {fileID: 11400000, guid: 8dde9338f97c02841aea4cca20b5e85e, type: 2}
   relativeOffsets: {x: 0, y: 0, z: 0}
