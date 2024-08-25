@@ -29,8 +29,8 @@ public class GameManager : Singleton<GameManager>
     //public delegate void EnemyKilledDelegate(int amount);
     //public event EnemyKilledDelegate OnEnemyKilledEvent;
         
-    public delegate void AllEnemiesDeadDelegate();
-    public event AllEnemiesDeadDelegate OnAllEnemiesDeadEvent;
+    //public delegate void AllEnemiesDeadDelegate();
+    //public event AllEnemiesDeadDelegate OnAllEnemiesDeadEvent;
 
     private float gameSpeed;
     private bool isDoubleSpeed = false;
@@ -52,7 +52,6 @@ public class GameManager : Singleton<GameManager>
     private void Awake() 
     {
         LevelAndSpawnId = Preferences.GetCurrentLvl();
-        //LevelAndSpawnId = Preferences.GetCurrentLvl();
         levelManager = LevelManager.Instance;
         waveManager = WaveManager.Instance;
         uiManager = UIManager.Instance;
@@ -72,25 +71,16 @@ public class GameManager : Singleton<GameManager>
         uiManager.NatureBarInit(natureAmountMax);
         uiManager.Init(targetDeathCount, enemyMaxSpawnCount);
         cardManager.LoadDeck();
-        //waveSpawner.SpawnCurrentWave();
     }
 
-    private void OnEnable() {
-        //OnEnemyKilledEvent += AddToMoney;
-        OnAllEnemiesDeadEvent += WaveFinished;
-        
-        // waveSpawner.OnWaveComplete += WaveFinished;
-        // waveSpawner.OnAllWavesComplete += WinLevel;
+    private void OnEnable() 
+    {
+ 
     }
 
     private void OnDisable() 
     {
-        //OnEnemyKilledEvent -= AddToMoney;
-        OnAllEnemiesDeadEvent -= WaveFinished;
-        // waveSpawner.OnWaveComplete -= WaveFinished;
-        // waveSpawner.OnAllWavesComplete -= WinLevel;
         DestroyObject();
-        //Preferences.ResetCurrentLvl();
     }
  
     public void Pause(float time) 
@@ -223,29 +213,10 @@ public class GameManager : Singleton<GameManager>
     public int GetEnemyCount() => enemyList.Count;
     public void ClearEnemiesList() => enemyList.Clear();
 
-    private void WaveFinished() {
-        ActivateWaveFinishDialog();
-    }
-
-    private void ActivateWaveFinishDialog() 
-    {
-        //_dialogManager.ActivateWaveFinishLabel();
-        Debug.Log("Wave 종료");
-    }
-
-    private void WinLevel() 
-    {
-        gameSpeed = 0;
-        SetGameSpeed(gameSpeed);
-        UnlockNextLevel();
-        uiManager.ShowGameVictoryUI();
-    }
     private void UnlockNextLevel() 
     {
         int currLvl = Preferences.GetCurrentLvl();
-        Debug.Log(currLvl);
         Preferences.SetCurrentLvl(currLvl + 1);
-        Debug.Log(Preferences.GetCurrentLvl());
     }
 
     private void DestroyObject()
@@ -273,7 +244,6 @@ public class GameManager : Singleton<GameManager>
     {
         uiManager.ShowGameVictoryUI();
         UnlockNextLevel();
-        //Pause(0f);
         LevelAndSpawnId++;
         NextScene();
     }

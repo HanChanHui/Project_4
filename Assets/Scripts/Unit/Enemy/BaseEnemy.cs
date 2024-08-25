@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding; 
 using TMPro;
+using HornSpirit;
 
 
 public abstract class BaseEnemy : LivingEntity
@@ -37,6 +38,8 @@ public abstract class BaseEnemy : LivingEntity
 
     [SerializeField] protected Tower targetTower;
     [SerializeField] protected List<Tower> towerList = new List<Tower>();
+    [SerializeField] protected TurningPoint turningPoint;
+    private int currentWaypointIndex = 0;
 
     protected Coroutine attackCoroutine;
     protected Coroutine moveAttackCoroutine;
@@ -45,16 +48,19 @@ public abstract class BaseEnemy : LivingEntity
     public static event EnemyDestroyedHandler OnEnemyDestroyed;
 
     public EnemyType EnemyType {get{return enemyType;} set{enemyType = value;}}
+    
 
-    protected virtual void Start()
+    private void Awake() 
     {
         aiPath = GetComponent<AIPath>();
         destinationSetter = GetComponent<AIDestinationSetter>();
-        
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();   
+    }
 
-        destinationSetter.target = originalTarget;
-
+    public void Init(TurningPoint turningPoint)
+    {
+        this.turningPoint = turningPoint;
+        FindTurningPoint(turningPoint.turningPoints[currentWaypointIndex]);
         StartCoroutine(MainRoutine());
 
         if(enemyType == EnemyType.General)
@@ -105,16 +111,44 @@ public abstract class BaseEnemy : LivingEntity
 
     private void CheckTargetReached()
     {
-        if (originalTarget == null) 
+        if (aiPath.reachedDestination && turningPoint != null)
+        {
+            
+            if (currentWaypointIndex < turningPoint.turningPoints.Count)
+            {
+                FindTurningPoint(turningPoint.turningPoints[currentWaypointIndex]);;
+            }
+            else if(currentWaypointIndex == turningPoint.turningPoints.Count)
+            {
+                originalTarget = GameManager.Instance.TargetList[turningPoint.destinationId - 1];
+                destinationSetter.target = originalTarget;
+                currentWaypointIndex++;
+            }
+            else
+            {
+                ApplyDamageToTarget(originalTarget);
+                //originalTarget.GetComponent<Block>().TakeDamage(1f);
+                GameManager.Instance.RemovePlaceableEnemyList(this);
+                Destroy(gameObject);
+            }
+        }
+        else if (destinationSetter.target == null) 
         {
             originalTarget = GameManager.Instance.TargetList[0];
             SetNewTarget(originalTarget);
         }
-        else if (!isAttackingTower && aiPath.reachedEndOfPath && aiPath.remainingDistance <= aiPath.endReachedDistance)
+    }
+
+    private void ApplyDamageToTarget(Transform target)
+    {
+        // 타겟에게 피해를 입히는 로직 구현
+        if (target != null)
         {
-            originalTarget.GetComponent<Block>().TakeDamage(1f);
-            GameManager.Instance.RemovePlaceableEnemyList(this);
-            Destroy(gameObject);
+            LivingEntity targetEntity = target.GetComponent<LivingEntity>();
+            if (targetEntity != null)
+            {
+                targetEntity.TakeDamage(1f);
+            }
         }
     }
 
@@ -125,6 +159,16 @@ public abstract class BaseEnemy : LivingEntity
         {
             LevelGrid.Instance.EnemyMovedGridPosition(this, beforeGridPosition, currentGridPosition);
             beforeGridPosition = currentGridPosition;
+        }
+    }
+
+    private void FindTurningPoint(Point point)
+    {
+        if(turningPoint != null && turningPoint.turningPoints.Count > 0)
+        {
+            Transform gridVisualTr = GridSystemVisual.Instance.GridSystemVisualOneLayerArray[point.x, point.y].GetComponent<Transform>();
+            destinationSetter.target = gridVisualTr;
+            currentWaypointIndex++;
         }
     }
 

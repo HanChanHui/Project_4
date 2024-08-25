@@ -15,7 +15,7 @@ namespace HornSpirit {
         [SerializeField] private SpawnerData spawnerData;
         [SerializeField] private List<WaveSpawner> waveSpawnerList;
         [SerializeField] private string jsonFileName;
-        [SerializeField] private int spawnerId;
+        [SerializeField] private int waveCount = 0;
 
         private int activeSpawners;
  
@@ -42,9 +42,7 @@ namespace HornSpirit {
             {
                 if (i < waveSpawnerList.Count) 
                 {
-                    int count = spawnerData.WaveList[i].destinationId;
-                    Transform target = GameManager.Instance.GetTargetList()[count - 1];
-                    waveSpawnerList[i].Init(spawnerData.WaveList[i], target);
+                    waveSpawnerList[i].Init(spawnerData.WaveList[i]);
                     activeSpawners++;
                 } else {
                     Debug.LogWarning($"WaveSpawner 리스트에 인덱스 {i}에 해당하는 Spawner가 없습니다.");
@@ -58,6 +56,8 @@ namespace HornSpirit {
             if (activeSpawners == 0)
             {
                 activeSpawners = waveSpawnerList.Count;
+                waveCount++;
+                UIManager.Instance.SetWaveCount(waveCount);
                 StartNextWaveSet();
             }
         }

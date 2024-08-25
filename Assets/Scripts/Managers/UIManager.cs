@@ -116,5 +116,10 @@ public class UIManager : Singleton<UIManager>
 
     public GameObject GetJoystickPanel() => towerAttackDirectionJoystickUI;
     public Canvas GetCanvas() => canvas;
+    public void SetWaveCount(int count)
+    {
+        Debug.Log("wave 카운터");
+        uiBattlePanel.OnWaveCount(count);
+    }
 
 }

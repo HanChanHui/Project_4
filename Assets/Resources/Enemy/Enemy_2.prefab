@@ -544,6 +544,9 @@ MonoBehaviour:
   textDamageSpawnPosition: {fileID: 5168368443059701893}
   targetTower: {fileID: 0}
   towerList: []
+  turningPoint:
+    turningPoints: []
+    destinationId: 0
   attackEffect: {fileID: 8467543171443383205, guid: bcad5aa891e6d224aac0cee49ac832b8, type: 3}
   effectSpawnDistance: 1
   effectSpeed: 2
@@ -596,7 +599,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  endReachedDistance: 0.2
+  endReachedDistance: 1.5
   whenCloseToDestination: 0
   rvoDensityBehavior:
     enabled: 1

@@ -13,7 +13,7 @@ namespace HornSpirit {
         public delegate void WaveCompleteDelegate();
         public event WaveCompleteDelegate OnWaveComplete;
 
-        public Transform target; // 목표 타겟
+
         private WaveFactory waveFactory;
         private SpawnState state = SpawnState.Waiting;
 
@@ -28,14 +28,9 @@ namespace HornSpirit {
             WaveManager.Instance.AddWaveSpawnerList(this);
         }
 
-        private void Start() {
-            
-        }
-
-        public void Init(WaveData waveData, Transform targetTr) 
+        public void Init(WaveData waveData) 
         {
             waveInfoDataList = waveData.waveInfoList;
-            target = targetTr;
             waveCount = waveData.waveCount;
             StartWaveSet();
         }
@@ -49,8 +44,7 @@ namespace HornSpirit {
         {
             if(currentWaveInfoIndex < waveCount)
             {
-                List<WaveTerm> waveTermList = waveInfoDataList[currentWaveInfoIndex].waveTermList;
-                StartCoroutine(StartWaveCoroutine(waveTermList));
+                StartCoroutine(StartWaveCoroutine(waveInfoDataList[currentWaveInfoIndex]));
             }
             else
             {
@@ -59,14 +53,13 @@ namespace HornSpirit {
             }
         }
 
-        private IEnumerator StartWaveCoroutine(List<WaveTerm> waveTermList)
+        private IEnumerator StartWaveCoroutine(WaveInfoData waveInfoList)
         {
-            while(currentWaveTermIndex < waveTermList.Count)
+            while(currentWaveTermIndex < waveInfoList.waveNumber)
             {
                 state = SpawnState.Spawning;
-                WaveTerm currentTerm = waveTermList[currentWaveTermIndex];
 
-                yield return StartCoroutine(waveFactory.SpawnSubWave(currentTerm, target, transform));
+                yield return StartCoroutine(waveFactory.SpawnSubWave(waveInfoList, transform,currentWaveTermIndex));
 
                 state = SpawnState.Waiting;
                 currentWaveTermIndex++;

@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 7420430198222950120}
   - component: {fileID: 8087773520757422767}
   - component: {fileID: 2560556406925392043}
+  - component: {fileID: 6070732413884926507}
   m_Layer: 10
   m_Name: Enemy_3
   m_TagString: Enemy
@@ -211,8 +212,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -694638643
-  m_SortingLayer: 4
+  m_SortingLayerID: 714422313
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d9d2815940fee1a4d95e0ace27d8b701, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -311,6 +312,9 @@ MonoBehaviour:
   textDamageSpawnPosition: {fileID: 5718747084566088773}
   targetTower: {fileID: 0}
   towerList: []
+  turningPoint:
+    turningPoints: []
+    destinationId: 0
   attackEffect: {fileID: 8467543171443383205, guid: bcad5aa891e6d224aac0cee49ac832b8, type: 3}
   effectSpawnDistance: 1
   effectSpeed: 2
@@ -341,7 +345,7 @@ MonoBehaviour:
   traversableTags: -1
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
-    value: -1
+    value: 2
 --- !u!114 &8087773520757422767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,7 +367,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  endReachedDistance: 0.2
+  endReachedDistance: 1
   whenCloseToDestination: 0
   rvoDensityBehavior:
     enabled: 1
@@ -406,6 +410,22 @@ MonoBehaviour:
   version: 1073741824
   target: {fileID: 0}
   useRotation: 0
+--- !u!114 &6070732413884926507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6153383026595147439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77f586f285b3847808d79083bd19ef1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1073741824
+  quality: 0
+  splitAtEveryPortal: 1
+  accountForGridPenalties: 0
 --- !u!1 &6186413121015273599
 GameObject:
   m_ObjectHideFlags: 0

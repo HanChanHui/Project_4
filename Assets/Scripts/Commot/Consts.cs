@@ -99,5 +99,18 @@ namespace Consts {
       Pattern19,
       Pattern20,
    }
+
+   public enum GoogleSheetType
+   {
+      TowerManager,
+      AttackRange,
+      Tower,
+      TowerValue,
+      TowerUpgradeValue,
+      Monster,
+      Level,
+      Stage,
+      Equipment,
+   }
 }
 

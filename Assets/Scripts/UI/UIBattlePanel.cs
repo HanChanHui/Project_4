@@ -115,6 +115,11 @@ public class UIBattlePanel : MonoBehaviour
         enemyCountText.text = enemyDeathCount.ToString();
     }
 
+    public void OnWaveCount(int waveCount)
+    {
+        waveCountText.text = "" + waveCount.ToString();
+    }
+
     public void ToggleTimeSpeedImageChange()
     {
         bool toggle = GameManager.Instance.ToggleTimeSpeed();

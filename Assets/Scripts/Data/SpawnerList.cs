@@ -12,7 +12,6 @@ namespace HornSpirit {
         int targetHP;
         int maxEnemyCount;
         int spawnerId;
-        int destinationId;
         int waveCount;
 
         List<WaveData> WaveList = new List<WaveData>();
@@ -34,54 +33,81 @@ namespace HornSpirit {
         public void ReadData(string[] column, SpawnerData spawner, bool isEnd) 
         {
             UnityEngine.Debug.Log(isEnd);
-            if(column[0] == "SpawnerNumber")
+            if(column[0] == "ID")
             {
-                UnityEngine.Debug.Log("SpawnerNumber");
+                UnityEngine.Debug.Log("ID");
                 if(id != 0)
                 {
                     SetAndInit(spawner);
                 }
-                
-                spawnerNumber = int.Parse(column[1]);
-                targetHP = int.Parse(column[3]);
-                maxEnemyCount = int.Parse(column[5]);
+                id = int.Parse(column[1]);
+                spawnerNumber = int.Parse(column[3]);
+                targetHP = int.Parse(column[5]);
+                maxEnemyCount = int.Parse(column[7]);
             }
-            else if(column[0] == "" && column[1] == "WaveNumber" && column[2] != "")
+            else if(column[0] == "SpawnerID")
+            {
+                UnityEngine.Debug.Log("SpawnerID");
+                spawnerId = int.Parse(column[1]);
+                waveCount = int.Parse(column[3]);
+
+                waveInfoList = new List<WaveInfoData>();
+            }
+            else if(column[0] == "WaveNumber")
             {
                 UnityEngine.Debug.Log("WaveNumber");
 
                 List<WaveTerm> waveTermList = new List<WaveTerm>();
+                List<TurningPoint> turningPointList = new List<TurningPoint>();
                 
-                for (int i = 3; i < int.Parse(column[2]) + 3; i++) 
+                for (int i = 2; i < column.Length; i++) 
                 {
-                    if(column[i] != "")
+                    if(!string.IsNullOrWhiteSpace(column[i]))
                     {
-                        string[] waveTermInfo = column[i].Split(',');
-                        UnityEngine.Debug.Log(waveTermInfo[0] + ", " + waveTermInfo[1] + ", " + waveTermInfo[2]);
-                        UnityEngine.Debug.Log(i + ", " + (int.Parse(column[2]) + 3));
-                        WaveTerm waveTermData = new WaveTerm(int.Parse(waveTermInfo[0]),
-                                                                    int.Parse(waveTermInfo[1]),
-                                                                    float.Parse(waveTermInfo[2]));
-                        waveTermList.Add(waveTermData);
+                        if(i % 2 == 0)
+                        {
+                            string[] waveTermInfo = column[i].Split(',');
+                            UnityEngine.Debug.Log(waveTermInfo[0] + ", " + waveTermInfo[1] + ", " + waveTermInfo[2]);
+                            WaveTerm waveTermData = new WaveTerm(int.Parse(waveTermInfo[0]),
+                                                                        int.Parse(waveTermInfo[1]),
+                                                                        float.Parse(waveTermInfo[2]));
+                            waveTermList.Add(waveTermData);
+                        }
+                        else
+                        {
+                            string[] waveTurningPointInfo = column[i].Split(',');
+                            List<Point> pointList = new List<Point>();
+                            int destinationId = 0;
+                            int count = 0;
+                            foreach(string point in waveTurningPointInfo)
+                            {
+                                count++;
+                                if(count >= waveTurningPointInfo.Length)
+                                {
+                                    destinationId = int.Parse(point);
+                                }
+                                else
+                                {
+                                    UnityEngine.Debug.Log(point);
+                                    char charPart = point[0]; // 'B'
+                                    char numPart = point[1];
+                                    int CharNumber = (int)charPart - (int)'A';
+                                    int NumNumber = (int)numPart - (int)'0';
+                                    pointList.Add(new Point(CharNumber, NumNumber));
+                                }
+                            }
+                            TurningPoint turningPoint = new TurningPoint(pointList, destinationId);
+                            turningPointList.Add(turningPoint);
+                        }
+                        
                     }
                 }
-                waveInfoList.Add(new WaveInfoData(waveTermList, int.Parse(column[2])));
+                waveInfoList.Add(new WaveInfoData(waveTermList, turningPointList, int.Parse(column[1])));
 
                 if(waveInfoList.Count >= waveCount)
                 {
-                    WaveList.Add(new WaveData(waveInfoList, spawnerId, destinationId, waveCount));
+                    WaveList.Add(new WaveData(waveInfoList, spawnerId, waveCount));
                 }
-            }
-            else if(column[0] != "")
-            {
-                UnityEngine.Debug.Log("Id");
-                id = int.Parse(column[0]);
-                
-                spawnerId = int.Parse(column[1]);
-                destinationId = int.Parse(column[2]);
-                waveCount = int.Parse(column[3]);
-
-                waveInfoList = new List<WaveInfoData>();
             }
 
             if(isEnd)

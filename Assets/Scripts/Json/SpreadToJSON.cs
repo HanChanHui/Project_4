@@ -27,7 +27,7 @@ namespace HornSpirit {
             bool isEnd = false;
             for (int i = 0; i < column.Length; i++) {
                 string[] row = column[i].Split('\t');
-                if(row[0] == "ID") { continue; }
+                
                 if(i >= column.Length - 1)
                 {
                     isEnd = true;

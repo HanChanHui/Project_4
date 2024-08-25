@@ -24,6 +24,7 @@ public class GridSystemVisual : MonoBehaviour {
     private GridSystemVisualSingle[,] gridSystemVisualOneLayerArray;
     private GridSystemVisualSingle[,] gridSystemVisualTwoLayerArray;
 
+    public GridSystemVisualSingle[,] GridSystemVisualOneLayerArray {get {return gridSystemVisualOneLayerArray;}}
 
     private void Awake() {
         if (Instance != null) 

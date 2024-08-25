@@ -2,6 +2,7 @@ using Consts;
 using UnityEngine;
 using System.IO;
 using System.Linq;
+using Pathfinding;
 
 namespace HornSpirit {
     public class LevelManager : Singleton<LevelManager> 
@@ -91,19 +92,14 @@ namespace HornSpirit {
 
         }
         // Astar 크기 조절
-        private void UpdateAstarGraph(int width, int depth)
+        private void UpdateAstarGraph( int width, int depth)
         {
-            var graph = astarPath.data.gridGraph;
-
-            if (graph != null)
+            var graphs = astarPath.data.graphs;
+            foreach(GridGraph graph in graphs)
             {
                 graph.SetDimensions(width, depth, 2);
                 graph.Scan();
-            }
-            else 
-            {
-                Debug.LogError("GridGraph not found");
-            }
+            } 
         }
 
         // 카메라 줌(확대/축소)
