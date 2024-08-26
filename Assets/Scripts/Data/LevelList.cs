@@ -1,6 +1,4 @@
 
-using System.Diagnostics;
-using UnityEditor.Build.Pipeline.Interfaces;
 
 namespace HornSpirit {
     [System.Serializable]

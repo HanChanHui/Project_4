@@ -11,27 +11,25 @@ namespace HornSpirit {
             base.MyInit();
 
             gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-            GenerateAttackPattern();
+
+            UIManager.Instance.ShowDirectionJoystickUI(transform.position);
+            joystickController = UIManager.Instance.GetJoystickPanel().GetComponentInChildren<JoystickController>();
+            joystickController.RegisterDirectionSelectedHandler(OnAttackDirectionSelected);
+        }
+
+        protected override void OnAttackDirectionSelected(Vector2 direction) {
+            base.OnAttackDirectionSelected(direction);
+
+            List<Vector2Int> basePatternArray = patternData.GetPattern(3);
+
+            UIManager.Instance.HideDirectionJoystickUI();
+            joystickController.UnregisterDirectionSelectedHandler(OnAttackDirectionSelected);
+            GenerateAttackPattern(atkDirection, gridPosition, basePatternArray);
 
             TowerVisualGrid towerVisualGrid = GetComponent<TowerVisualGrid>();
             towerVisualGrid.SetDirection(isTwoType, atkDirection);
             towerVisualGrid.Init();
             OnCreateComplete();
-        }
-
-        public void GenerateAttackPattern() {
-            atkRangeGridList = new List<GridPosition>();
-
-            List<Vector2Int> directionVectors = patternData.GetPattern(3); ;
-
-            foreach (Vector2Int directionVector in directionVectors) {
-                GridPosition attackGridPosition = gridPosition + new GridPosition(directionVector.x, directionVector.y);
-                Debug.Log(attackGridPosition);
-                atkRangeGridList.Add(attackGridPosition);
-            }
-
-            FilterInvalidGridPositions(atkRangeGridList);
-            StartCoroutine(CoCheckAttackRange());
         }
     }
 }

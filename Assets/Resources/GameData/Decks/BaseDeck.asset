@@ -12,5 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b346150927e40846bd30f647de87292, type: 3}
   m_Name: BaseDeck
   m_EditorClassIdentifier: 
-  labelsToInclude:
-  - m_LabelString: Base
+  cardNames:
+  - DealerTower_1
+  - DealerTower_2
+  - DealerTower_3
+  - DealerTower_4
+  - DealerTower_5
+  - HealerTower_1
+  - HealerTower_2
+  - HealerTower_3
+  - TankerTower_1
+  - TankerTower_2
+  - TankerTower_3
+  - TankerTower_4

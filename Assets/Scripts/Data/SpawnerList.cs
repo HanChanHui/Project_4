@@ -38,9 +38,11 @@ namespace HornSpirit {
                 UnityEngine.Debug.Log("ID");
                 if(id != 0)
                 {
+                    UnityEngine.Debug.Log("여기 들어오지?");
                     SetAndInit(spawner);
                 }
                 id = int.Parse(column[1]);
+                UnityEngine.Debug.Log(id);
                 spawnerNumber = int.Parse(column[3]);
                 targetHP = int.Parse(column[5]);
                 maxEnemyCount = int.Parse(column[7]);
@@ -67,7 +69,7 @@ namespace HornSpirit {
                         if(i % 2 == 0)
                         {
                             string[] waveTermInfo = column[i].Split(',');
-                            UnityEngine.Debug.Log(waveTermInfo[0] + ", " + waveTermInfo[1] + ", " + waveTermInfo[2]);
+                            //UnityEngine.Debug.Log(waveTermInfo[0] + ", " + waveTermInfo[1] + ", " + waveTermInfo[2]);
                             WaveTerm waveTermData = new WaveTerm(int.Parse(waveTermInfo[0]),
                                                                         int.Parse(waveTermInfo[1]),
                                                                         float.Parse(waveTermInfo[2]));
@@ -88,7 +90,7 @@ namespace HornSpirit {
                                 }
                                 else
                                 {
-                                    UnityEngine.Debug.Log(point);
+                                    //UnityEngine.Debug.Log(point);
                                     char charPart = point[0]; // 'B'
                                     char numPart = point[1];
                                     int CharNumber = (int)charPart - (int)'A';

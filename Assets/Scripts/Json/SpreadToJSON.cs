@@ -34,7 +34,7 @@ namespace HornSpirit {
                 }
                 T item = getItemFunc(row, isEnd);
 
-                if (item != null && ((i != 0 && row[0] == "SpawnerNumber") || i >= column.Length - 1)) {
+                if (item != null && ((i != 0 && row[0] == "ID") || i >= column.Length - 1)) {
                     itemList.Add(item);
                 }
             }

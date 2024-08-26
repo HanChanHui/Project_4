@@ -22,7 +22,7 @@ MonoBehaviour:
   towerDefence: 0
   towerAttack: 20
   towerAttackSpeed: 0.7
-  attackRange: 2
+  attackRange: 0
   towerCost: 5
   towerRecoveryCost: 5
   towerRecoveryCostIncrease: 5

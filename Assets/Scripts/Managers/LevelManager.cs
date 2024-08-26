@@ -16,37 +16,39 @@ namespace HornSpirit {
         [SerializeField] private string jsonFileName;
         [SerializeField] private int levelId;
 
-        void Awake() 
+        public void Init(int levelId)
         {
-            LoadLevelData(1000 + GameManager.Instance.GetLevelAndSpawnId); // 예를 들어 ID가 1001인 레벨을 로드
-        }
-
-        public void Init()
-        {
+            LoadLevelData(1000 + levelId);
             if(levelData != null)
             {
                 levelGrid.Init(levelData.x, levelData.y, 2);
                 gridVisual.Init(levelData.x, levelData.y);
                 AdjustCameraToGrid(levelData.x, levelData.y, 2);
                 BackgroundScaler();
-                UpdateAstarGraph(levelData.x, levelData.y);
+                UpdateAstarGraph(0, levelData.x, levelData.y);
+                UpdateAstarGraph(1, levelData.x, levelData.y);
                 BlockDeployment();
                 astarPath.Scan();
             }
         }
         // Json 읽기
         private void LoadLevelData(int levelId) {
-            string filePath = System.IO.Path.Combine(Application.dataPath + $"/Resources/JSON/{jsonFileName}.json");
-            if (File.Exists(filePath)) 
-            {
-                string jsonData = File.ReadAllText(filePath);
-                LevelMap levelMap = JsonUtility.FromJson<LevelMap>(jsonData);
-                levelData = levelMap.Level.FirstOrDefault(level => level.id == levelId);
-            } 
-            else 
-            {
-                Debug.LogError("JSON file not found at " + filePath);
-            }
+            //string filePath = System.IO.Path.Combine(Application.dataPath + $"/Resources/JSON/{jsonFileName}.json");
+            string resourcePath = $"Json/{jsonFileName}";
+            var jsonData = Resources.Load<TextAsset>(resourcePath);
+            LevelMap levelMap = JsonUtility.FromJson<LevelMap>(jsonData.text);
+            levelData = levelMap.Level.FirstOrDefault(level => level.id == levelId);
+            // if (File.Exists(resourcePath)) 
+            // {
+            //     //string jsonData = File.ReadAllText(filePath);
+            //     var jsonData = Resources.Load<TextAsset>(resourcePath);
+            //     LevelMap levelMap = JsonUtility.FromJson<LevelMap>(jsonData.text);
+            //     levelData = levelMap.Level.FirstOrDefault(level => level.id == levelId);
+            // } 
+            // else 
+            // {
+            //     Debug.LogError("JSON file not found at " + resourcePath);
+            // }
         }
         // Block 배치
         private void BlockDeployment()
@@ -92,14 +94,30 @@ namespace HornSpirit {
 
         }
         // Astar 크기 조절
-        private void UpdateAstarGraph( int width, int depth)
+        private void UpdateAstarGraph(int graphIndex, int width, int depth)
         {
             var graphs = astarPath.data.graphs;
-            foreach(GridGraph graph in graphs)
-            {
-                graph.SetDimensions(width, depth, 2);
-                graph.Scan();
+            if (graphIndex >= 0 && graphIndex < graphs.Length) {
+                // 해당 인덱스의 그래프를 GridGraph로 캐스팅합니다.
+                var graph = graphs[graphIndex] as GridGraph;
+
+                if (graphIndex == 0) {
+                    // 그래프의 크기를 설정하고 다시 스캔합니다.
+                    graph.SetDimensions(width, depth, 2);
+                    graph.Scan();
+                }else if(graphIndex == 1)
+                {
+                    graph.nodeSize = 0.5f;
+                    graph.collision.diameter = 1.7f;
+                    graph.SetDimensions(width * 4, depth * 4, graph.nodeSize);
+                    graph.Scan();
+                }
+
             } 
+            else 
+            {
+                Debug.LogError("Graph index out of bounds");
+            }
         }
 
         // 카메라 줌(확대/축소)

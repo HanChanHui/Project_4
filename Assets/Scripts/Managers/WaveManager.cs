@@ -18,15 +18,10 @@ namespace HornSpirit {
         [SerializeField] private int waveCount = 0;
 
         private int activeSpawners;
- 
 
-        void Awake() {
-            //int currLvl = Preferences.GetCurrentLvl();
-            LoadLevelData(1000 + GameManager.Instance.GetLevelAndSpawnId); // 예를 들어 ID가 1001인 레벨을 로드
-        }
-
-        public void Init() 
+        public void Init(int spawnId) 
         {
+            LoadLevelData(1000 + spawnId);
             InitializeWaveSpawners();
             foreach(WaveSpawner waveSpawner in waveSpawnerList)
             {
@@ -83,14 +78,19 @@ namespace HornSpirit {
 
         // Json 읽기
         private void LoadLevelData(int spawnerId) {
-            string filePath = Path.Combine(Application.dataPath + $"/Resources/JSON/{jsonFileName}.json");
-            if (File.Exists(filePath)) {
-                string jsonData = File.ReadAllText(filePath);
-                SpawnerInfo spawnerInfo = JsonUtility.FromJson<SpawnerInfo>(jsonData);
-                spawnerData = spawnerInfo.Spawner.FirstOrDefault(Spawner => Spawner.id == spawnerId);
-            } else {
-                Debug.LogError("JSON file not found at " + filePath);
-            }
+            //string filePath = Path.Combine(Application.dataPath + $"/Resources/JSON/{jsonFileName}.json");
+            string resourcePath = $"Json/{jsonFileName}";
+            var jsonData = Resources.Load<TextAsset>(resourcePath);
+            SpawnerInfo spawnerInfo = JsonUtility.FromJson<SpawnerInfo>(jsonData.text);
+            spawnerData = spawnerInfo.Spawner.FirstOrDefault(Spawner => Spawner.id == spawnerId);
+            // if (File.Exists(resourcePath)) {
+            //     //string jsonData = File.ReadAllText(filePath);
+            //     var jsonData = Resources.Load<TextAsset>(resourcePath);
+            //     SpawnerInfo spawnerInfo = JsonUtility.FromJson<SpawnerInfo>(jsonData.text);
+            //     spawnerData = spawnerInfo.Spawner.FirstOrDefault(Spawner => Spawner.id == spawnerId);
+            // } else {
+            //     Debug.LogError("JSON file not found at " + resourcePath);
+            // }
         }
 
     }

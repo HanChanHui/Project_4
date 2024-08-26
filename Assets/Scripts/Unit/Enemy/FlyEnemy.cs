@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace HornSpirit {
-    public class MeleeEnemy : BaseEnemy {
+    public class FlyEnemy : BaseEnemy {
 
         [SerializeField] private GameObject attackEffect;
         [SerializeField] private float effectSpawnDistance = 1f; // 이펙트 생성 거리
@@ -40,9 +40,9 @@ namespace HornSpirit {
 
             foreach (var hit in hits) {
                 Tower tower = hit.GetComponent<Tower>();
-                if (tower != null && !tower.IsTwoType) {
+                if (tower != null) {
                     newTowerList.Add(tower); // 새로운 리스트에 타워 추가
-
+            
                     if (IsTowerInMovingDirection(tower.transform.position)) {
                         targetTower = tower;
                     }

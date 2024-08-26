@@ -532,7 +532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ff5957e641d3e1429627129d5a5fee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
+  enemyType: 1
   maxDistance: 2
   attackRange: 2
   attackDamage: 10

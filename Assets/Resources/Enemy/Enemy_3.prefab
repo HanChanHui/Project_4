@@ -145,11 +145,11 @@ GameObject:
   - component: {fileID: 2364047217962446987}
   - component: {fileID: 8159335540861126244}
   - component: {fileID: 1361286761083542375}
-  - component: {fileID: 7531350827881385150}
+  - component: {fileID: 2374589003519926831}
   - component: {fileID: 7420430198222950120}
   - component: {fileID: 8087773520757422767}
   - component: {fileID: 2560556406925392043}
-  - component: {fileID: 6070732413884926507}
+  - component: {fileID: -8843257481001932297}
   m_Layer: 10
   m_Name: Enemy_3
   m_TagString: Enemy
@@ -288,7 +288,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1.1, y: 1.4}
   m_Direction: 0
---- !u!114 &7531350827881385150
+--- !u!114 &2374589003519926831
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -297,13 +297,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 6153383026595147439}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ff5957e641d3e1429627129d5a5fee5, type: 3}
+  m_Script: {fileID: 11500000, guid: 56c0a3d356a96a241a3aaaba9f788db1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 0
   maxDistance: 2
   attackRange: 2
-  attackDamage: 30
+  attackDamage: 2
   attackInterval: 2
   moveAttackSpeed: 2
   moveWaitTime: 0.4
@@ -410,7 +410,7 @@ MonoBehaviour:
   version: 1073741824
   target: {fileID: 0}
   useRotation: 0
---- !u!114 &6070732413884926507
+--- !u!114 &-8843257481001932297
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -424,7 +424,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1073741824
   quality: 0
-  splitAtEveryPortal: 1
+  splitAtEveryPortal: 0
   accountForGridPenalties: 0
 --- !u!1 &6186413121015273599
 GameObject:
