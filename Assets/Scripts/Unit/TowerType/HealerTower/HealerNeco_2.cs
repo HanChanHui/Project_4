@@ -23,7 +23,7 @@ namespace HornSpirit {
         public void GenerateAttackPattern() {
             atkRangeGridList = new List<GridPosition>();
 
-            List<Vector2Int> directionVectors = patternData.GetPattern(14);
+            List<Vector2Int> directionVectors = patternData.GetPattern((int)attackRangeType);
 
             foreach (Vector2Int directionVector in directionVectors) {
                 GridPosition attackGridPosition = gridPosition + new GridPosition(directionVector.x, directionVector.y);

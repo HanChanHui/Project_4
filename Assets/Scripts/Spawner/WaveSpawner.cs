@@ -55,24 +55,22 @@ namespace HornSpirit {
 
         private IEnumerator StartWaveCoroutine(WaveInfoData waveInfoList)
         {
-            while(currentWaveTermIndex < waveInfoList.waveNumber)
+            while(currentWaveTermIndex < waveInfoList.waveNumber && waveInfoList != null)
             {
                 state = SpawnState.Spawning;
-
                 yield return StartCoroutine(waveFactory.SpawnSubWave(waveInfoList, transform,currentWaveTermIndex));
 
                 state = SpawnState.Waiting;
                 currentWaveTermIndex++;
             }
-
             while (GameManager.Instance.GetEnemyCount() > 0)
             {
                 yield return null;
             }
-
             currentWaveInfoIndex++;
             currentWaveTermIndex = 0;
             state = SpawnState.Waiting;
+            Debug.Log(OnWaveComplete);
             OnWaveComplete?.Invoke();
         }
 

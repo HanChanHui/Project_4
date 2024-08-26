@@ -162,7 +162,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.HornSpirit.Project04
-    Standalone: com.DefaultCompany.Project-04-i
+    Standalone: com.HornSpirit.Project-04
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -878,7 +878,7 @@ PlayerSettings:
   hmiLogStartupTiming: 0
   hmiCpuConfiguration: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 1
+  activeInputHandler: 0
   windowsGamepadBackendHint: 0
   cloudProjectId: 
   framebufferDepthMemorylessMode: 0

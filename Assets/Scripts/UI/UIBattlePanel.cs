@@ -44,6 +44,10 @@ namespace HornSpirit {
 
             StartCoroutine(FillNature());
 
+            fullBarSpeed = 0.6f;
+            natureBarSpeed = 10f;
+            natureFillInterval = 0.01f;
+
             waveCountText.text = "0";
             enemyCountText.text = "0";
             targetCount.text = TargetCount.ToString();
@@ -106,7 +110,7 @@ namespace HornSpirit {
         }
 
         public void OnWaveCount(int waveCount) {
-            waveCountText.text = "" + waveCount.ToString();
+            waveCountText.text = waveCount.ToString();
         }
 
         public void ToggleTimeSpeedImageChange() {

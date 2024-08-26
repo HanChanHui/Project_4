@@ -134,11 +134,8 @@ namespace HornSpirit {
                 newPlaceableGO.GridPositionList.Add(gridPosition);
             }
 
-            if (cardData.towerData.towerType == Consts.TowerType.Tanker) {
-                newPlaceableGO.InitHealth((int)cardData.towerData.towerHP);
-            }
-
             SetupPlaceable(newPlaceableGO, pDataRef);
+            newPlaceableGO.InitHealth((int)cardData.towerData.towerHP);
         }
 
         public void SellTower(Tower tower) {

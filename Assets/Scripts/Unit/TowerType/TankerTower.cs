@@ -95,7 +95,6 @@ namespace HornSpirit {
         protected void FilterInvalidGridPositions(List<GridPosition> atkRangeGridList) {
             atkRangeGridList.RemoveAll(gridPos =>
                 !LevelGrid.Instance.IsValidGridPosition(gridPos) ||
-                LevelGrid.Instance.HasAnyBlockOnGridPosition(gridPos) ||
                 LevelGrid.Instance.HasAnyTowerOnGridPosition(gridPos)
             );
         }

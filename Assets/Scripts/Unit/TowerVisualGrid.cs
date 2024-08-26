@@ -36,7 +36,7 @@ namespace HornSpirit {
             rangeFunc = GetRangeFunc();
         }
 
-        private void RemoveType(AttackRangeType type) {
+        private void RemoveType() {
             rangeFunc -= GetRangeFunc();
         }
 
@@ -59,7 +59,9 @@ namespace HornSpirit {
                     Vector3 worldPosition = transform.position + new Vector3(directionVector.x * 2, directionVector.y * 2 - 0.65f, 0);
                     SetGridSystemVisualList(worldPosition);
                 }
-            } else {
+            } 
+            else 
+            {
                 foreach (Vector2Int directionVector in pattern) {
                     Vector3 worldPosition = transform.position + new Vector3(directionVector.x * 2, directionVector.y * 2, 0);
                     SetGridSystemVisualList(worldPosition);
@@ -70,7 +72,26 @@ namespace HornSpirit {
                 gridVisual.Hide();
                 gridVisual.GridLayerChange(LayerName.PlaceGrid.ToString());
             }
+        }
 
+        public void ShowAttackDirection()
+        {
+            List<Vector2Int> pattern;
+            if (attackDirectionType != AttackDirection.None) {
+                pattern = patternData.GetDirectionVector(patternData.GetPattern((int)attackRangeType), attackDirectionType);
+            } else {
+                pattern = patternData.GetDirectionVector(patternData.GetPattern((int)attackRangeType));
+            }
+
+            foreach (Vector2Int directionVector in pattern) 
+            {
+                    Vector3 worldPosition = transform.position + new Vector3(directionVector.x * 2, directionVector.y * 2, 0);
+                    SetGridSystemVisualList(worldPosition);
+            }
+            
+            foreach (GridSystemVisualSingle gridVisual in gridSystemVisualSingleList) {
+                gridVisual.GridLayerChange(LayerName.PlaceGrid.ToString());
+            }
         }
 
         public void HideAllGridPosition() {
@@ -99,7 +120,7 @@ namespace HornSpirit {
             StopAllCoroutines();
             if (gridSystemVisualSingleList != null) {
                 DestroyGridPositionList();
-                RemoveType(attackRangeType);
+                RemoveType();
             }
         }
 

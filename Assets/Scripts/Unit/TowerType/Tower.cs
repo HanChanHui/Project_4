@@ -16,6 +16,7 @@ namespace HornSpirit {
         protected List<BaseEnemy> enemiesInRange = new List<BaseEnemy>();
         protected PatternData patternData;
 
+        [SerializeField] protected AttackRangeType attackRangeType;
         [SerializeField] protected float defence;
         [SerializeField] protected int maxDistance;
         [SerializeField] protected float attackDamage;

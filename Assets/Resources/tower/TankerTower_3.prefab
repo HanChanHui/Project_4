@@ -516,6 +516,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprite: {fileID: 0}
+  healthBar: {fileID: 4136480632185564917}
+  attackRangeType: 3
   defence: 0
   maxDistance: 0
   attackDamage: 0
@@ -523,7 +525,6 @@ MonoBehaviour:
   towerSellCost: 0
   isTwoType: 0
   bulletPrefab: {fileID: 8467543171443383205, guid: a79c7b7888a215a47b6892a2589061b7, type: 3}
-  healthBar: {fileID: 4136480632185564917}
   effectSpawnDistance: 1.5
 --- !u!114 &7711817453444822911
 MonoBehaviour:

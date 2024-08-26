@@ -23,11 +23,10 @@ namespace HornSpirit {
         {
             LoadLevelData(1000 + spawnId);
             InitializeWaveSpawners();
-            foreach(WaveSpawner waveSpawner in waveSpawnerList)
-            {
-                waveSpawner.OnWaveComplete += OnWaveSpawnerComplete;
-                waveSpawner.OnAllWavesComplete += OnAllWaveSpawnerComplete;
-            }
+            // foreach (WaveSpawner waveSpawner in waveSpawnerList) {
+            //     waveSpawner.OnWaveComplete += OnWaveSpawnerComplete;
+            //     waveSpawner.OnAllWavesComplete += OnAllWaveSpawnerComplete;
+            // }
         }
 
         private void InitializeWaveSpawners() 
@@ -37,6 +36,8 @@ namespace HornSpirit {
             {
                 if (i < waveSpawnerList.Count) 
                 {
+                    waveSpawnerList[i].OnWaveComplete += OnWaveSpawnerComplete;
+                    waveSpawnerList[i].OnAllWavesComplete += OnAllWaveSpawnerComplete;
                     waveSpawnerList[i].Init(spawnerData.WaveList[i]);
                     activeSpawners++;
                 } else {

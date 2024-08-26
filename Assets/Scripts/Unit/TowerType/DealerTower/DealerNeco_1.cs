@@ -6,7 +6,7 @@ namespace HornSpirit {
     public class DealerNeco_1 : DealerTower 
     {
         private GridPosition gridPosition;
-
+        
         protected override void MyInit() {
             base.MyInit();
 
@@ -14,13 +14,14 @@ namespace HornSpirit {
 
             UIManager.Instance.ShowDirectionJoystickUI(transform.position);
             joystickController = UIManager.Instance.GetJoystickPanel().GetComponentInChildren<JoystickController>();
+            joystickController.SetAttackRangeType(attackRangeType);
             joystickController.RegisterDirectionSelectedHandler(OnAttackDirectionSelected);
         }
 
         protected override void OnAttackDirectionSelected(Vector2 direction) {
             base.OnAttackDirectionSelected(direction);
 
-            List<Vector2Int> basePatternArray = patternData.GetPattern(2);
+            List<Vector2Int> basePatternArray = patternData.GetPattern((int)attackRangeType);
 
             UIManager.Instance.HideDirectionJoystickUI();
             joystickController.UnregisterDirectionSelectedHandler(OnAttackDirectionSelected);
