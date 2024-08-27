@@ -23,10 +23,6 @@ namespace HornSpirit {
         {
             LoadLevelData(1000 + spawnId);
             InitializeWaveSpawners();
-            // foreach (WaveSpawner waveSpawner in waveSpawnerList) {
-            //     waveSpawner.OnWaveComplete += OnWaveSpawnerComplete;
-            //     waveSpawner.OnAllWavesComplete += OnAllWaveSpawnerComplete;
-            // }
         }
 
         private void InitializeWaveSpawners() 

@@ -58,22 +58,25 @@ namespace HornSpirit {
             towerInfoManager = TowerTouchManager.Instance;
 
             cardManager.OnCardUsed += UseCard;
+            cardManager.OnDrawFinish += WaveStart;
             towerInfoManager.OnTowerSell += SellTower;
         }
 
         private void Start() {
+            Application.targetFrameRate = 60;
             gameSpeed = 1f;
             levelManager.Init(LevelAndSpawnId);
-            waveManager.Init(LevelAndSpawnId);
-            enemyMaxSpawnCount = waveManager.MaxEnemyDeathCount();
             uiManager.NatureBarInit(natureAmountMax);
-            uiManager.Init(targetDeathCount, enemyMaxSpawnCount);
             cardManager.LoadDeck();
         }
-
-        private void OnEnable() {
-
+        private void WaveStart()
+        {
+            uiManager.HideTouchProtectionPanel();
+            waveManager.Init(LevelAndSpawnId);
+            enemyMaxSpawnCount = waveManager.MaxEnemyDeathCount();
+            uiManager.Init(targetDeathCount, enemyMaxSpawnCount);
         }
+
 
         private void OnDisable() {
             DestroyObject();

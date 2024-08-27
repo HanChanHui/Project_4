@@ -10,7 +10,7 @@ namespace HornSpirit {
 
 
         [Header("Parameter")]
-        [SerializeField] private float fullBarSpeed = 0.5f; // 채워지는 속도
+        [SerializeField] private float fullBarSpeed = 1f; // 채워지는 속도
         [SerializeField] private float natureBarSpeed = 10f; // 채워지는 속도
         [SerializeField] private float natureFillInterval = 0.01f; // 채워지는 간격
 
@@ -44,7 +44,7 @@ namespace HornSpirit {
 
             StartCoroutine(FillNature());
 
-            fullBarSpeed = 0.6f;
+            fullBarSpeed = 1f;
             natureBarSpeed = 10f;
             natureFillInterval = 0.01f;
 

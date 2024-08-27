@@ -19,6 +19,7 @@ namespace HornSpirit {
         [SerializeField] private GameObject towerAttackDirectionJoystickUI;
         [SerializeField] private GameObject towerInfoUI;
         [SerializeField] private GameObject towerSellInfoUI;
+        [SerializeField] private GameObject touchProtectionPanel;
 
         [Header("Class")]
         [SerializeField] private UIBattlePanel uiBattlePanel;
@@ -94,6 +95,10 @@ namespace HornSpirit {
         public void HideTowerSellInfoUI() {
             towerSellInfoUI.SetActive(false);
             GameManager.Instance.Resume();
+        }
+        public void HideTouchProtectionPanel()
+        {
+            touchProtectionPanel.SetActive(false);
         }
 
         public GameObject GetJoystickPanel() => towerAttackDirectionJoystickUI;

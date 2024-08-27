@@ -71,9 +71,9 @@ namespace HornSpirit {
                 healthBar.Init();
             }
 
-            BaseEnemy.OnEnemyDestroyed += OnEnemyDestroyed;
+            //BaseEnemy.OnEnemyDestroyed += OnEnemyDestroyed;
 
-            StartCoroutine(CoCheckDistance());
+            //StartCoroutine(CoCheckDistance());
         }
 
         protected void OnEnemyDestroyed(BaseEnemy enemy) {

@@ -62,11 +62,19 @@ namespace HornSpirit {
             if(turningPoint.turningPoints.Count > 0)
             {
                 FindTurningPoint(turningPoint.turningPoints[currentWaypointIndex]);
+                currentWaypointIndex++;
+            }
+            else if(GameManager.Instance.TargetList.Count > turningPoint.destinationId - 1)
+            {
+                originalTarget = GameManager.Instance.TargetList[turningPoint.destinationId - 1];
+                SetNewTarget(originalTarget);
+                currentWaypointIndex++;
             }
             else
             {
-                originalTarget = GameManager.Instance.TargetList[turningPoint.destinationId - 1];
-                destinationSetter.target = originalTarget;
+                originalTarget = GameManager.Instance.TargetList[0];
+                SetNewTarget(originalTarget);
+                currentWaypointIndex++;
             }
             StartCoroutine(MainRoutine());
 
@@ -78,7 +86,7 @@ namespace HornSpirit {
             healthBar.Init();
             GameManager.Instance.AddPlaceableEnemyList(this);
 
-            attackCoroutine = StartCoroutine(CoCheckDistance());
+            //attackCoroutine = StartCoroutine(CoCheckDistance());
 
         }
 
@@ -89,9 +97,9 @@ namespace HornSpirit {
 
         private IEnumerator MainRoutine() {
             while (true) {
-                UpdateDirection();
+                //UpdateDirection();
                 CheckTargetReached();
-                UpdateGridPosition();
+                //UpdateGridPosition();
 
                 yield return new WaitForSeconds(0.1f);
             }
@@ -107,22 +115,50 @@ namespace HornSpirit {
         }
 
         private void CheckTargetReached() {
-            if (aiPath.reachedDestination) 
+
+            if(aiPath.reachedDestination && GameManager.Instance.TargetList.Contains(originalTarget) 
+               && targetTower == null && currentWaypointIndex > turningPoint.turningPoints.Count)
             {
-                if (currentWaypointIndex < turningPoint.turningPoints.Count) {
-                    FindTurningPoint(turningPoint.turningPoints[currentWaypointIndex]); ;
-                } else if (currentWaypointIndex == turningPoint.turningPoints.Count) {
-                    originalTarget = GameManager.Instance.TargetList[turningPoint.destinationId - 1];
-                    destinationSetter.target = originalTarget;
+                Debug.Log(currentWaypointIndex);
+                ApplyDamageToTarget(originalTarget);
+                GameManager.Instance.RemovePlaceableEnemyList(this);
+                Destroy(gameObject);
+            }
+
+            if (turningPoint.turningPoints.Count > 0 && aiPath.reachedDestination) 
+            {
+                if(currentWaypointIndex < turningPoint.turningPoints.Count)
+                {
+                    FindTurningPoint(turningPoint.turningPoints[currentWaypointIndex]);
                     currentWaypointIndex++;
-                } else if (targetTower == null && towerList.Count <= 0 && currentWaypointIndex > turningPoint.turningPoints.Count) {
-                    ApplyDamageToTarget(originalTarget);
-                    GameManager.Instance.RemovePlaceableEnemyList(this);
-                    Destroy(gameObject);
                 }
-            } else if (turningPoint == null && targetTower == null && towerList.Count <= 0 && destinationSetter.target == null) {
-                originalTarget = GameManager.Instance.TargetList[0];
-                SetNewTarget(originalTarget);
+                if (currentWaypointIndex == turningPoint.turningPoints.Count) 
+                {
+                    if(GameManager.Instance.TargetList.Count > turningPoint.destinationId - 1)
+                    {
+                        Debug.Log("여기 들어오지?");
+                        originalTarget = GameManager.Instance.TargetList[turningPoint.destinationId - 1];
+                        destinationSetter.target = originalTarget;
+                        currentWaypointIndex++;
+                    }else
+                    {
+                        originalTarget = GameManager.Instance.TargetList[0];
+                        SetNewTarget(originalTarget);
+                        currentWaypointIndex++;
+                    }
+                }
+            } 
+            else if (targetTower == null && destinationSetter.target == null) {
+                if(GameManager.Instance.TargetList.Count <= 0)
+                {
+                    destinationSetter.target = null;
+                    aiPath.canMove = false;
+                }
+                else
+                {
+                    originalTarget = GameManager.Instance.TargetList[0];
+                    SetNewTarget(originalTarget);
+                }
             }
         }
 
@@ -148,7 +184,6 @@ namespace HornSpirit {
             if (turningPoint != null && turningPoint.turningPoints.Count > 0) {
                 Transform gridVisualTr = GridSystemVisual.Instance.GridSystemVisualOneLayerArray[point.x, point.y].GetComponent<Transform>();
                 destinationSetter.target = gridVisualTr;
-                currentWaypointIndex++;
             }
         }
 

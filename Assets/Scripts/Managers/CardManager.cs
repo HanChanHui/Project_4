@@ -2,6 +2,7 @@ using Consts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.Events;
 using DG.Tweening;
 
@@ -16,6 +17,7 @@ namespace HornSpirit {
         [SerializeField] private GameManager gameManager;
 
         public UnityAction<CardData, Vector3, List<GridPosition>, int> OnCardUsed;
+        public event Action OnDrawFinish;
 
         [Header("UI Elements")]
         [SerializeField] private RectTransform backupCardTransform;
@@ -30,6 +32,7 @@ namespace HornSpirit {
         [SerializeField] private PlaceableTowerData dataToSpawn;
         private List<GridPosition> towerGridPositionList = new List<GridPosition>();
         private Vector3 resultTowerGridPos = new Vector3();
+        private int drawCount = 0;
 
         private void Awake() {
             previewHolder = new GameObject("PreviewHolder");
@@ -53,6 +56,7 @@ namespace HornSpirit {
                 StartCoroutine(PromoteCardFromDeck(i, 0.4f + i));
                 StartCoroutine(AddCardToDeck(0.8f + i));
             }
+            //OnDrawFinish?.Invoke();
         }
 
         // 덱에서 대시보드로 카드를 이동
@@ -92,6 +96,11 @@ namespace HornSpirit {
             //Card 스크립트에 CardData 설정
             UICard cardScript = backupCardTransform.GetComponent<UICard>();
             cardScript.InitialiseWithData(playersDeck.GetNextCardFromDeck());
+            drawCount++;
+            if(drawCount == 4)
+            {
+                OnDrawFinish?.Invoke();
+            }
         }
 
         // 카드가 탭 될 때 호출
