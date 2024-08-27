@@ -70,7 +70,6 @@ namespace HornSpirit {
             currentWaveInfoIndex++;
             currentWaveTermIndex = 0;
             state = SpawnState.Waiting;
-            Debug.Log(OnWaveComplete);
             OnWaveComplete?.Invoke();
         }
 

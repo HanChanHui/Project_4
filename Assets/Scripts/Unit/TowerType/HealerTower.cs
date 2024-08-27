@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace HornSpirit {
     public class HealerTower : Tower {
-        protected List<Tower> towersInRange = new List<Tower>();
+        [SerializeField] protected List<Tower> towersInRange = new List<Tower>();
         protected AttackDirection atkDirection;
         protected JoystickController joystickController;
         protected List<GridPosition> atkRangeGridList;
@@ -35,15 +35,15 @@ namespace HornSpirit {
 
         private void CoHealTowers() {
             isHealing = true;
-
+            Debug.Log("힐 탐색");
             if (towersInRange.Count > 0) {
                 Tower targetTower = towersInRange[0];
 
                 if (targetTower != null && targetTower.Health < targetTower.MaxHealth) {
-                    // 힐 시전
+                    Debug.Log("힐 시전");
                     targetTower.SetHealth((int)attackDamage);
                 } else {
-                    // 타워가 풀피가 되거나 null인 경우 리스트에서 제거
+                   Debug.Log("Tawer 제거");
                     towersInRange.Sort((t1, t2) => t1.Health.CompareTo(t2.Health));
                 }
             }
