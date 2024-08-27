@@ -534,10 +534,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   maxDistance: 2
+  maxhealth: 700
   attackRange: 2
-  attackDamage: 10
+  attackDamage: 90
   attackInterval: 1.5
-  moveAttackSpeed: 1.5
+  moveAttackSpeed: 1
   moveWaitTime: 0.4
   healthBar: {fileID: 4530176063428779052}
   textDamage: {fileID: 4691782142634938849, guid: 334eac695a40a84428127dc3e7e4b6c9, type: 3}
@@ -594,7 +595,7 @@ MonoBehaviour:
   radius: 0.5
   height: 2
   canMove: 1
-  maxSpeed: 1
+  maxSpeed: 2
   gravity: {x: 0, y: 0, z: 0}
   groundMask:
     serializedVersion: 2

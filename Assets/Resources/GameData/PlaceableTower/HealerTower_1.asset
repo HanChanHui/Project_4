@@ -18,13 +18,13 @@ MonoBehaviour:
   towerID: 0
   towerName: HealerNeco_1
   towerAttackType: 1
-  towerHP: 100
-  towerDefence: 0
-  towerAttack: 20
-  towerAttackSpeed: 7
+  towerHP: 700
+  towerDefence: 25
+  towerAttack: 110
+  towerAttackSpeed: 1.2
   attackRange: 4
   towerCost: 3
-  towerRecoveryCost: 3
-  towerRecoveryCostIncrease: 4
+  towerRecoveryCost: 1
+  towerRecoveryCostIncrease: 0
   width: 1
   height: 1

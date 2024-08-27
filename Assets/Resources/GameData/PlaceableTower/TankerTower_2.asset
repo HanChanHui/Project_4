@@ -18,13 +18,13 @@ MonoBehaviour:
   towerID: 0
   towerName: TankerNeco_2
   towerAttackType: 1
-  towerHP: 400
-  towerDefence: 0
-  towerAttack: 50
-  towerAttackSpeed: 5
+  towerHP: 2200
+  towerDefence: 130
+  towerAttack: 110
+  towerAttackSpeed: 0.8
   attackRange: 3
   towerCost: 6
-  towerRecoveryCost: 6
-  towerRecoveryCostIncrease: 6
+  towerRecoveryCost: 3
+  towerRecoveryCostIncrease: 0
   width: 1
   height: 1

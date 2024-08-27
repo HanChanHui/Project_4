@@ -534,8 +534,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 1
   maxDistance: 2
+  maxhealth: 2500
   attackRange: 2
-  attackDamage: 10
+  attackDamage: 150
   attackInterval: 1.5
   moveAttackSpeed: 1.5
   moveWaitTime: 0.4
