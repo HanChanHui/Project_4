@@ -4,7 +4,7 @@
             "id": 1001,
             "spawnerNumber": 2,
             "targetHP": 10,
-            "maxEnemyCount": 22,
+            "maxEnemyCount": 25,
             "WaveList": [
                 {
                     "spawnerId": 1,
@@ -40,9 +40,25 @@
                             ]
                         },
                         {
-                            "waveNumber": 0,
-                            "waveTermList": [],
-                            "turningPointList": []
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 3,
+                                    "Interval": 2.0
+                                }
+                            ],
+                            "turningPointList": [
+                                {
+                                    "turningPoints": [
+                                        {
+                                            "x": 1,
+                                            "y": 1
+                                        }
+                                    ],
+                                    "destinationId": 1
+                                }
+                            ]
                         },
                         {
                             "waveNumber": 1,
@@ -192,7 +208,7 @@
             "id": 1002,
             "spawnerNumber": 2,
             "targetHP": 10,
-            "maxEnemyCount": 34,
+            "maxEnemyCount": 33,
             "WaveList": [
                 {
                     "spawnerId": 1,
@@ -203,7 +219,7 @@
                             "waveTermList": [
                                 {
                                     "enemyId": 501,
-                                    "enemySpawnMaxCount": 5,
+                                    "enemySpawnMaxCount": 6,
                                     "Interval": 2.0
                                 }
                             ],
@@ -216,6 +232,48 @@
                                         }
                                     ],
                                     "destinationId": 1
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 3,
+                                    "Interval": 2.0
+                                }
+                            ],
+                            "turningPointList": [
+                                {
+                                    "turningPoints": [
+                                        {
+                                            "x": 0,
+                                            "y": 6
+                                        }
+                                    ],
+                                    "destinationId": 1
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 4,
+                                    "Interval": 2.0
+                                }
+                            ],
+                            "turningPointList": [
+                                {
+                                    "turningPoints": [
+                                        {
+                                            "x": 0,
+                                            "y": 6
+                                        }
+                                    ],
+                                    "destinationId": 2
                                 }
                             ]
                         },
@@ -230,10 +288,19 @@
                                 {
                                     "enemyId": 503,
                                     "enemySpawnMaxCount": 3,
-                                    "Interval": 4.0
+                                    "Interval": 2.0
                                 }
                             ],
                             "turningPointList": [
+                                {
+                                    "turningPoints": [
+                                        {
+                                            "x": 0,
+                                            "y": 6
+                                        }
+                                    ],
+                                    "destinationId": 1
+                                },
                                 {
                                     "turningPoints": [
                                         {
@@ -242,12 +309,72 @@
                                         }
                                     ],
                                     "destinationId": 2
-                                },
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "spawnerId": 1,
+                    "waveCount": 3,
+                    "waveInfoList": [
+                        {
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 6,
+                                    "Interval": 2.0
+                                }
+                            ],
+                            "turningPointList": [
                                 {
                                     "turningPoints": [
                                         {
-                                            "x": 1,
-                                            "y": 8
+                                            "x": 0,
+                                            "y": 6
+                                        }
+                                    ],
+                                    "destinationId": 1
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 3,
+                                    "Interval": 2.0
+                                }
+                            ],
+                            "turningPointList": [
+                                {
+                                    "turningPoints": [
+                                        {
+                                            "x": 0,
+                                            "y": 6
+                                        }
+                                    ],
+                                    "destinationId": 1
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 4,
+                                    "Interval": 2.0
+                                }
+                            ],
+                            "turningPointList": [
+                                {
+                                    "turningPoints": [
+                                        {
+                                            "x": 0,
+                                            "y": 6
                                         }
                                     ],
                                     "destinationId": 2
@@ -259,13 +386,13 @@
                             "waveTermList": [
                                 {
                                     "enemyId": 501,
-                                    "enemySpawnMaxCount": 5,
+                                    "enemySpawnMaxCount": 3,
                                     "Interval": 2.0
                                 },
                                 {
-                                    "enemyId": 502,
-                                    "enemySpawnMaxCount": 1,
-                                    "Interval": 3.0
+                                    "enemyId": 503,
+                                    "enemySpawnMaxCount": 3,
+                                    "Interval": 2.0
                                 }
                             ],
                             "turningPointList": [
@@ -281,11 +408,11 @@
                                 {
                                     "turningPoints": [
                                         {
-                                            "x": 0,
-                                            "y": 6
+                                            "x": 1,
+                                            "y": 8
                                         }
                                     ],
-                                    "destinationId": 1
+                                    "destinationId": 2
                                 }
                             ]
                         }
@@ -296,25 +423,9 @@
                     "waveCount": 4,
                     "waveInfoList": [
                         {
-                            "waveNumber": 1,
-                            "waveTermList": [
-                                {
-                                    "enemyId": 501,
-                                    "enemySpawnMaxCount": 5,
-                                    "Interval": 2.0
-                                }
-                            ],
-                            "turningPointList": [
-                                {
-                                    "turningPoints": [
-                                        {
-                                            "x": 5,
-                                            "y": 4
-                                        }
-                                    ],
-                                    "destinationId": 2
-                                }
-                            ]
+                            "waveNumber": 0,
+                            "waveTermList": [],
+                            "turningPointList": []
                         },
                         {
                             "waveNumber": 1,
@@ -329,8 +440,29 @@
                                 {
                                     "turningPoints": [
                                         {
+                                            "x": 5,
+                                            "y": 4
+                                        }
+                                    ],
+                                    "destinationId": 2
+                                }
+                            ]
+                        },
+                        {
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 4,
+                                    "Interval": 2.0
+                                }
+                            ],
+                            "turningPointList": [
+                                {
+                                    "turningPoints": [
+                                        {
                                             "x": 4,
-                                            "y": 0
+                                            "y": 1
                                         }
                                     ],
                                     "destinationId": 1
@@ -338,16 +470,11 @@
                             ]
                         },
                         {
-                            "waveNumber": 0,
-                            "waveTermList": [],
-                            "turningPointList": []
-                        },
-                        {
                             "waveNumber": 2,
                             "waveTermList": [
                                 {
                                     "enemyId": 501,
-                                    "enemySpawnMaxCount": 5,
+                                    "enemySpawnMaxCount": 3,
                                     "Interval": 2.0
                                 },
                                 {
@@ -369,11 +496,11 @@
                                 {
                                     "turningPoints": [
                                         {
-                                            "x": 5,
-                                            "y": 4
+                                            "x": 4,
+                                            "y": 0
                                         }
                                     ],
-                                    "destinationId": 2
+                                    "destinationId": 1
                                 }
                             ]
                         }
@@ -844,16 +971,27 @@
             "id": 1005,
             "spawnerNumber": 2,
             "targetHP": 10,
-            "maxEnemyCount": 24,
+            "maxEnemyCount": 26,
             "WaveList": [
                 {
                     "spawnerId": 1,
                     "waveCount": 4,
                     "waveInfoList": [
                         {
-                            "waveNumber": 0,
-                            "waveTermList": [],
-                            "turningPointList": []
+                            "waveNumber": 1,
+                            "waveTermList": [
+                                {
+                                    "enemyId": 501,
+                                    "enemySpawnMaxCount": 2,
+                                    "Interval": 2.0
+                                }
+                            ],
+                            "turningPointList": [
+                                {
+                                    "turningPoints": [],
+                                    "destinationId": 2
+                                }
+                            ]
                         },
                         {
                             "waveNumber": 1,
