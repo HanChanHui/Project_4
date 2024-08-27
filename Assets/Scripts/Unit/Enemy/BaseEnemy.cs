@@ -19,6 +19,7 @@ namespace HornSpirit {
 
         [SerializeField] private EnemyType enemyType;
         [SerializeField] protected int maxDistance = 1;
+        [SerializeField] protected int maxhealth;
         [SerializeField] private int attackRange = 1; // 공격 범위
         [SerializeField] protected float attackDamage; // 공격 데미지
         [SerializeField] protected float attackInterval = 1f; // 공격 간격
@@ -70,9 +71,9 @@ namespace HornSpirit {
             StartCoroutine(MainRoutine());
 
             if (enemyType == EnemyType.General) {
-                InitHealth(100);
+                InitHealth(maxhealth);
             } else if (enemyType == EnemyType.Boss) {
-                InitHealth(400);
+                InitHealth(maxhealth);
             }
             healthBar.Init();
             GameManager.Instance.AddPlaceableEnemyList(this);

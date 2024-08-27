@@ -18,13 +18,13 @@ MonoBehaviour:
   towerID: 0
   towerName: DealerNeco_1
   towerAttackType: 1
-  towerHP: 100
-  towerDefence: 0
-  towerAttack: 20
-  towerAttackSpeed: 0.7
+  towerHP: 750
+  towerDefence: 35
+  towerAttack: 140
+  towerAttackSpeed: 0.8
   attackRange: 0
-  towerCost: 5
-  towerRecoveryCost: 5
-  towerRecoveryCostIncrease: 5
+  towerCost: 1
+  towerRecoveryCost: 0
+  towerRecoveryCostIncrease: 0
   width: 1
   height: 1
