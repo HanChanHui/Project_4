@@ -12,7 +12,7 @@ namespace HornSpirit {
 
         private void Awake() {
             if (blockType == BlockType.TargetBlock) {
-                InitHealth(100);
+                InitHealth(5);
                 GameManager.Instance.AddPlaceableTargetList(transform);
             }
         }
