@@ -550,6 +550,7 @@ MonoBehaviour:
   attackSpeed: 0
   towerSellCost: 0
   isTwoType: 1
+  isDirection: 1
   bulletPrefab: {fileID: 5870224901932606103, guid: bf116db3d1a4aa94eb6a8cc6b2621d49, type: 3}
   shooterPos: {fileID: 1206229762142822319}
 --- !u!114 &7072277506782355412

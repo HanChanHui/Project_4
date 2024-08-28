@@ -2,6 +2,7 @@ using Consts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using UnityEngine.Events;
 using DG.Tweening;
 
@@ -13,9 +14,9 @@ namespace HornSpirit {
         [SerializeField] private InputManager input;
         [SerializeField] private LevelGrid levelGrid;
         [SerializeField] private GridSystemVisual gridSV;
-        [SerializeField] private GameManager gameManager;
 
         public UnityAction<CardData, Vector3, List<GridPosition>, int> OnCardUsed;
+        public event Action OnDrawFinish;
 
         [Header("UI Elements")]
         [SerializeField] private RectTransform backupCardTransform;
@@ -30,6 +31,7 @@ namespace HornSpirit {
         [SerializeField] private PlaceableTowerData dataToSpawn;
         private List<GridPosition> towerGridPositionList = new List<GridPosition>();
         private Vector3 resultTowerGridPos = new Vector3();
+        private int drawCount = 0;
 
         private void Awake() {
             previewHolder = new GameObject("PreviewHolder");
@@ -53,6 +55,7 @@ namespace HornSpirit {
                 StartCoroutine(PromoteCardFromDeck(i, 0.4f + i));
                 StartCoroutine(AddCardToDeck(0.8f + i));
             }
+            //OnDrawFinish?.Invoke();
         }
 
         // 덱에서 대시보드로 카드를 이동
@@ -92,6 +95,11 @@ namespace HornSpirit {
             //Card 스크립트에 CardData 설정
             UICard cardScript = backupCardTransform.GetComponent<UICard>();
             cardScript.InitialiseWithData(playersDeck.GetNextCardFromDeck());
+            drawCount++;
+            if(drawCount == 4)
+            {
+                OnDrawFinish?.Invoke();
+            }
         }
 
         // 카드가 탭 될 때 호출
@@ -115,7 +123,7 @@ namespace HornSpirit {
                     towerGridPositionList = new List<GridPosition>();
 
                     // 슬로우 시간
-                    gameManager.Pause(0f);
+                    GameManager.Instance.Pause(0f);
                     gridSV.UpdateGridVisual(dataToSpawn.towerType, true);
 
                     // 미리보기 PlaceableTower를 생성하고 cardPreview에 부모로 설정
@@ -147,7 +155,7 @@ namespace HornSpirit {
 
 
             if (input.GetPosition(out Vector3 position) && IsPlaceable
-                && (int)gameManager.NatureAmount() >= dataToSpawn.towerCost) {
+                && (int)GameManager.Instance.NatureAmount() >= dataToSpawn.towerCost) {
                 cardIsActive = false;
                 if (OnCardUsed != null) {
                     //GameManager가 실제 Placeable을 생성하도록 요청
@@ -163,7 +171,7 @@ namespace HornSpirit {
                 StartCoroutine(PromoteCardFromDeck(cardId, .2f));
                 StartCoroutine(AddCardToDeck(.6f));
             } else {
-                gameManager.Resume();
+                GameManager.Instance.Resume();
                 gridSV.UpdateGridVisual(dataToSpawn.towerType, false);
                 cardIsActive = false;
                 ClearPreviewObjects();

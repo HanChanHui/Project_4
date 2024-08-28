@@ -524,6 +524,7 @@ MonoBehaviour:
   attackSpeed: 0
   towerSellCost: 0
   isTwoType: 0
+  isDirection: 1
   bulletPrefab: {fileID: 8467543171443383205, guid: a79c7b7888a215a47b6892a2589061b7, type: 3}
   effectSpawnDistance: 1.5
 --- !u!114 &7711817453444822911

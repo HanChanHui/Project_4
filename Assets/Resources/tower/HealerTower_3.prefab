@@ -183,6 +183,8 @@ MonoBehaviour:
   attackSpeed: 0
   towerSellCost: 0
   isTwoType: 1
+  isDirection: 1
+  towersInRange: []
 --- !u!114 &2303677523894609014
 MonoBehaviour:
   m_ObjectHideFlags: 0

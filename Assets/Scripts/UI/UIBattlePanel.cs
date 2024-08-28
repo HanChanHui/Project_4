@@ -10,7 +10,7 @@ namespace HornSpirit {
 
 
         [Header("Parameter")]
-        [SerializeField] private float fullBarSpeed = 0.5f; // 채워지는 속도
+        [SerializeField] private float fullBarSpeed = 1f; // 채워지는 속도
         [SerializeField] private float natureBarSpeed = 10f; // 채워지는 속도
         [SerializeField] private float natureFillInterval = 0.01f; // 채워지는 간격
 
@@ -36,15 +36,19 @@ namespace HornSpirit {
         private int currentNatureSegment = 0;
         private bool isFilling = false;
 
-        public void Init(UIManager uiManager, int TargetCount, int MaxEnemyDeathCount) {
-            this.uiManager = uiManager;
+        private void Start()
+        {
+            uiManager = UIManager.Instance;
             uiManager.OnUseNature += OnIamgeUseNatureApple;
             uiManager.OnFullNature += OnIamgeUseNatureApple;
             GameManager.Instance.OnEnemyDeath += OnEnemyDeathCount;
 
             StartCoroutine(FillNature());
+        }
 
-            fullBarSpeed = 0.6f;
+        public void Init(int TargetCount, int MaxEnemyDeathCount) 
+        {
+            fullBarSpeed = 1f;
             natureBarSpeed = 10f;
             natureFillInterval = 0.01f;
 
