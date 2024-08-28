@@ -27,7 +27,7 @@ namespace HornSpirit {
         public float NatureAmount { get { return natureAmount; } }
 
         public void Init(int TargetCount, int MaxEnemyDeathCount) {
-            uiBattlePanel.Init(this, TargetCount, MaxEnemyDeathCount);
+            uiBattlePanel.Init(TargetCount, MaxEnemyDeathCount);
         }
 
         public void NatureBarInit(float amount) {
@@ -104,7 +104,6 @@ namespace HornSpirit {
         public GameObject GetJoystickPanel() => towerAttackDirectionJoystickUI;
         public Canvas GetCanvas() => canvas;
         public void SetWaveCount(int count) {
-            Debug.Log("wave 카운터");
             uiBattlePanel.OnWaveCount(count);
         }
 

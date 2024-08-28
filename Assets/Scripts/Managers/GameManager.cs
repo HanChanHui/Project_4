@@ -16,7 +16,7 @@ namespace HornSpirit {
 
         [Header("Parameter")]
         [SerializeField] private int LevelAndSpawnId = 1;
-        [SerializeField] private float natureAmountMax;
+        [SerializeField] private float natureAmountMax = 10f;
         [SerializeField] private int enemyWave;
         [SerializeField] private int enemyMaxSpawnCount = 0;
         [SerializeField] private int enemyDeathCount = 0;

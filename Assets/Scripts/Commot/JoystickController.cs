@@ -35,6 +35,7 @@ namespace HornSpirit {
         private void OnEnable() {
             mainCamera = Camera.main;
             SetJoystickPositionToTower();
+            GameManager.Instance.Pause(0.2f);
         }
 
         void SetJoystickPositionToTower() {
@@ -100,6 +101,7 @@ namespace HornSpirit {
 
         public void UnregisterDirectionSelectedHandler(OnAttackDirectionSelected handler) {
             AttackDirectionSelected -= handler;
+            GameManager.Instance.Resume();
         }
 
         public void OnPointerUp(PointerEventData eventData) 

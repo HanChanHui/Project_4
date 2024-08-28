@@ -9,7 +9,8 @@ namespace HornSpirit {
         //[SerializeField] protected HealthLabel healthBar;
         protected AttackDirection atkDirection;
         protected JoystickController joystickController;
-        protected List<GridPosition> atkRangeGridList;
+        protected List<GridPosition> atkRangeGridList = new List<GridPosition>();
+        private List<BaseEnemy> currentEnemiesInRange = new List<BaseEnemy>();
         [SerializeField] private float effectSpawnDistance = 1f;
 
         protected override void MyInit() {
@@ -79,7 +80,8 @@ namespace HornSpirit {
         }
 
         public void GenerateAttackPattern(AttackDirection direction, GridPosition gridPosition, List<Vector2Int> basePatternArray) {
-            atkRangeGridList = new List<GridPosition>();
+            atkRangeGridList.Clear();
+            enemiesInRange.Clear();
 
             List<Vector2Int> directionVectors = patternData.GetDirectionVector(basePatternArray, direction);
 
@@ -107,7 +109,7 @@ namespace HornSpirit {
         }
 
         protected void FindEnemy() {
-            List<BaseEnemy> currentEnemiesInRange = new List<BaseEnemy>();
+            currentEnemiesInRange.Clear();
 
             foreach (GridPosition gridPos in atkRangeGridList) {
                 BaseEnemy enemy = LevelGrid.Instance.GetEnemiesAtGridPosition(gridPos);
@@ -122,16 +124,8 @@ namespace HornSpirit {
             enemiesInRange.RemoveAll(enemy => !currentEnemiesInRange.Contains(enemy));
         }
 
-        public override void TakeDamage(float damage, int obstacleDamage = 1, bool showLabel = false) {
-            base.TakeDamage(damage, obstacleDamage, showLabel);
-            if (healthBar != null) {
-                healthBar.Show();
-                healthBar.UpdateHealth(health, maxHealth);
-            }
-        }
-
         private void OnDisable() {
-            StopCoroutine(CoCheckDistance());
+            StopCoroutine(CoCheckAttackRange());
         }
     }
 }

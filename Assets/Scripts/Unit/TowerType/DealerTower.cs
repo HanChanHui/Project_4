@@ -9,7 +9,8 @@ namespace HornSpirit {
         [SerializeField] private Transform shooterPos;
         protected AttackDirection atkDirection;
         protected JoystickController joystickController;
-        protected List<GridPosition> atkRangeGridList;
+        protected List<GridPosition> atkRangeGridList = new List<GridPosition>();
+        private List<BaseEnemy> currentEnemiesInRange = new List<BaseEnemy>();
         private bool isBulletActive = false;
 
         protected override void MyInit() {
@@ -73,7 +74,8 @@ namespace HornSpirit {
         }
 
         public void GenerateAttackPattern(AttackDirection direction, GridPosition gridPosition, List<Vector2Int> basePatternArray) {
-            atkRangeGridList = new List<GridPosition>();
+            atkRangeGridList.Clear();
+            enemiesInRange.Clear();
 
             List<Vector2Int> directionVectors = patternData.GetDirectionVector(basePatternArray, direction);
 
@@ -101,7 +103,7 @@ namespace HornSpirit {
         }
 
         private void FindEnemy() {
-            List<BaseEnemy> currentEnemiesInRange = new List<BaseEnemy>();
+            currentEnemiesInRange.Clear();
 
             foreach (GridPosition gridPos in atkRangeGridList) {
                 BaseEnemy enemy = LevelGrid.Instance.GetEnemiesAtGridPosition(gridPos);
@@ -116,9 +118,12 @@ namespace HornSpirit {
             enemiesInRange.RemoveAll(enemy => !currentEnemiesInRange.Contains(enemy));
         }
 
-
         private void OnBulletDestroyed() {
             isBulletActive = false;
+        }
+
+        private void OnDisable() {
+            StopCoroutine(CoCheckAttackRange());
         }
     }
 }

@@ -86,7 +86,7 @@ namespace HornSpirit {
             healthBar.Init();
             GameManager.Instance.AddPlaceableEnemyList(this);
 
-            //attackCoroutine = StartCoroutine(CoCheckDistance());
+            attackCoroutine = StartCoroutine(CoCheckDistance());
 
         }
 
@@ -97,9 +97,9 @@ namespace HornSpirit {
 
         private IEnumerator MainRoutine() {
             while (true) {
-                //UpdateDirection();
+                UpdateDirection();
                 CheckTargetReached();
-                //UpdateGridPosition();
+                UpdateGridPosition();
 
                 yield return new WaitForSeconds(0.1f);
             }
@@ -119,7 +119,6 @@ namespace HornSpirit {
             if(aiPath.reachedDestination && GameManager.Instance.TargetList.Contains(originalTarget) 
                && targetTower == null && currentWaypointIndex > turningPoint.turningPoints.Count)
             {
-                Debug.Log(currentWaypointIndex);
                 ApplyDamageToTarget(originalTarget);
                 GameManager.Instance.RemovePlaceableEnemyList(this);
                 Destroy(gameObject);
@@ -136,7 +135,6 @@ namespace HornSpirit {
                 {
                     if(GameManager.Instance.TargetList.Count > turningPoint.destinationId - 1)
                     {
-                        Debug.Log("여기 들어오지?");
                         originalTarget = GameManager.Instance.TargetList[turningPoint.destinationId - 1];
                         destinationSetter.target = originalTarget;
                         currentWaypointIndex++;

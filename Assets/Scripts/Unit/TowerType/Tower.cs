@@ -24,12 +24,14 @@ namespace HornSpirit {
         [SerializeField] protected int towerSellCost;
         protected bool isClickUI = false;
         [SerializeField] protected bool isTwoType = false; // 임시로 1층과 2층 구분
+        [SerializeField] protected bool isDirection = false;
 
 
         public List<GridPosition> GridPositionList { get { return gridPositionList; } set { gridPositionList = value; } }
         public List<BaseEnemy> EnemiesInRange { get { return enemiesInRange; } }
         public int TowerSellCost { get { return towerSellCost; } }
         public bool IsTwoType { get { return isTwoType; } }
+        public bool IsDirection { get { return isDirection; } }
 
 
 
@@ -71,9 +73,9 @@ namespace HornSpirit {
                 healthBar.Init();
             }
 
-            //BaseEnemy.OnEnemyDestroyed += OnEnemyDestroyed;
+            BaseEnemy.OnEnemyDestroyed += OnEnemyDestroyed;
 
-            //StartCoroutine(CoCheckDistance());
+            StartCoroutine(CoCheckDistance());
         }
 
         protected void OnEnemyDestroyed(BaseEnemy enemy) {
@@ -93,6 +95,8 @@ namespace HornSpirit {
         protected virtual IEnumerator CoCheckDistance() {
             yield return null;
         }
+
+        public virtual void OnJoystickDirSelect() {}
 
         public override void TakeDamage(float damage, int obstacleDamage = 1, bool showLabel = false) {
             base.TakeDamage(damage, obstacleDamage, showLabel);
@@ -128,7 +132,7 @@ namespace HornSpirit {
 
         protected virtual void OnDestroy() {
             BaseEnemy.OnEnemyDestroyed -= OnEnemyDestroyed;
-
+            StopCoroutine(CoCheckDistance());
             foreach (GridPosition gridPosition in gridPositionList) {
                 LevelGrid.Instance.RemoveTowerAtGridPosition(gridPosition, this);
             }

@@ -6,9 +6,10 @@ using UnityEngine;
 namespace HornSpirit {
     public class HealerTower : Tower {
         [SerializeField] protected List<Tower> towersInRange = new List<Tower>();
+        private List<Tower> currentTowersInRange = new List<Tower>();
         protected AttackDirection atkDirection;
         protected JoystickController joystickController;
-        protected List<GridPosition> atkRangeGridList;
+        protected List<GridPosition> atkRangeGridList = new List<GridPosition>();
         private bool isHealing = false;
 
 
@@ -66,7 +67,8 @@ namespace HornSpirit {
         }
 
         public void GenerateAttackPattern(AttackDirection direction, GridPosition gridPosition, List<Vector2Int> basePatternArray) {
-            atkRangeGridList = new List<GridPosition>();
+            atkRangeGridList.Clear();
+            towersInRange.Clear();
 
             List<Vector2Int> directionVectors = patternData.GetDirectionVector(basePatternArray, direction);
 
@@ -93,7 +95,7 @@ namespace HornSpirit {
         }
 
         protected void FindTower() {
-            List<Tower> currentTowersInRange = new List<Tower>();
+           currentTowersInRange.Clear();
 
             foreach (GridPosition gridPos in atkRangeGridList) {
                 Tower tower = LevelGrid.Instance.GetTowerAtGridPosition(gridPos);
@@ -107,6 +109,10 @@ namespace HornSpirit {
             }
 
             towersInRange.RemoveAll(tower => !currentTowersInRange.Contains(tower));
+        }
+
+        private void OnDisable() {
+            StopCoroutine(CoCheckAttackRange());
         }
 
     }

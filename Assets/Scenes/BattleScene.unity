@@ -3214,7 +3214,6 @@ MonoBehaviour:
   input: {fileID: 351283741}
   levelGrid: {fileID: 617176497}
   gridSV: {fileID: 870311542}
-  gameManager: {fileID: 452421883}
   backupCardTransform: {fileID: 0}
   cardSpawnPanel: {fileID: 1850933738}
   cardsPanel: {fileID: 39372024}

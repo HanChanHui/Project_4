@@ -12,6 +12,11 @@ namespace HornSpirit {
 
             gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
 
+            OnJoystickDirSelect();
+        }
+
+        public override void OnJoystickDirSelect()
+        {
             UIManager.Instance.ShowDirectionJoystickUI(transform.position);
             joystickController = UIManager.Instance.GetJoystickPanel().GetComponentInChildren<JoystickController>();
             joystickController.SetAttackRangeType(attackRangeType);
