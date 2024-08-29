@@ -28,9 +28,9 @@ namespace HornSpirit {
         private bool IsPlaceable = false;
         private GameObject previewHolder;
         private GameObject newPlaceable;
-        [SerializeField] private PlaceableTowerData dataToSpawn;
-        private List<GridPosition> towerGridPositionList = new List<GridPosition>();
-        private Vector3 resultTowerGridPos = new Vector3();
+        [SerializeField] private IPlaceable  dataToSpawn;
+        private List<GridPosition> placeableGridPositionList = new List<GridPosition>();
+        private Vector3 resultPlaceableGridPos = new Vector3();
         private int drawCount = 0;
 
         private void Awake() {
@@ -55,7 +55,6 @@ namespace HornSpirit {
                 StartCoroutine(PromoteCardFromDeck(i, 0.4f + i));
                 StartCoroutine(AddCardToDeck(0.8f + i));
             }
-            //OnDrawFinish?.Invoke();
         }
 
         // 덱에서 대시보드로 카드를 이동
@@ -96,7 +95,7 @@ namespace HornSpirit {
             UICard cardScript = backupCardTransform.GetComponent<UICard>();
             cardScript.InitialiseWithData(playersDeck.GetNextCardFromDeck());
             drawCount++;
-            if(drawCount == 4)
+            if(drawCount == 5)
             {
                 OnDrawFinish?.Invoke();
             }
@@ -111,7 +110,7 @@ namespace HornSpirit {
         private void CardDragged(int cardId, Vector2 dragAmount) {
             cards[cardId].transform.Translate(dragAmount);
 
-            dataToSpawn = cards[cardId].cardData.towerData;
+            dataToSpawn = cards[cardId].cardData.placeableData;
             if (input.GetPosition(out Vector3 position)) {
                 if (!cardIsActive) {
                     cardIsActive = true;
@@ -120,25 +119,32 @@ namespace HornSpirit {
 
                     // CardData에서 배열을 가져옵니다.
                     Vector3 offsets = cards[cardId].cardData.relativeOffsets;
-                    towerGridPositionList = new List<GridPosition>();
+                    placeableGridPositionList = new List<GridPosition>();
 
                     // 슬로우 시간
-                    GameManager.Instance.Pause(0f);
-                    gridSV.UpdateGridVisual(dataToSpawn.towerType, true);
+                    GameManager.Instance.Pause(0.2f);
+                    gridSV.UpdateGridVisual(true, dataToSpawn.gridRangeType);
 
                     // 미리보기 PlaceableTower를 생성하고 cardPreview에 부모로 설정
-                    newPlaceable = GameObject.Instantiate<GameObject>(dataToSpawn.towerIconPrefab,
-                                                                                    position + offsets,
-                                                                                    Quaternion.identity,
-                                                                                    previewHolder.transform);
-                    newPlaceable.GetComponent<TowerVisualGrid>().Init();
+                    newPlaceable = GameObject.Instantiate<GameObject>(dataToSpawn.IconPrefab,
+                                                                      position + offsets,
+                                                                      Quaternion.identity,
+                                                                      previewHolder.transform);
+                    if (dataToSpawn is PlaceableTowerData towerData) 
+                    {
+                        gridSV.UpdateGridVisual(true, dataToSpawn.gridRangeType, towerData.towerType);
+                        newPlaceable.GetComponent<TowerVisualGrid>().Init();
+                    } else if (dataToSpawn is PlaceableBlockData) {
+                        gridSV.UpdateGridVisual(true, dataToSpawn.gridRangeType);
+                    }
                 } else {
                     // 임시 복사본이 생성되었으며 커서와 함께 이동합니다.
                     UpdateMousePosition(previewHolder);
                     HandleMouseHoldAction(dataToSpawn, position);
-
                 }
-            } else {
+            } 
+            else 
+            {
                 if (cardIsActive) {
                     IsPlaceable = false;
                     cardIsActive = false;
@@ -153,17 +159,19 @@ namespace HornSpirit {
         private void CardReleased(int cardId) {
             // 플레이 필드에 카드가 있는지 확인하기 위해 레이캐스트를 수행
 
-
             if (input.GetPosition(out Vector3 position) && IsPlaceable
-                && (int)GameManager.Instance.NatureAmount() >= dataToSpawn.towerCost) {
+                && (int)GameManager.Instance.NatureAmount() >= dataToSpawn.placeableCost) {
                 cardIsActive = false;
                 if (OnCardUsed != null) {
                     //GameManager가 실제 Placeable을 생성하도록 요청
-                    OnCardUsed(cards[cardId].cardData, resultTowerGridPos, towerGridPositionList, dataToSpawn.towerCost);
+                    OnCardUsed(cards[cardId].cardData, resultPlaceableGridPos, placeableGridPositionList, dataToSpawn.placeableCost);
                 }
 
-                //UIManager.Instance.ShowDirectionJoystickUI(resultTowerGridPos);
-                gridSV.UpdateGridVisual(dataToSpawn.towerType, false);
+                gridSV.UpdateGridVisual(false, dataToSpawn.gridRangeType);
+                if (dataToSpawn is PlaceableBlockData) {
+                    GameManager.Instance.Resume();
+                    AstarPath.active.Scan();
+                }
 
                 ClearPreviewObjects();
                 Destroy(cards[cardId].gameObject); // 카드를 제거
@@ -172,7 +180,7 @@ namespace HornSpirit {
                 StartCoroutine(AddCardToDeck(.6f));
             } else {
                 GameManager.Instance.Resume();
-                gridSV.UpdateGridVisual(dataToSpawn.towerType, false);
+                gridSV.UpdateGridVisual(false, dataToSpawn.gridRangeType);
                 cardIsActive = false;
                 ClearPreviewObjects();
                 cards[cardId].GetComponent<RectTransform>().DOAnchorPos(new Vector2(-310f + (200f * cardId), 0f),
@@ -181,25 +189,41 @@ namespace HornSpirit {
             }
         }
 
-        private void HandleMouseHoldAction(PlaceableTowerData towerData, Vector3 position) {
+        private void HandleMouseHoldAction(IPlaceable placeableData, Vector3 position) 
+        {
+            if(newPlaceable == null)
+            {
+                return;
+            }
             Vector3 pos = position;
             if (levelGrid.HasAnyBlockTypeOnWorldPosition(pos)) {
                 pos.z = 2f;
             }
             GridPosition gridPosition = levelGrid.GetGridPosition(pos);
             Vector2 gridTr = levelGrid.GetWorldPosition(gridPosition);
-            towerGridPositionList.Clear();
+            placeableGridPositionList.Clear();
 
-
-            if (TryGetTowerGridPositions(gridPosition, towerData, out List<GridPosition> gridPositions)) {
-                newPlaceable.GetComponent<TowerVisualGrid>().ShowAllGridPosition();
-                towerGridPositionList = gridPositions;
-                resultTowerGridPos = gridTr;
-                IsPlaceable = true;
-            } else {
-                newPlaceable.GetComponent<TowerVisualGrid>().HideAllGridPosition();
-                IsPlaceable = false;
-                return;
+            if (placeableData is PlaceableTowerData towerData) {
+                if (TryGetPlaceableGridPositions(gridPosition, towerData, out List<GridPosition> gridPositions)) {
+                    newPlaceable.GetComponent<TowerVisualGrid>().ShowAllGridPosition();
+                    placeableGridPositionList = gridPositions;
+                    resultPlaceableGridPos = gridTr;
+                    IsPlaceable = true;
+                } else {
+                    newPlaceable.GetComponent<TowerVisualGrid>().HideAllGridPosition();
+                    IsPlaceable = false;
+                    return;
+                }
+            } else if (placeableData is PlaceableBlockData blockData) {
+                // Block에 대한 위치 처리 로직
+                if (TryGetPlaceableGridPositions(gridPosition, blockData, out List<GridPosition> gridPositions)) {
+                    placeableGridPositionList = gridPositions;
+                    resultPlaceableGridPos = gridTr;
+                    IsPlaceable = true;
+                } else {
+                    IsPlaceable = false;
+                    return;
+                }
             }
 
         }
@@ -219,16 +243,16 @@ namespace HornSpirit {
             }
         }
 
-        private bool TryGetTowerGridPositions(GridPosition gridPosition, PlaceableTowerData towerData, out List<GridPosition> gridPositions) {
+        private bool TryGetPlaceableGridPositions(GridPosition gridPosition, IPlaceable placeableData, out List<GridPosition> gridPositions) {
             gridPositions = new List<GridPosition>();
 
-            if (towerData.towerType == TowerType.Dealer) {
-                if (towerData.GetSingleGridPosition(gridPosition)) {
+            if (placeableData.gridRangeType == GridRangeType.Single) {
+                if (OneAndTwoLayerDivision(gridPosition, placeableData)) {
                     gridPositions.Add(gridPosition);
                     return true;
                 }
-            } else if (towerData.towerType == TowerType.Tanker) {
-                if (towerData.GetGridPositionList(gridPosition, out gridPositions)) {
+            } else if (placeableData.gridRangeType == GridRangeType.Range) {
+                if (placeableData.GetGridPositionList(gridPosition, out gridPositions)) {
                     return true;
                 }
             }
@@ -236,9 +260,31 @@ namespace HornSpirit {
             return false;
         }
 
+        private bool OneAndTwoLayerDivision(GridPosition gridPosition, IPlaceable placeableData)
+        {
+            if(placeableData is PlaceableTowerData towerData)
+            {
+                switch (towerData.towerType) 
+                {
+                    case TowerType.Dealer:
+                        return towerData.GetSingleTwoLayerGridPosition(gridPosition);
+                    case TowerType.Tanker:
+                        return towerData.GetSingleOneLayerGridPosition(gridPosition);
+                }
+            }
+            else if(placeableData is PlaceableBlockData)
+            {
+                return placeableData.GetSingleOneLayerGridPosition(gridPosition);
+                //return placeableData.CanPlaceBlock(blockData.IconPrefab.GetComponent<Transform>);
+            }
+            return false;
+        }
+
+
 
         private void ClearPreviewObjects() {
             // 미리보기 PlaceableTower를 모두 제거
+            Debug.Log("여기서 삭제?");
             for (int i = 0; i < previewHolder.transform.childCount; i++) {
                 Destroy(previewHolder.transform.GetChild(i).gameObject);
             }

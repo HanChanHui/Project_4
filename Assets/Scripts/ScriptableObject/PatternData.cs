@@ -5,102 +5,104 @@ namespace HornSpirit {
     [CreateAssetMenu(fileName = "PatternData", menuName = "ScriptableObjects/PatternData", order = 1)]
     public class PatternData : ScriptableObject {
         public int[,] basePattern1 = new int[,] {
-        { 0, 1},
+        { 1, 1},
     };
         public int[,] basePattern2 = new int[,] {
-        { 0, 1, 1},
+        { 1, 1, 1},
     };
         public int[,] basePattern3 = new int[,] {
-        { 1, 0, 1},
+        { 1, 1, 1},
     };
         public int[,] basePattern4 = new int[,] {
         { 0, 1},
-        { 0, 1},
+        { 1, 1},
         { 0, 1},
     };
         public int[,] basePattern5 = new int[,] {
-        { 1, 1, 0, 1, 1},
+        { 1, 1, 1, 1, 1},
     };
         public int[,] basePattern6 = new int[,] {
         { 1, 0, 1},
-        { 1, 0, 1},
+        { 1, 1, 1},
         { 1, 0, 1},
     };
         public int[,] basePattern7 = new int[,] {
-        { 0, 1, 1, 1, 1},
+        { 1, 1, 1, 1, 1},
     };
         public int[,] basePattern8 = new int[,] {
         { 1, 1, 1, 0},
-        { 0, 1, 1, 1},
+        { 1, 1, 1, 1},
         { 1, 1, 1, 0},
     };
         public int[,] basePattern9 = new int[,] {
         { 0, 1, 1, 0},
         { 1, 1, 1, 1},
-        { 0, 1, 1, 1},
+        { 1, 1, 1, 1},
         { 1, 1, 1, 1},
         { 0, 1, 1, 0},
     };
         public int[,] basePattern10 = new int[,] {
         { 1, 1, 0},
-        { 0, 1, 1},
+        { 1, 1, 1},
         { 1, 1, 0},
     };
         public int[,] basePattern11 = new int[,] {
         { 1, 1, 1, 1},
-        { 0, 1, 1, 1},
+        { 1, 1, 1, 1},
         { 1, 1, 1, 1},
     };
         public int[,] basePattern12 = new int[,] {
         { 1, 1, 0, 0, 0},
-        { 0, 1, 1, 1, 1},
+        { 1, 1, 1, 1, 1},
         { 1, 1, 0, 0, 0},
     };
         public int[,] basePattern13 = new int[,] {
         { 1, 1, 0, 0},
-        { 0, 1, 1, 1},
+        { 1, 1, 1, 1},
         { 1, 1, 0, 0},
     };
         public int[,] basePattern14 = new int[,] {
         { 1, 1, 1},
-        { 1, 0, 1},
+        { 1, 1, 1},
         { 1, 1, 1},
     };
         public int[,] basePattern15 = new int[,] {
         { 1, 1, 1, 1},
-        { 1, 0, 1, 1},
+        { 1, 1, 1, 1},
         { 1, 1, 1, 1},
     };
         public int[,] basePattern16 = new int[,] {
         { 1, 1},
-        { 0, 1},
+        { 1, 1},
         { 1, 1},
     };
         public int[,] basePattern17 = new int[,] {
         { 0, 1, 1, 0},
-        { 0, 1, 1, 1},
+        { 1, 1, 1, 1},
         { 0, 1, 1, 0},
     };
         public int[,] basePattern18 = new int[,] {
         { 0, 0, 1, 0, 0},
         { 0, 1, 1, 1, 0},
-        { 1, 1, 0, 1, 1},
+        { 1, 1, 1, 1, 1},
         { 0, 1, 1, 1, 0},
         { 0, 0, 1, 0, 0},
     };
         public int[,] basePattern19 = new int[,] {
         { 0, 1, 1, 1},
-        { 0, 1, 1, 1},
+        { 1, 1, 1, 1},
         { 0, 1, 1, 1},
     };
         public int[,] basePattern20 = new int[,] {
         { 0, 1, 0},
-        { 1, 0, 1},
+        { 1, 1, 1},
         { 0, 1, 0},
     };
 
         public List<Vector2Int> GetPattern(int patternIndex) {
             switch (patternIndex) {
+                case 0:
+                    return null;
                 case 1:
                     return ConvertPatternToList(basePattern1);
                 case 2:

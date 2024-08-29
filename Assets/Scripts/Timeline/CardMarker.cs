@@ -10,8 +10,8 @@ namespace HornSpirit {
     public class CardMarker : Marker, INotification {
         public CardData card;
         public Vector3 position;
-        public List<GridPosition> towerGridPosition;
-        public int towerCost;
+        public List<GridPosition> placeableGridPosition;
+        public int placeableCost;
 
 
         public PropertyName id { get { return new PropertyName(); } }

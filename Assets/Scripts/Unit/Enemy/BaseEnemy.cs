@@ -40,7 +40,7 @@ namespace HornSpirit {
         [SerializeField] protected Tower targetTower;
         [SerializeField] protected List<Tower> towerList = new List<Tower>();
         [SerializeField] protected TurningPoint turningPoint;
-        private int currentWaypointIndex = 0;
+        //private int currentWaypointIndex = 0;
 
         protected Coroutine attackCoroutine;
         protected Coroutine moveAttackCoroutine;
@@ -59,23 +59,13 @@ namespace HornSpirit {
 
         public void Init(TurningPoint turningPoint) {
             this.turningPoint = turningPoint;
-            if(turningPoint.turningPoints.Count > 0)
-            {
-                FindTurningPoint(turningPoint.turningPoints[currentWaypointIndex]);
-                currentWaypointIndex++;
-            }
-            else if(GameManager.Instance.TargetList.Count > turningPoint.destinationId - 1)
+
+           if(GameManager.Instance.TargetList.Count > turningPoint.destinationId - 1)
             {
                 originalTarget = GameManager.Instance.TargetList[turningPoint.destinationId - 1];
                 SetNewTarget(originalTarget);
-                currentWaypointIndex++;
             }
-            else
-            {
-                originalTarget = GameManager.Instance.TargetList[0];
-                SetNewTarget(originalTarget);
-                currentWaypointIndex++;
-            }
+
             StartCoroutine(MainRoutine());
 
             if (enemyType == EnemyType.General) {
@@ -116,52 +106,15 @@ namespace HornSpirit {
 
         private void CheckTargetReached() {
 
-            if(aiPath.reachedDestination && GameManager.Instance.TargetList.Contains(originalTarget) 
-               && targetTower == null && currentWaypointIndex > turningPoint.turningPoints.Count)
+            if(aiPath.reachedDestination && targetTower == null && !isAttackingTower)
             {
                 ApplyDamageToTarget(originalTarget);
                 GameManager.Instance.RemovePlaceableEnemyList(this);
                 Destroy(gameObject);
             }
-
-            if (turningPoint.turningPoints.Count > 0 && aiPath.reachedDestination) 
-            {
-                if(currentWaypointIndex < turningPoint.turningPoints.Count)
-                {
-                    FindTurningPoint(turningPoint.turningPoints[currentWaypointIndex]);
-                    currentWaypointIndex++;
-                }
-                if (currentWaypointIndex == turningPoint.turningPoints.Count) 
-                {
-                    if(GameManager.Instance.TargetList.Count > turningPoint.destinationId - 1)
-                    {
-                        originalTarget = GameManager.Instance.TargetList[turningPoint.destinationId - 1];
-                        destinationSetter.target = originalTarget;
-                        currentWaypointIndex++;
-                    }else
-                    {
-                        originalTarget = GameManager.Instance.TargetList[0];
-                        SetNewTarget(originalTarget);
-                        currentWaypointIndex++;
-                    }
-                }
-            } 
-            else if (targetTower == null && destinationSetter.target == null) {
-                if(GameManager.Instance.TargetList.Count <= 0)
-                {
-                    destinationSetter.target = null;
-                    aiPath.canMove = false;
-                }
-                else
-                {
-                    originalTarget = GameManager.Instance.TargetList[0];
-                    SetNewTarget(originalTarget);
-                }
-            }
         }
 
         private void ApplyDamageToTarget(Transform target) {
-            // 타겟에게 피해를 입히는 로직 구현
             if (target != null) {
                 LivingEntity targetEntity = target.GetComponent<LivingEntity>();
                 if (targetEntity != null) {
@@ -178,12 +131,12 @@ namespace HornSpirit {
             }
         }
 
-        private void FindTurningPoint(Point point) {
-            if (turningPoint != null && turningPoint.turningPoints.Count > 0) {
-                Transform gridVisualTr = GridSystemVisual.Instance.GridSystemVisualOneLayerArray[point.x, point.y].GetComponent<Transform>();
-                destinationSetter.target = gridVisualTr;
-            }
-        }
+        // private void FindTurningPoint(Point point) {
+        //     if (turningPoint != null && turningPoint.turningPoints.Count > 0) {
+        //         Transform gridVisualTr = GridSystemVisual.Instance.GridSystemVisualOneLayerArray[point.x, point.y].GetComponent<Transform>();
+        //         destinationSetter.target = gridVisualTr;
+        //     }
+        // }
 
         #region Tower Grid Find
         protected IEnumerator CoCheckDistance() {

@@ -22,33 +22,20 @@ namespace HornSpirit {
             if(levelData != null)
             {
                 levelGrid.Init(levelData.x, levelData.y, 2);
-                gridVisual.Init(levelData.x, levelData.y);
+                BlockDeployment();
                 AdjustCameraToGrid(levelData.x, levelData.y, 2);
                 BackgroundScaler();
                 UpdateAstarGraph(0, levelData.x, levelData.y);
-                UpdateAstarGraph(1, levelData.x, levelData.y);
-                BlockDeployment();
+                //UpdateAstarGraph(1, levelData.x, levelData.y);
                 astarPath.Scan();
             }
         }
         // Json 읽기
         private void LoadLevelData(int levelId) {
-            //string filePath = System.IO.Path.Combine(Application.dataPath + $"/Resources/JSON/{jsonFileName}.json");
             string resourcePath = $"Json/{jsonFileName}";
             var jsonData = Resources.Load<TextAsset>(resourcePath);
             LevelMap levelMap = JsonUtility.FromJson<LevelMap>(jsonData.text);
             levelData = levelMap.Level.FirstOrDefault(level => level.id == levelId);
-            // if (File.Exists(resourcePath)) 
-            // {
-            //     //string jsonData = File.ReadAllText(filePath);
-            //     var jsonData = Resources.Load<TextAsset>(resourcePath);
-            //     LevelMap levelMap = JsonUtility.FromJson<LevelMap>(jsonData.text);
-            //     levelData = levelMap.Level.FirstOrDefault(level => level.id == levelId);
-            // } 
-            // else 
-            // {
-            //     Debug.LogError("JSON file not found at " + resourcePath);
-            // }
         }
         // Block 배치
         private void BlockDeployment()
@@ -58,6 +45,7 @@ namespace HornSpirit {
                 GridPosition gridPosition = new GridPosition(block.x, block.y);
                 SelectBlockType((BlockType)block.blockType, levelGrid.GetWorldPosition(gridPosition));
             }
+            gridVisual.Init(levelData.x, levelData.y);
         }
         // 설치할 Block Type 설정
         private void SelectBlockType(BlockType blockType, Vector3 gridPosition) 
@@ -139,8 +127,6 @@ namespace HornSpirit {
         private void BackgroundScaler() 
         {
             SpriteRenderer sr = backGroundOj.GetComponent<SpriteRenderer>();
-            Debug.Log(sr);
-            //if (sr == null) return;
 
             float width = sr.sprite.bounds.size.x;
             float height = sr.sprite.bounds.size.y;
@@ -150,7 +136,12 @@ namespace HornSpirit {
 
             backGroundOj.transform.localScale = new Vector3(worldScreenWidth / width, worldScreenHeight / height, 1);
 
-            backGroundOj.AddComponent<BoxCollider2D>();
+            BoxCollider2D boxCollider = backGroundOj.AddComponent<BoxCollider2D>();
+            boxCollider.size = new Vector2(worldScreenWidth / backGroundOj.transform.localScale.x, 
+                                   worldScreenHeight / (backGroundOj.transform.localScale.y * 1.5f));
+
+            float verticalOffset = 0.5f; // 이동할 크기 (필요에 따라 조정)
+            boxCollider.offset = new Vector2(0, verticalOffset);
         }
     }
 }

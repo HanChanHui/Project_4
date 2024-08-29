@@ -414,7 +414,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
 --- !u!114 &2507211482568547872
 MonoBehaviour:
@@ -437,6 +437,8 @@ MonoBehaviour:
   attackSpeed: 0
   towerSellCost: 0
   isTwoType: 1
+  isDirection: 0
+  towersInRange: []
 --- !u!114 &7988393057261433135
 MonoBehaviour:
   m_ObjectHideFlags: 0

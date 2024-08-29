@@ -17,7 +17,7 @@ MonoBehaviour:
   towerIconPrefab: {fileID: 807696782923670664, guid: a0c005e7208a1c044a10d808413ba574, type: 3}
   towerID: 0
   towerName: HealerNeco_2
-  towerAttackType: 1
+  towergridRangeType: 1
   towerHP: 800
   towerDefence: 30
   towerAttack: 120

@@ -6,6 +6,7 @@ using UnityEngine;
 namespace HornSpirit {
     public class HealerTower : Tower {
         [SerializeField] protected List<Tower> towersInRange = new List<Tower>();
+        private Tower targetTower;
         private List<Tower> currentTowersInRange = new List<Tower>();
         protected AttackDirection atkDirection;
         protected JoystickController joystickController;
@@ -22,34 +23,54 @@ namespace HornSpirit {
         }
 
         protected override IEnumerator CoCheckDistance() {
-            while (true) {
-
+            while (true) 
+            {
                 if (towersInRange.Count > 0 && !isHealing) {
+                    FindTower();
                     CoHealTowers();
                     yield return new WaitForSeconds(attackSpeed);
+                }
+                else
+                {
+                    FindTower();
                 }
 
                 yield return new WaitForSeconds(0.1f);
             }
         }
 
-
         private void CoHealTowers() {
             isHealing = true;
-            Debug.Log("힐 탐색");
+            //Debug.Log("힐 탐색");
             if (towersInRange.Count > 0) {
-                Tower targetTower = towersInRange[0];
+                
+                towersInRange.Sort((t1, t2) => 
+                ((float)t1.Health / t1.MaxHealth).CompareTo((float)t2.Health / t2.MaxHealth));
+                
+                targetTower = towersInRange[0];
 
                 if (targetTower != null && targetTower.Health < targetTower.MaxHealth) {
-                    Debug.Log("힐 시전");
                     targetTower.SetHealth((int)attackDamage);
-                } else {
-                   Debug.Log("Tawer 제거");
-                    towersInRange.Sort((t1, t2) => t1.Health.CompareTo(t2.Health));
                 }
             }
 
             isHealing = false;
+        }
+        protected void FindTower() {
+            currentTowersInRange.Clear();
+    
+            foreach (GridPosition gridPos in atkRangeGridList) {
+                Tower tower = LevelGrid.Instance.GetTowerAtGridPosition(gridPos);
+                if (tower != null && tower.Health < tower.MaxHealth) 
+                {
+                    if (!towersInRange.Contains(tower)) {
+                        towersInRange.Add(tower);
+                    }
+                    currentTowersInRange.Add(tower);
+                }
+            }
+
+            towersInRange.RemoveAll(tower => !currentTowersInRange.Contains(tower));
         }
 
         protected virtual void OnAttackDirectionSelected(Vector2 direction) {
@@ -78,41 +99,13 @@ namespace HornSpirit {
             }
 
             FilterInvalidGridPositions(atkRangeGridList);
-            StartCoroutine(CoCheckAttackRange());
         }
 
         protected void FilterInvalidGridPositions(List<GridPosition> atkRangeGridList) {
             atkRangeGridList.RemoveAll(gridPos =>
-                !LevelGrid.Instance.IsValidGridPosition(gridPos)
+                !LevelGrid.Instance.IsValidGridPosition(gridPos) ||
+                gridPos == gridPositionList[0]
             );
-        }
-
-        protected IEnumerator CoCheckAttackRange() {
-            while (true) {
-                FindTower();
-                yield return new WaitForSeconds(0.1f);
-            }
-        }
-
-        protected void FindTower() {
-           currentTowersInRange.Clear();
-
-            foreach (GridPosition gridPos in atkRangeGridList) {
-                Tower tower = LevelGrid.Instance.GetTowerAtGridPosition(gridPos);
-                if (tower != null && !towersInRange.Contains(tower)) {
-                    towersInRange.Add(tower);
-                    towersInRange.Sort((t1, t2) => t1.Health.CompareTo(t2.Health));
-                }
-                if (tower != null) {
-                    currentTowersInRange.Add(tower);
-                }
-            }
-
-            towersInRange.RemoveAll(tower => !currentTowersInRange.Contains(tower));
-        }
-
-        private void OnDisable() {
-            StopCoroutine(CoCheckAttackRange());
         }
 
     }

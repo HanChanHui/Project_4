@@ -272,11 +272,6 @@
                 {
                     "x": 4,
                     "y": 8,
-                    "blockType": 3
-                },
-                {
-                    "x": 5,
-                    "y": 0,
                     "blockType": 4
                 },
                 {
@@ -449,13 +444,8 @@
                 },
                 {
                     "x": 5,
-                    "y": 0,
-                    "blockType": 4
-                },
-                {
-                    "x": 5,
                     "y": 9,
-                    "blockType": 3
+                    "blockType": 4
                 }
             ]
         },
@@ -641,7 +631,7 @@
                 {
                     "x": 1,
                     "y": 7,
-                    "blockType": 3
+                    "blockType": 4
                 },
                 {
                     "x": 1,
@@ -671,17 +661,12 @@
                 {
                     "x": 3,
                     "y": 0,
-                    "blockType": 4
+                    "blockType": 3
                 },
                 {
                     "x": 3,
                     "y": 1,
                     "blockType": 1
-                },
-                {
-                    "x": 3,
-                    "y": 2,
-                    "blockType": 3
                 },
                 {
                     "x": 3,

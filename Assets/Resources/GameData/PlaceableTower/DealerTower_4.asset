@@ -17,7 +17,7 @@ MonoBehaviour:
   towerIconPrefab: {fileID: 8942181413289869589, guid: bb5f5fa1a0ac4934db7df385374164c7, type: 3}
   towerID: 0
   towerName: DealerNeco_4
-  towerAttackType: 1
+  towergridRangeType: 1
   towerHP: 950
   towerDefence: 50
   towerAttack: 200

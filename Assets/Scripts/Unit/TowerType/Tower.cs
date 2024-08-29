@@ -50,6 +50,7 @@ namespace HornSpirit {
             this.health = health;
             this.defence = defence;
             this.towerSellCost = towerSellCost;
+            
 
             MyInit();
         }

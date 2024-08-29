@@ -7,7 +7,7 @@ namespace Consts {
       Healer,
    }
 
-   public enum TowerAttackType {
+   public enum GridRangeType {
       None,
       Single,
       Range,

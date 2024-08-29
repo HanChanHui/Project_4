@@ -126,19 +126,34 @@ namespace HornSpirit {
 
         public float NatureAmount() => uiManager.NatureAmount;
 
-        public void UseCard(CardData cardData, Vector3 position, List<GridPosition> towerGridPositionList, int towerCost) {
-            PlaceableTowerData pDataRef = cardData.towerData;
-            GameObject prefabToSpawn = pDataRef.towerPrefab;
-            Tower newPlaceableGO = Instantiate(prefabToSpawn, position, Quaternion.identity).GetComponent<Tower>();
-            uiManager.UseNature(towerCost);
-            newPlaceableGO.OnClickAction += towerInfoManager.PromoteTowerFromTowerUI;
+        public void UseCard(CardData cardData, Vector3 position, List<GridPosition> placeableGridPositionList, int placeableCost) {
 
-            foreach (GridPosition gridPosition in towerGridPositionList) {
-                newPlaceableGO.GridPositionList.Add(gridPosition);
+            GameObject prefabToSpawn = cardData.placeableData.Prefab;
+            if(cardData.placeableData is PlaceableTowerData towerData)
+            {
+                PlaceableTowerData pDataRef = towerData;
+                
+                Tower newPlaceableGO = Instantiate(prefabToSpawn, position, Quaternion.identity).GetComponent<Tower>();
+                uiManager.UseNature(placeableCost);
+                newPlaceableGO.OnClickAction += towerInfoManager.PromoteTowerFromTowerUI;
+
+                foreach (GridPosition gridPosition in placeableGridPositionList) {
+                    newPlaceableGO.GridPositionList.Add(gridPosition);
+                }
+
+                SetupPlaceable(newPlaceableGO, pDataRef);
+                newPlaceableGO.InitHealth((int)pDataRef.towerHP);
             }
+            else if(cardData.placeableData is PlaceableBlockData blockData)
+            {
+                Block newPlaceableGO = Instantiate(prefabToSpawn, position, Quaternion.identity).GetComponent<Block>();
+                uiManager.UseNature(placeableCost);
 
-            SetupPlaceable(newPlaceableGO, pDataRef);
-            newPlaceableGO.InitHealth((int)cardData.towerData.towerHP);
+                foreach (GridPosition gridPosition in placeableGridPositionList) {
+                    newPlaceableGO.GridPositionList.Add(gridPosition);
+                }
+            }
+            
         }
 
         public void SellTower(Tower tower) {

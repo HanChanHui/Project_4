@@ -19,6 +19,11 @@ namespace HornSpirit {
             return Resources.Load<GameObject>("Enemy/" + "Enemy_" + enemyId % 500);
         }
 
+        public int GetEnemyId()
+        {
+            return enemyId;
+        }
+
         public int GetEnemySpawnMaxCount()
         {
             return enemySpawnMaxCount;

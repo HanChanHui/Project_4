@@ -17,7 +17,7 @@ MonoBehaviour:
   towerIconPrefab: {fileID: 841211081241225511, guid: 230f2a710e6c46b4da506b04563df799, type: 3}
   towerID: 0
   towerName: TankerNeco_1
-  towerAttackType: 1
+  towergridRangeType: 1
   towerHP: 2400
   towerDefence: 140
   towerAttack: 120

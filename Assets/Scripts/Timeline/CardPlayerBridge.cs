@@ -11,7 +11,7 @@ namespace HornSpirit {
             CardMarker cm = notification as CardMarker;
 
             if (cm != null) {
-                gameManager.UseCard(cm.card, cm.position, cm.towerGridPosition, cm.towerCost);
+                gameManager.UseCard(cm.card, cm.position, cm.placeableGridPosition, cm.placeableCost);
             }
         }
     }

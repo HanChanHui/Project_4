@@ -53,10 +53,10 @@ namespace HornSpirit {
             } else {
                 pattern = patternData.GetDirectionVector(patternData.GetPattern((int)attackRangeType));
             }
-
+            
             if (isTwoLayerType) {
                 foreach (Vector2Int directionVector in pattern) {
-                    Vector3 worldPosition = transform.position + new Vector3(directionVector.x * 2, directionVector.y * 2 - 0.65f, 0);
+                    Vector3 worldPosition = transform.position + new Vector3(directionVector.x * 2, directionVector.y * 2 - 1.65f, 0);
                     SetGridSystemVisualList(worldPosition);
                 }
             } 

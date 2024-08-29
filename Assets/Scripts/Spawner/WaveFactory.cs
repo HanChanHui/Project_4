@@ -31,6 +31,14 @@ namespace HornSpirit {
                 // 적 생성 후 대기
                 yield return new WaitForSeconds(wave.GetInterval());
             }
+
+            // 몬스터 500번을 없음.
+            // 스폰 텀을 주기 위한 방식
+            if(wave.GetEnemyId() == 500)
+            {
+                float time = wave.GetEnemySpawnMaxCount() * wave.GetInterval();
+                yield return new WaitForSeconds(time);
+            }
         }
     }
 }

@@ -27,12 +27,10 @@ namespace HornSpirit {
 
             foreach (Vector2Int directionVector in directionVectors) {
                 GridPosition attackGridPosition = gridPosition + new GridPosition(directionVector.x, directionVector.y);
-                Debug.Log(attackGridPosition);
                 atkRangeGridList.Add(attackGridPosition);
             }
 
             FilterInvalidGridPositions(atkRangeGridList);
-            StartCoroutine(CoCheckAttackRange());
         }
 
 

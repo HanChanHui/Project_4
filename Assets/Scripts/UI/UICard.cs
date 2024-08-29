@@ -33,7 +33,7 @@ namespace HornSpirit {
             portraitImage.sprite = cardData.cardImage;
             towerPropertyImage.sprite = cardData.cardPropertyImage;
             towerBackgroundImage.sprite = cardData.cardBackgroundImage;
-            towerCostText.text = cardData.towerData.towerCost.ToString();
+            towerCostText.text = cData.placeableData.placeableCost.ToString();
         }
 
         public void OnPointerDown(PointerEventData pointerEvent) {

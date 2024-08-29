@@ -403,7 +403,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.053479552, y: -0.34783423}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -414,7 +414,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.0105894, y: 1.6336796}
+  m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
 --- !u!114 &1385624261197466668
 MonoBehaviour:
@@ -437,6 +437,7 @@ MonoBehaviour:
   attackSpeed: 0
   towerSellCost: 0
   isTwoType: 0
+  isDirection: 0
   bulletPrefab: {fileID: 8467543171443383205, guid: a79c7b7888a215a47b6892a2589061b7, type: 3}
   effectSpawnDistance: 1.5
 --- !u!114 &2107704164962429783

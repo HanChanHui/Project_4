@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace HornSpirit {
     public class Block : LivingEntity {
-        private GridPosition gridPosition;
+        protected List<GridPosition> gridPositionList = new List<GridPosition>();
+        public List<GridPosition> GridPositionList { get { return gridPositionList; } set { gridPositionList = value; } }
         [SerializeField] private HealthLabel healthBar;
         [SerializeField] private BlockType blockType;
         public BlockType BlockType { get { return blockType; } }
@@ -17,10 +18,13 @@ namespace HornSpirit {
             }
         }
 
-        void Start() {
-            gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-            LevelGrid.Instance.AddBlockAtGridPosition(gridPosition, this);
+        private void OnEnable() 
+        {
+            gridPositionList.Add(LevelGrid.Instance.GetGridPosition(transform.position));
+            LevelGrid.Instance.AddBlockAtGridPosition(gridPositionList[0], this);
+        }
 
+        void Start() {
             if (healthBar != null) {
                 healthBar.Init();
             }

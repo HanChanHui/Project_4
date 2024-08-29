@@ -1,12 +1,20 @@
-using Consts;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace HornSpirit {
     [CreateAssetMenu(fileName = "NewPlaceable", menuName = "Unity Royale/Placeable Tower Data")]
-    public class PlaceableTowerData : ScriptableObject {
+    public class PlaceableTowerData : ScriptableObject, IPlaceable {
+
+        public string Name => towerName;
+        public int ID => towerID;
+        public GameObject Prefab => towerPrefab;
+        public GameObject IconPrefab => towerIconPrefab;
+        public Consts.GridRangeType gridRangeType => towergridRangeType;
+        public int placeableCost => towerCost;
+        
+
         [Header("Tower")]
-        public TowerType towerType;
+        public Consts.TowerType towerType;
         public GameObject towerPrefab;
         public GameObject towerIconPrefab;
         public int towerID;
@@ -14,7 +22,7 @@ namespace HornSpirit {
 
 
         [Header("Tower Battle")]
-        public TowerAttackType towerAttackType;
+        public Consts.GridRangeType towergridRangeType;
         public int towerHP;
         public float towerDefence;
         public float towerAttack;
@@ -51,13 +59,26 @@ namespace HornSpirit {
             return true;
         }
 
-        public bool GetSingleGridPosition(GridPosition gridPosition) {
+        public bool GetSingleTwoLayerGridPosition(GridPosition gridPosition) {
             if (!LevelGrid.Instance.IsValidGridPosition(gridPosition)) {
                 return false;
             }
 
             if (LevelGrid.Instance.HasAnyTowerOnGridPosition(gridPosition)
                 || !LevelGrid.Instance.HasAnyBlockTypeOnGridPosition(gridPosition)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool GetSingleOneLayerGridPosition(GridPosition gridPosition) {
+            if (!LevelGrid.Instance.IsValidGridPosition(gridPosition)) {
+                return false;
+            }
+
+            if (LevelGrid.Instance.HasAnyTowerOnGridPosition(gridPosition)
+                || LevelGrid.Instance.HasAnyBlockOnGridPosition(gridPosition)) {
                 return false;
             }
 

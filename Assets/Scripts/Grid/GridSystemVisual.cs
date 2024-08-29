@@ -48,7 +48,6 @@ namespace HornSpirit {
                 for (int y = 0; y < height; y++) {
                     GridPosition gridPosition = new GridPosition(x, y);
 
-
                     if (LevelGrid.Instance.HasAnyBlockTypeOnGridPosition(gridPosition)) {
                         TwoLayerGridSystemVisualSelect(gridSystemVisualBlockPrefab, gridPosition, x, y);
                     }
@@ -152,24 +151,37 @@ namespace HornSpirit {
             }
         }
 
-        public void UpdateGridVisual(TowerType type, bool isActive) {
+        public void UpdateGridVisual(bool isActive, GridRangeType type, TowerType towerType = TowerType.None) {
             HideAllGridPosition();
 
-            switch (type) {
-                case TowerType.Dealer:
-                    if (isActive) {
-                        ShowGridPositionTwoLayerRange(GridVisualType.Green);
-                    } else {
-                        ShowAllGridPosition();
-                    }
-                    break;
-                case TowerType.Tanker:
-                    if (isActive) {
-                        ShowGridPositionOneLayerRange(GridVisualType.Green);
-                    } else {
-                        ShowAllGridPosition();
-                    }
-                    break;
+            if(isActive)
+            {
+                switch (type) {
+                    case GridRangeType.Single:
+                        if (towerType == TowerType.Tanker || towerType == TowerType.None)
+                        {
+                            ShowGridPositionOneLayerRange(GridVisualType.Green);
+                        } 
+                        else
+                        {
+                            ShowGridPositionTwoLayerRange(GridVisualType.Green);
+                        }
+                        break;
+                    case GridRangeType.Range:
+                        if (towerType == TowerType.Tanker|| towerType == TowerType.None)
+                        {
+                            ShowGridPositionOneLayerRange(GridVisualType.Green);
+                        } 
+                        else
+                        {
+                            ShowGridPositionTwoLayerRange(GridVisualType.Green);
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                ShowAllGridPosition();
             }
         }
 
