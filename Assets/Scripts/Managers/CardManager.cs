@@ -130,12 +130,14 @@ namespace HornSpirit {
                                                                       position + offsets,
                                                                       Quaternion.identity,
                                                                       previewHolder.transform);
+                    
                     if (dataToSpawn is PlaceableTowerData towerData) 
                     {
                         gridSV.UpdateGridVisual(true, dataToSpawn.gridRangeType, towerData.towerType);
                         newPlaceable.GetComponent<TowerVisualGrid>().Init();
                     } else if (dataToSpawn is PlaceableBlockData) {
                         gridSV.UpdateGridVisual(true, dataToSpawn.gridRangeType);
+                        newPlaceable.GetComponent<BlockSprite>().Init();
                     }
                 } else {
                     // 임시 복사본이 생성되었으며 커서와 함께 이동합니다.
@@ -191,10 +193,6 @@ namespace HornSpirit {
 
         private void HandleMouseHoldAction(IPlaceable placeableData, Vector3 position) 
         {
-            if(newPlaceable == null)
-            {
-                return;
-            }
             Vector3 pos = position;
             if (levelGrid.HasAnyBlockTypeOnWorldPosition(pos)) {
                 pos.z = 2f;
@@ -272,10 +270,11 @@ namespace HornSpirit {
                         return towerData.GetSingleOneLayerGridPosition(gridPosition);
                 }
             }
-            else if(placeableData is PlaceableBlockData)
+            else if(placeableData is PlaceableBlockData blockData)
             {
-                return placeableData.GetSingleOneLayerGridPosition(gridPosition);
-                //return placeableData.CanPlaceBlock(blockData.IconPrefab.GetComponent<Transform>);
+                return blockData.GetSingleOneLayerGridPosition(gridPosition) &&
+                        blockData.CanPlaceBlock(GameManager.Instance.SpawnerList,
+                                                    GameManager.Instance.TargetList[0].position);
             }
             return false;
         }
@@ -284,7 +283,6 @@ namespace HornSpirit {
 
         private void ClearPreviewObjects() {
             // 미리보기 PlaceableTower를 모두 제거
-            Debug.Log("여기서 삭제?");
             for (int i = 0; i < previewHolder.transform.childCount; i++) {
                 Destroy(previewHolder.transform.GetChild(i).gameObject);
             }

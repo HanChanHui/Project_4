@@ -30,6 +30,7 @@ namespace HornSpirit {
 
         public void Init(WaveData waveData) 
         {
+            GameManager.Instance.SpawnerList.Add(this.transform);
             waveInfoDataList = waveData.waveInfoList;
             waveCount = waveData.waveCount;
             StartWaveSet();

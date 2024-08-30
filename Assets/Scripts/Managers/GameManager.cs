@@ -25,6 +25,7 @@ namespace HornSpirit {
         private List<Tower> towerList = new List<Tower>();
         private List<BaseEnemy> enemyList = new List<BaseEnemy>();
         [SerializeField] private List<Transform> targetList = new List<Transform>();
+        [SerializeField] private List<Transform> spawnerList = new List<Transform>();
 
         //public delegate void EnemyKilledDelegate(int amount);
         //public event EnemyKilledDelegate OnEnemyKilledEvent;
@@ -42,6 +43,7 @@ namespace HornSpirit {
         public int TargetDeathCount { get { return targetDeathCount; } set { targetDeathCount = value; } }
         public bool IsTimeTwoSpeed { get { return isTimeTwoSpeed; } set { isTimeTwoSpeed = value; } }
         public List<Transform> TargetList { get { return targetList; } set { targetList = value; } }
+        public List<Transform> SpawnerList { get { return spawnerList; } set { spawnerList = value; } }
 
 
 
@@ -172,6 +174,7 @@ namespace HornSpirit {
         public void AddPlaceableTowerList(Tower tower) => towerList.Add(tower);
         public void AddPlaceableEnemyList(BaseEnemy enemy) => enemyList.Add(enemy);
         public void AddPlaceableTargetList(Transform target) => targetList.Add(target);
+        public void AddPlaceableSpawnerList(Transform spawner) => spawnerList.Add(spawner);
 
         public void RemovePlaceableTowerList(Tower tower) => towerList.Remove(tower);
 
@@ -218,7 +221,7 @@ namespace HornSpirit {
                     Destroy(enemy);
                 }
             }
-
+            spawnerList.Clear();
             towerList = null;
             enemyList = null;
         }

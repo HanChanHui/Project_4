@@ -14,12 +14,21 @@ namespace HornSpirit {
 
         private BaseEnemy enemyTarget;
 
-        private void Update() {
-            if (enemyTarget != null) {
-                Move();
-                RotateBullet();
-            } else {
-                DestroyBullet();
+        private void Start() 
+        {
+            StartCoroutine(CoMove());
+        }
+
+        private IEnumerator CoMove() {
+            while(true)
+            {
+                if (enemyTarget != null) {
+                    Move();
+                    RotateBullet();
+                } else {
+                    DestroyBullet();
+                }
+                yield return null;
             }
         }
 

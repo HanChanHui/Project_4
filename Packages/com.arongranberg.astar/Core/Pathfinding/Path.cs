@@ -55,7 +55,7 @@ namespace Pathfinding {
 
 
 		/// <summary>Backing field for <see cref="CompleteState"/></summary>
-		protected PathCompleteState completeState;
+		public PathCompleteState completeState;
 
 		/// <summary>
 		/// Current state of the path.
